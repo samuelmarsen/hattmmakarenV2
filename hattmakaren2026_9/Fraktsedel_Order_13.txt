@@ -1,0 +1,10 @@
+======= FRAKTSEDEL (EXPORT) =======
+Ordernummer: 13
+Mottagare:   Erik Export
+Adress:      Shipping Lane 12, London
+-----------------------------------
+Exportkod:   46214105
+Vikt:        0.8 kg
+Moms (25%):  100.0 kr
+Totalpris:   500.0 kr
+===================================

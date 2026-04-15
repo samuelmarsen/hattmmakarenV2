@@ -1,0 +1,10 @@
+======= FRAKTSEDEL (EXPORT) =======
+Ordernummer: 6
+Mottagare:   Sofia Sömmerska
+Adress:      Ateljégatan 8, Stockholm
+-----------------------------------
+Exportkod:   80651405
+Vikt:        0.8 kg
+Moms (25%):  300.0 kr
+Totalpris:   1500.0 kr
+===================================

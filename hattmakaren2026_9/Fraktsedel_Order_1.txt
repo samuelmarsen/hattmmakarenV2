@@ -1,0 +1,9 @@
+======= FRAKTSEDEL (INRIKES) =======
+Ordernummer: 1
+Mottagare:   Kurt Lupton
+Adress:      Slottsgatan 1, Örebro
+-----------------------------------
+Vikt:        0.8 kg
+Moms (25%):  300.0 kr
+Totalpris:   1500.0 kr
+===================================

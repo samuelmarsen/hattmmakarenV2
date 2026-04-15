@@ -1,0 +1,19 @@
+# NetBeans specifika filer (dessa ska INTE delas) 
+nbproject/private/ 
+build/
+nbbuild/ 
+dist/ 
+nbdist/ 
+nbactions.xml nb-configuration.xml 
+# Systemfiler 
+.DS_Store 
+Thumbs.db 
+
+# Lärarens förslag för andra miljöer 
+bin/ 
+obj/ 
+*.user 
+*.suo 
+.vs/ 
+.vscode/ 
+.log

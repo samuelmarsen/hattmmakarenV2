@@ -1,0 +1,287 @@
+/*
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+ * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
+ */
+package hattmakaren2026_9;
+import oru.inf.InfException;
+import oru.inf.InfDB;
+import java.util.HashMap;
+import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
+import java.util.ArrayList;
+import javax.swing.JScrollPane;
+import javax.swing.JTable;
+
+/**
+ *
+ * @author lucasbrautigam
+ */
+public class AktuellaOrdrar extends javax.swing.JFrame {
+    private InfDB idb;
+    
+    
+    private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(AktuellaOrdrar.class.getName());
+
+    /**
+     * Creates new form AktuellaOrdrar
+     */
+    public AktuellaOrdrar(InfDB idb) {
+        this.idb = idb;
+        initComponents();
+        
+        fyllOrderTabell();
+        
+        jtAktuellaOrdrar.setDefaultEditor(Object.class, null);
+        
+        jtAktuellaOrdrar.addMouseListener(new java.awt.event.MouseAdapter() {
+        @Override
+        public void mouseClicked(java.awt.event.MouseEvent evt) {
+            if (evt.getClickCount() == 2) {
+                visaOrderInnehall();
+            }
+        }
+    });
+    }
+    
+    private void fyllOrderTabell(){
+        try {
+            String sql = "SELECT * FROM Ordrar WHERE Status != 'Klar'";
+            
+            ArrayList<HashMap<String, String>> allaOrdrar = idb.fetchRows(sql);
+            
+            DefaultTableModel model = (DefaultTableModel)jtAktuellaOrdrar.getModel();
+            model.setRowCount(0);
+            
+            if(allaOrdrar != null) {
+                for(HashMap<String, String> rad : allaOrdrar) {
+                model.addRow(new Object[]{
+                    rad.get("OrderID"),
+                    rad.get("KundID"),
+                    rad.get("OrderDatum"),
+                    rad.get("Status"),
+                    rad.get("ArSnabborder"),
+                    rad.get("FraktAdress"),
+                    rad.get("TotalPrisInclMoms")
+                });
+            }
+            }
+        }catch(InfException ex) {
+            JOptionPane.showMessageDialog(null, "Kunde inte hämta ordrar: "+ ex.getMessage());
+        }
+        
+        
+jtAktuellaOrdrar.setAutoResizeMode(javax.swing.JTable.AUTO_RESIZE_ALL_COLUMNS);
+
+
+
+jtAktuellaOrdrar.getColumnModel().getColumn(0).setPreferredWidth(100);  
+jtAktuellaOrdrar.getColumnModel().getColumn(1).setPreferredWidth(100);  
+jtAktuellaOrdrar.getColumnModel().getColumn(2).setPreferredWidth(250); 
+jtAktuellaOrdrar.getColumnModel().getColumn(3).setPreferredWidth(200);
+jtAktuellaOrdrar.getColumnModel().getColumn(4).setPreferredWidth(150);  
+jtAktuellaOrdrar.getColumnModel().getColumn(5).setPreferredWidth(300); 
+jtAktuellaOrdrar.getColumnModel().getColumn(6).setPreferredWidth(150); 
+    }
+    
+    private void visaOrderInnehall() {
+    int valdRad = jtAktuellaOrdrar.getSelectedRow();
+
+    if (valdRad == -1) {
+        return;
+    }
+
+    try {
+        // Hämta OrderID från första kolumnen i tabellen
+        String orderID = jtAktuellaOrdrar.getValueAt(valdRad, 0).toString();
+
+        String sql = "SELECT OrderradID, ModellID, Antal, Anpassningstext, RadPrisExklMoms "
+                   + "FROM Orderrader WHERE OrderID = " + orderID;
+
+        ArrayList<HashMap<String, String>> rader = idb.fetchRows(sql);
+
+        if (rader == null || rader.isEmpty()) {
+            JOptionPane.showMessageDialog(this,
+                    "Den valda ordern innehåller inga orderrader.",
+                    "Orderinnehåll",
+                    JOptionPane.INFORMATION_MESSAGE);
+            return;
+        }
+
+        // Skapa kolumner för popup-tabellen
+        String[] kolumner = {"OrderradID", "ModellID", "Antal", "Anpassningstext", "RadPrisExklMoms"};
+        DefaultTableModel model = new DefaultTableModel(kolumner, 0);
+
+        for (HashMap<String, String> rad : rader) {
+            model.addRow(new Object[]{
+                rad.get("OrderradID"),
+                rad.get("ModellID"),
+                rad.get("Antal"),
+                rad.get("Anpassningstext"),
+                rad.get("RadPrisExklMoms")
+            });
+        }
+
+        JTable innehallsTabell = new JTable(model);
+        JScrollPane scrollPane = new JScrollPane(innehallsTabell);
+        scrollPane.setPreferredSize(new java.awt.Dimension(700, 200));
+
+        JOptionPane.showMessageDialog(this,
+                scrollPane,
+                "Innehåll i order " + orderID,
+                JOptionPane.INFORMATION_MESSAGE);
+
+    } catch (InfException ex) {
+        JOptionPane.showMessageDialog(this,
+                "Fel vid hämtning av orderinnehåll: " + ex.getMessage());
+    }
+}
+
+    /**
+     * This method is called from within the constructor to initialize the form.
+     * WARNING: Do NOT modify this code. The content of this method is always
+     * regenerated by the Form Editor.
+     */
+    @SuppressWarnings("unchecked")
+    // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
+    private void initComponents() {
+
+        jScrollPane2 = new javax.swing.JScrollPane();
+        jtAktuellaOrdrar = new javax.swing.JTable();
+        btnTillbaka = new javax.swing.JButton();
+        btnRedigeraOrder = new javax.swing.JButton();
+
+        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+
+        jtAktuellaOrdrar.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null}
+            },
+            new String [] {
+                "OrderID", "KundID", "OrderDatum", "Status", "ArSnabborder", "FraktAdress", "TotalPrisInclMoms"
+            }
+        ));
+        jScrollPane2.setViewportView(jtAktuellaOrdrar);
+
+        btnTillbaka.setText("Tillbaka");
+        btnTillbaka.addActionListener(this::btnTillbakaActionPerformed);
+
+        btnRedigeraOrder.setText("Redigera Order");
+        btnRedigeraOrder.addActionListener(this::btnRedigeraOrderActionPerformed);
+
+        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
+        getContentPane().setLayout(layout);
+        layout.setHorizontalGroup(
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 792, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(100, 100, 100))
+            .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(btnTillbaka)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(btnRedigeraOrder)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+        layout.setVerticalGroup(
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(btnTillbaka)
+                    .addComponent(btnRedigeraOrder))
+                .addGap(34, 34, 34)
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 372, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+
+        pack();
+    }// </editor-fold>//GEN-END:initComponents
+
+    private void btnTillbakaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnTillbakaActionPerformed
+    this.dispose();        // TODO add your handling code here:
+    }//GEN-LAST:event_btnTillbakaActionPerformed
+
+    private void btnRedigeraOrderActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRedigeraOrderActionPerformed
+
+    int radIndex = jtAktuellaOrdrar.getSelectedRow();
+    
+    if (radIndex == -1) {
+        JOptionPane.showMessageDialog(this, "Vänligen välj en order i tabellen först!");
+        return;
+    }
+
+    try {
+        // Hämta nuvarande värden från tabellen
+        String orderID = String.valueOf(jtAktuellaOrdrar.getValueAt(radIndex, 0));
+        String nuvarandeDatum = String.valueOf(jtAktuellaOrdrar.getValueAt(radIndex, 2));
+        String nuvarandeStatus = String.valueOf(jtAktuellaOrdrar.getValueAt(radIndex, 3));
+        String nuvarandeSnabb = String.valueOf(jtAktuellaOrdrar.getValueAt(radIndex, 4));
+        String nuvarandeAdress = String.valueOf(jtAktuellaOrdrar.getValueAt(radIndex, 5));
+        String nuvarandePris = String.valueOf(jtAktuellaOrdrar.getValueAt(radIndex, 6));
+
+        // Öppna rutor för varje fält
+        String nyAdress = JOptionPane.showInputDialog(this, "Ändra adress:", nuvarandeAdress);
+        String nyStatus = JOptionPane.showInputDialog(this, "Ändra status:", nuvarandeStatus);
+        String nyttDatum = JOptionPane.showInputDialog(this, "Ändra datum (YYYY-MM-DD HH:MM:SS):", nuvarandeDatum);
+        String nySnabb = JOptionPane.showInputDialog(this, "Ändra Snabborder (1 eller 0):", nuvarandeSnabb);
+        String nyttPris = JOptionPane.showInputDialog(this, "Ändra totalpris:", nuvarandePris); {
+            
+            // SQL Fråga
+            String sql = "UPDATE Ordrar SET "
+                       + "FraktAdress = '" + nyAdress + "', "
+                       + "Status = '" + nyStatus + "', "
+                       + "OrderDatum = '" + nyttDatum + "', "
+                       + "ArSnabborder = " + nySnabb + ", "
+                       + "TotalPrisInclMoms = " + nyttPris + " "
+                       + "WHERE OrderID = " + orderID;
+            
+            
+            idb.update(sql);
+            
+            // Uppdatera tabellen och bekräfta för användaren
+            fyllOrderTabell(); 
+            JOptionPane.showMessageDialog(this, "Order " + orderID + " har uppdaterats!");
+        }
+    } catch (InfException ex) {
+        JOptionPane.showMessageDialog(this, "Databastillgång misslyckades: " + ex.getMessage());
+    } catch (Exception ex) {
+        JOptionPane.showMessageDialog(this, "Ett fel uppstod: " + ex.getMessage());
+    }
+    }//GEN-LAST:event_btnRedigeraOrderActionPerformed
+
+    /**
+     * @param args the command line arguments
+     */
+    public static void main(String args[]) {
+        /* Set the Nimbus look and feel */
+        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
+        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
+         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
+         */
+        try {
+            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
+                if ("Nimbus".equals(info.getName())) {
+                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
+                    break;
+                }
+            }
+        } catch (ReflectiveOperationException | javax.swing.UnsupportedLookAndFeelException ex) {
+            logger.log(java.util.logging.Level.SEVERE, null, ex);
+        }
+        //</editor-fold>
+
+        /* Create and display the form */
+        //java.awt.EventQueue.invokeLater(() -> new AktuellaOrdrar().setVisible(true));
+    }
+
+    // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnRedigeraOrder;
+    private javax.swing.JButton btnTillbaka;
+    private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JTable jtAktuellaOrdrar;
+    // End of variables declaration//GEN-END:variables
+}

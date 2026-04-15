@@ -1,0 +1,10 @@
+======= FRAKTSEDEL (EXPORT) =======
+Ordernummer: 9
+Mottagare:   Kurt Lupton
+Adress:      Slottsgatan 1, Örebro
+-----------------------------------
+Exportkod:   87961079
+Vikt:        0.8 kg
+Moms (25%):  187.5 kr
+Totalpris:   937.5 kr
+===================================
