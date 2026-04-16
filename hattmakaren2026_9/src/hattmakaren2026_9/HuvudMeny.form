@@ -31,23 +31,19 @@
           <Group type="102" alignment="0" attributes="0">
               <EmptySpace min="-2" pref="163" max="-2" attributes="0"/>
               <Group type="103" groupAlignment="0" attributes="0">
-                  <Group type="102" attributes="0">
-                      <Component id="btnStatistik" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace max="32767" attributes="0"/>
+                  <Group type="103" alignment="0" groupAlignment="0" max="-2" attributes="0">
+                      <Component id="btnOrderMeny" max="32767" attributes="0"/>
+                      <Component id="btnMaterial" max="32767" attributes="0"/>
                   </Group>
-                  <Group type="102" attributes="0">
-                      <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                          <Component id="btnOrderMeny" max="32767" attributes="0"/>
-                          <Component id="btnMaterial" max="32767" attributes="0"/>
-                      </Group>
-                      <EmptySpace max="32767" attributes="0"/>
-                      <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                          <Component id="btnLagerfordaModeller" max="32767" attributes="0"/>
-                          <Component id="BTNkundSida" max="32767" attributes="0"/>
-                      </Group>
-                      <EmptySpace min="-2" pref="183" max="-2" attributes="0"/>
-                  </Group>
+                  <Component id="btnStatistik" alignment="0" min="-2" max="-2" attributes="0"/>
               </Group>
+              <EmptySpace max="32767" attributes="0"/>
+              <Group type="103" groupAlignment="0" max="-2" attributes="0">
+                  <Component id="btnLagerfordaModeller" max="32767" attributes="0"/>
+                  <Component id="BTNkundSida" max="32767" attributes="0"/>
+                  <Component id="btnSchemaVy" max="32767" attributes="0"/>
+              </Group>
+              <EmptySpace min="-2" pref="183" max="-2" attributes="0"/>
           </Group>
       </Group>
     </DimensionLayout>
@@ -67,7 +63,10 @@
                   <Component id="BTNkundSida" alignment="3" min="-2" max="-2" attributes="0"/>
               </Group>
               <EmptySpace min="-2" pref="72" max="-2" attributes="0"/>
-              <Component id="btnStatistik" min="-2" max="-2" attributes="0"/>
+              <Group type="103" groupAlignment="3" attributes="0">
+                  <Component id="btnStatistik" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="btnSchemaVy" alignment="3" min="-2" max="-2" attributes="0"/>
+              </Group>
               <EmptySpace pref="199" max="32767" attributes="0"/>
           </Group>
       </Group>
@@ -117,6 +116,14 @@
       </Properties>
       <Events>
         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnStatistikActionPerformed"/>
+      </Events>
+    </Component>
+    <Component class="javax.swing.JButton" name="btnSchemaVy">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="Schema"/>
+      </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnSchemaVyActionPerformed"/>
       </Events>
     </Component>
   </SubComponents>
