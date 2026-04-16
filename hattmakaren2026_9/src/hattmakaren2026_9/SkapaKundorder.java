@@ -13,6 +13,7 @@ import java.util.ArrayList;
 import javax.swing.JOptionPane;
 import oru.inf.InfDB;
 import oru.inf.InfException;
+import java.util.HashMap;
 
 /**
  * Creates new form SkapaKundorder
@@ -20,6 +21,9 @@ import oru.inf.InfException;
 public class SkapaKundorder extends javax.swing.JFrame {
 
     private InfDB idb;
+
+    private double totaltPris = 0.0;
+    private double styckPrisHatt = 0.0;
 
     public SkapaKundorder(InfDB idb) throws InfException {
         initComponents();
@@ -111,11 +115,13 @@ public class SkapaKundorder extends javax.swing.JFrame {
         jLabel5 = new javax.swing.JLabel();
         txtDatum = new javax.swing.JTextField();
         lblDatum = new javax.swing.JLabel();
-        jLabel6 = new javax.swing.JLabel();
         cmbFarg = new javax.swing.JComboBox<>();
         cmbTyg = new javax.swing.JComboBox<>();
         cmbStorlek = new javax.swing.JComboBox<>();
         lblVäljAntal = new javax.swing.JLabel();
+        txtPrisExklMoms = new javax.swing.JTextField();
+        jLabel2 = new javax.swing.JLabel();
+        chkSnabborder = new javax.swing.JCheckBox();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -151,7 +157,7 @@ public class SkapaKundorder extends javax.swing.JFrame {
 
             },
             new String [] {
-                "Hattmodell", "Färg", "Tyg", "Storlek", "Antal"
+                "Hattmodell", "Färg", "Tyg", "Storlek", "Antal", "Snabborder"
             }
         ));
         jScrollPane1.setViewportView(jTable1);
@@ -164,11 +170,15 @@ public class SkapaKundorder extends javax.swing.JFrame {
 
         lblDatum.setText("Datum");
 
-        jLabel6.setText("Pris");
-
         cmbFarg.addActionListener(this::cmbFargActionPerformed);
 
         lblVäljAntal.setText("Välj antal");
+
+        txtPrisExklMoms.addActionListener(this::txtPrisExklMomsActionPerformed);
+
+        jLabel2.setText("Pris exkl moms:");
+
+        chkSnabborder.setText("Snabborder");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -220,10 +230,12 @@ public class SkapaKundorder extends javax.swing.JFrame {
                                 .addGap(43, 43, 43)
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addComponent(jButton1)
-                                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                                        .addComponent(lblVäljAntal, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                        .addComponent(txtAntalHattar, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 71, Short.MAX_VALUE)))
-                                .addGap(52, 52, 52))))
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                                            .addComponent(lblVäljAntal, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                            .addComponent(txtAntalHattar, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 71, Short.MAX_VALUE))
+                                        .addGap(18, 18, 18)
+                                        .addComponent(chkSnabborder))))))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addGap(0, 0, Short.MAX_VALUE)
                         .addComponent(btnPaborjaOrder)))
@@ -231,8 +243,10 @@ public class SkapaKundorder extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addGap(96, 96, 96)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 59, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 674, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 674, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                        .addComponent(jLabel2, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 107, Short.MAX_VALUE)
+                        .addComponent(txtPrisExklMoms, javax.swing.GroupLayout.Alignment.LEADING)))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
@@ -260,25 +274,28 @@ public class SkapaKundorder extends javax.swing.JFrame {
                     .addGroup(layout.createSequentialGroup()
                         .addGap(18, 18, 18)
                         .addComponent(txtFraktadress, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addGap(28, 28, 28)
+                .addGap(34, 34, 34)
                 .addComponent(lblVäljAntal)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(cmbHatt, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(lblHattmodell)
                     .addComponent(txtAntalHattar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(cmbFarg, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(cmbTyg, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(cmbStorlek, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(cmbStorlek, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(chkSnabborder))
                 .addGap(27, 27, 27)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jButton1)
                     .addComponent(jLabel5))
-                .addGap(32, 32, 32)
+                .addGap(30, 30, 30)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 326, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 35, Short.MAX_VALUE)
-                .addComponent(jLabel6)
-                .addGap(24, 24, 24)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 26, Short.MAX_VALUE)
+                .addComponent(jLabel2)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(txtPrisExklMoms, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(7, 7, 7)
                 .addComponent(btnPaborjaOrder)
                 .addGap(60, 60, 60))
         );
@@ -309,7 +326,7 @@ public class SkapaKundorder extends javax.swing.JFrame {
         }
 
         try {
-            String fraga = "SELECT Farg, Tyg, Storlek FROM Hattmodeller WHERE ModellNamn = '" + valtNamn + "'";
+            String fraga = "SELECT Farg, Tyg, Storlek, PrisExklMoms FROM Hattmodeller WHERE ModellNamn = '" + valtNamn + "'";
             java.util.HashMap<String, String> rad = idb.fetchRow(fraga);
 
             if (rad != null) {
@@ -317,6 +334,11 @@ public class SkapaKundorder extends javax.swing.JFrame {
                 String f = rad.get("Farg");
                 String t = rad.get("Tyg");
                 String s = rad.get("Storlek");
+
+                String p = rad.get("PrisExklMoms");
+                if (p != null) {
+                    styckPrisHatt = Double.parseDouble(p);
+                }
 
                 // 2. Tvinga Swing att uppdatera rutorna på "rätt" sätt
                 javax.swing.SwingUtilities.invokeLater(() -> {
@@ -374,21 +396,37 @@ public class SkapaKundorder extends javax.swing.JFrame {
     }//GEN-LAST:event_txtAntalHattarActionPerformed
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-
+        String snabborderText = "Nej"; 
+        if (chkSnabborder.isSelected()) {
+            snabborderText = "Ja";
+        }
+        String antalStr = txtAntalHattar.getText().trim();
+        int antal = antalStr.isEmpty() ? 1 : Integer.parseInt(antalStr);
         String hattModell = (String) cmbHatt.getSelectedItem();
         String tyg = (String) cmbTyg.getSelectedItem();
         String farg = (String) cmbFarg.getSelectedItem();
         String storlek = (String) cmbStorlek.getSelectedItem();
-        String antal = (String) txtAntalHattar.getText();
-
+       
+        // Räknar priset på valda hattar och plussar på totalen
+        double radPris = styckPrisHatt * antal;
+        totaltPris += radPris;
+        
+        // Uppdaterar textfältet
+        txtPrisExklMoms.setText(String.format("%.2f", totaltPris));
+        
+        
         // 2. Lägg till raden i tabellen
         javax.swing.table.DefaultTableModel model = (javax.swing.table.DefaultTableModel) jTable1.getModel();
 
         // Vi sparar priset som en formaterad sträng i tabellen
-        model.addRow(new Object[]{hattModell, tyg, farg, storlek, antal});
+        model.addRow(new Object[]{hattModell, tyg, farg, storlek, antal, snabborderText});
 
 
     }//GEN-LAST:event_jButton1ActionPerformed
+
+    private void txtPrisExklMomsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtPrisExklMomsActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtPrisExklMomsActionPerformed
 
     //public static void main(String args[]) {
     // java.awt.EventQueue.invokeLater(new Runnable() {S
@@ -400,6 +438,7 @@ public class SkapaKundorder extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnPaborjaOrder;
+    private javax.swing.JCheckBox chkSnabborder;
     private javax.swing.JComboBox<String> cmbFarg;
     private javax.swing.JComboBox<String> cmbHatt;
     private javax.swing.JComboBox<String> cmbStorlek;
@@ -407,9 +446,9 @@ public class SkapaKundorder extends javax.swing.JFrame {
     private javax.swing.JComboBox cmbValjKund;
     private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
-    private javax.swing.JLabel jLabel6;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTable jTable1;
     private javax.swing.JLabel lblDatum;
@@ -421,5 +460,6 @@ public class SkapaKundorder extends javax.swing.JFrame {
     private javax.swing.JTextField txtDatum;
     private javax.swing.JTextField txtFraktadress;
     private javax.swing.JTextField txtKundId;
+    private javax.swing.JTextField txtPrisExklMoms;
     // End of variables declaration//GEN-END:variables
 }
