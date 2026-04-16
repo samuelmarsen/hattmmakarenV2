@@ -214,17 +214,17 @@ int radIndex = jtAktuellaOrdrar.getSelectedRow();
     }
 
     try {
-        // 1. Hämta nuvarande värden
+        // Hämta nuvarande värden
         String orderID = String.valueOf(jtAktuellaOrdrar.getValueAt(radIndex, 0));
         
-        // 2. Skapa textfält för alla värden och fyll dem med nuvarande data
+        //Skapa textfält för alla värden och fyll dem med nuvarande data
         javax.swing.JTextField txtDatum = new javax.swing.JTextField(String.valueOf(jtAktuellaOrdrar.getValueAt(radIndex, 2)));
         javax.swing.JTextField txtStatus = new javax.swing.JTextField(String.valueOf(jtAktuellaOrdrar.getValueAt(radIndex, 3)));
         javax.swing.JTextField txtSnabb = new javax.swing.JTextField(String.valueOf(jtAktuellaOrdrar.getValueAt(radIndex, 4)));
         javax.swing.JTextField txtAdress = new javax.swing.JTextField(String.valueOf(jtAktuellaOrdrar.getValueAt(radIndex, 5)));
         javax.swing.JTextField txtPris = new javax.swing.JTextField(String.valueOf(jtAktuellaOrdrar.getValueAt(radIndex, 6)));
 
-        // 3. Designa panelen som ska visas i rutan
+        // Designa panelen som ska visas i rutan
         Object[] message = {
             "OrderDatum (YYYY-MM-DD HH:MM:SS):", txtDatum,
             "Status:", txtStatus,
@@ -233,7 +233,7 @@ int radIndex = jtAktuellaOrdrar.getSelectedRow();
             "TotalPris inkl moms:", txtPris
         };
 
-        // 4. Visa rutan med EN bekräftelseknapp
+       
         int option = JOptionPane.showConfirmDialog(this, message, "Redigera Order " + orderID, JOptionPane.OK_CANCEL_OPTION);
 
         if (option == JOptionPane.OK_OPTION) {
@@ -248,7 +248,7 @@ int radIndex = jtAktuellaOrdrar.getSelectedRow();
             
             idb.update(sql);
             
-            // 6. Uppdatera och bekräfta
+            // Uppdatera och bekräfta
             fyllOrderTabell(); 
             JOptionPane.showMessageDialog(this, "Order " + orderID + " har uppdaterats!");
         }
