@@ -30,6 +30,7 @@ public class RegistreraKunder extends javax.swing.JFrame {
   
         initComponents();
         fyllTabell();
+        this.setExtendedState(javax.swing.JFrame.MAXIMIZED_BOTH);
     }
     
         public void fyllTabell() {
