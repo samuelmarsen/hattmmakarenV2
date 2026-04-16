@@ -37,11 +37,12 @@ public class ForsaljningsstatistikHattmodeller extends javax.swing.JFrame {
     
     try { 
         
-        String sql = "SELECT Hattmodeller.ModellNamn, " 
-                + "SUM(IFNULL(Orderrader.Antal, 0)) AS TotaltAntal, " 
-                + "SUM(IFNULL(Orderrader.Antal * Orderrader.RadPrisExklMoms, 0)) AS TotalSumma " 
-                + "FROM Hattmodeller " +"LEFT JOIN Orderrader ON Hattmodeller.ModellID = Orderrader.ModellID " 
-                + "GROUP BY Hattmodeller.ModellID, Hattmodeller.ModellNamn";
+        String sql = "SELECT Hattmodeller.ModellNamn, " +
+             "SUM(IFNULL(Orderrader.Antal, 0)) AS TotaltAntal, " +
+             "SUM(IFNULL(Orderrader.Antal * Orderrader.RadPrisExklMoms, 0)) AS TotalSumma " +
+             "FROM Hattmodeller " +
+             "LEFT JOIN Orderrader ON Hattmodeller.ModellID = Orderrader.ModellID " +
+             "GROUP BY Hattmodeller.ModellID, Hattmodeller.ModellNamn";
 
         
         ArrayList<HashMap<String, String>> rader = idb.fetchRows(sql);
@@ -49,15 +50,26 @@ public class ForsaljningsstatistikHattmodeller extends javax.swing.JFrame {
         DefaultTableModel model = (DefaultTableModel) jtStatistik.getModel();
         model.setRowCount(0);
         
-        if (rader!= null) {
-            for (HashMap<String, String> rad : rader) {
-            model.addRow(new Object[]{
-                rad.get("ModellNamn"),
-                rad.get("TotaltAntal"),
-                rad.get("Totalsumma") + " kr"
-            });
+        if (rader != null) {
+    for (HashMap<String, String> rad : rader) {
+        String namn = rad.get("ModellNamn");
+        String antal = rad.get("TotaltAntal");
+        String summa = rad.get("TotalSumma"); // 
+
+        if (summa == null) {
+            summa = "0";
         }
+        if (antal == null) {
+            antal = "0";
         }
+
+        model.addRow(new Object[]{
+            namn,
+            antal,
+            summa + " kr"
+        });
+    }
+}
     } catch (InfException ex) {
         JOptionPane.showMessageDialog(null, "Fel vid hämtning av statistik: " + ex.getMessage());
     }
