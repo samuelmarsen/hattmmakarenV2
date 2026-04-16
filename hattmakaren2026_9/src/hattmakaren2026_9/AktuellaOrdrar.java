@@ -206,8 +206,7 @@ jtAktuellaOrdrar.getColumnModel().getColumn(6).setPreferredWidth(150);
     }//GEN-LAST:event_btnTillbakaActionPerformed
 
     private void btnRedigeraOrderActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRedigeraOrderActionPerformed
-
-    int radIndex = jtAktuellaOrdrar.getSelectedRow();
+int radIndex = jtAktuellaOrdrar.getSelectedRow();
     
     if (radIndex == -1) {
         JOptionPane.showMessageDialog(this, "Vänligen välj en order i tabellen först!");
@@ -215,37 +214,45 @@ jtAktuellaOrdrar.getColumnModel().getColumn(6).setPreferredWidth(150);
     }
 
     try {
-        // Hämta nuvarande värden från tabellen
+        // 1. Hämta nuvarande värden
         String orderID = String.valueOf(jtAktuellaOrdrar.getValueAt(radIndex, 0));
-        String nuvarandeDatum = String.valueOf(jtAktuellaOrdrar.getValueAt(radIndex, 2));
-        String nuvarandeStatus = String.valueOf(jtAktuellaOrdrar.getValueAt(radIndex, 3));
-        String nuvarandeSnabb = String.valueOf(jtAktuellaOrdrar.getValueAt(radIndex, 4));
-        String nuvarandeAdress = String.valueOf(jtAktuellaOrdrar.getValueAt(radIndex, 5));
-        String nuvarandePris = String.valueOf(jtAktuellaOrdrar.getValueAt(radIndex, 6));
+        
+        // 2. Skapa textfält för alla värden och fyll dem med nuvarande data
+        javax.swing.JTextField txtDatum = new javax.swing.JTextField(String.valueOf(jtAktuellaOrdrar.getValueAt(radIndex, 2)));
+        javax.swing.JTextField txtStatus = new javax.swing.JTextField(String.valueOf(jtAktuellaOrdrar.getValueAt(radIndex, 3)));
+        javax.swing.JTextField txtSnabb = new javax.swing.JTextField(String.valueOf(jtAktuellaOrdrar.getValueAt(radIndex, 4)));
+        javax.swing.JTextField txtAdress = new javax.swing.JTextField(String.valueOf(jtAktuellaOrdrar.getValueAt(radIndex, 5)));
+        javax.swing.JTextField txtPris = new javax.swing.JTextField(String.valueOf(jtAktuellaOrdrar.getValueAt(radIndex, 6)));
 
-        // Öppna rutor för varje fält
-        String nyAdress = JOptionPane.showInputDialog(this, "Ändra adress:", nuvarandeAdress);
-        String nyStatus = JOptionPane.showInputDialog(this, "Ändra status:", nuvarandeStatus);
-        String nyttDatum = JOptionPane.showInputDialog(this, "Ändra datum (YYYY-MM-DD HH:MM:SS):", nuvarandeDatum);
-        String nySnabb = JOptionPane.showInputDialog(this, "Ändra Snabborder (1 eller 0):", nuvarandeSnabb);
-        String nyttPris = JOptionPane.showInputDialog(this, "Ändra totalpris:", nuvarandePris); {
-            
-            // SQL Fråga
+        // 3. Designa panelen som ska visas i rutan
+        Object[] message = {
+            "OrderDatum (YYYY-MM-DD HH:MM:SS):", txtDatum,
+            "Status:", txtStatus,
+            "Snabborder (1/0):", txtSnabb,
+            "FraktAdress:", txtAdress,
+            "TotalPris inkl moms:", txtPris
+        };
+
+        // 4. Visa rutan med EN bekräftelseknapp
+        int option = JOptionPane.showConfirmDialog(this, message, "Redigera Order " + orderID, JOptionPane.OK_CANCEL_OPTION);
+
+        if (option == JOptionPane.OK_OPTION) {
+            // 5. Bygg SQL-frågan med de nya värdena från fälten
             String sql = "UPDATE Ordrar SET "
-                       + "FraktAdress = '" + nyAdress + "', "
-                       + "Status = '" + nyStatus + "', "
-                       + "OrderDatum = '" + nyttDatum + "', "
-                       + "ArSnabborder = " + nySnabb + ", "
-                       + "TotalPrisInclMoms = " + nyttPris + " "
+                       + "FraktAdress = '" + txtAdress.getText() + "', "
+                       + "Status = '" + txtStatus.getText() + "', "
+                       + "OrderDatum = '" + txtDatum.getText() + "', "
+                       + "ArSnabborder = " + txtSnabb.getText() + ", "
+                       + "TotalPrisInclMoms = " + txtPris.getText() + " "
                        + "WHERE OrderID = " + orderID;
-            
             
             idb.update(sql);
             
-            // Uppdatera tabellen och bekräfta för användaren
+            // 6. Uppdatera och bekräfta
             fyllOrderTabell(); 
             JOptionPane.showMessageDialog(this, "Order " + orderID + " har uppdaterats!");
         }
+        
     } catch (InfException ex) {
         JOptionPane.showMessageDialog(this, "Databastillgång misslyckades: " + ex.getMessage());
     } catch (Exception ex) {
