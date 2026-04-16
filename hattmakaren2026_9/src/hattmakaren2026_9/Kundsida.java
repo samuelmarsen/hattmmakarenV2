@@ -20,6 +20,7 @@ import javax.swing.table.DefaultTableModel;
 
 public class Kundsida extends javax.swing.JFrame {
     private InfDB idb;
+    private java.util.Set<Integer> changedRows = new java.util.HashSet<>();
     
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(Kundsida.class.getName());
     /**
@@ -28,7 +29,7 @@ public class Kundsida extends javax.swing.JFrame {
     public Kundsida(InfDB idb) {
         initComponents();
         this.idb = idb;
-        visaAllaKunder(); 
+        visaAllaKunder(); // ← istället för visaAllaKunder() 
         
 }
     
@@ -70,6 +71,7 @@ public class Kundsida extends javax.swing.JFrame {
             e.printStackTrace();
         }
 }
+    
     
     public void sokKunder(String sokText) {
     
@@ -154,6 +156,7 @@ public class Kundsida extends javax.swing.JFrame {
         TXTsokfunktion = new javax.swing.JTextField();
         TXThantera = new javax.swing.JButton();
         CBOXsortera = new javax.swing.JComboBox<>();
+        jButton1 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         addWindowListener(new java.awt.event.WindowAdapter() {
@@ -177,9 +180,16 @@ public class Kundsida extends javax.swing.JFrame {
                 "Kund ID", "Namn", "Epost", "Telefon", "Adress"
             }
         ) {
-            boolean[] canEdit = new boolean [] {
-                false, false, false, true, false
+            Class[] types = new Class [] {
+                java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class
             };
+            boolean[] canEdit = new boolean [] {
+                false, true, true, true, true
+            };
+
+            public Class getColumnClass(int columnIndex) {
+                return types [columnIndex];
+            }
 
             public boolean isCellEditable(int rowIndex, int columnIndex) {
                 return canEdit [columnIndex];
@@ -200,6 +210,9 @@ public class Kundsida extends javax.swing.JFrame {
         CBOXsortera.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Namn A-Ö", "Namn Ö-A", "KundID stigande", "KundID fallande" }));
         CBOXsortera.addActionListener(this::CBOXsorteraActionPerformed);
 
+        jButton1.setText("Spara");
+        jButton1.addActionListener(this::jButton1ActionPerformed);
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -209,14 +222,18 @@ public class Kundsida extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jScrollPane1)
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(TXTsokfunktion, javax.swing.GroupLayout.PREFERRED_SIZE, 305, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 285, Short.MAX_VALUE)
-                        .addComponent(TXThantera)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(BTNmeny))
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(CBOXsortera, javax.swing.GroupLayout.PREFERRED_SIZE, 305, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(0, 0, Short.MAX_VALUE)))
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(TXTsokfunktion, javax.swing.GroupLayout.PREFERRED_SIZE, 305, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(TXThantera)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED))
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(CBOXsortera, javax.swing.GroupLayout.PREFERRED_SIZE, 305, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(372, 372, 372)))
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(jButton1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(BTNmeny, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -228,8 +245,13 @@ public class Kundsida extends javax.swing.JFrame {
                         .addComponent(BTNmeny)
                         .addComponent(TXThantera))
                     .addComponent(TXTsokfunktion, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(7, 7, 7)
-                .addComponent(CBOXsortera, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(7, 7, 7)
+                        .addComponent(CBOXsortera, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jButton1)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 461, Short.MAX_VALUE)
                 .addContainerGap())
@@ -278,7 +300,6 @@ public class Kundsida extends javax.swing.JFrame {
     }//GEN-LAST:event_TXTsokfunktionKeyPressed
 
     private void formWindowOpened(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowOpened
-        visaAllaKunder();
         
     }//GEN-LAST:event_formWindowOpened
 
@@ -288,30 +309,43 @@ public class Kundsida extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_TXThanteraActionPerformed
 
-    /**
-     * @param args the command line arguments
-     */
-    public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
-        try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        } catch (ReflectiveOperationException | javax.swing.UnsupportedLookAndFeelException ex) {
-            logger.log(java.util.logging.Level.SEVERE, null, ex);
-        }
-        //</editor-fold>
-
-        /* Create and display the form */
-      //  java.awt.EventQueue.invokeLater(() -> new Kundsida().setVisible(true));
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+    if (TBLkund.isEditing()) {
+        TBLkund.getCellEditor().stopCellEditing();
     }
+
+    DefaultTableModel model = (DefaultTableModel) TBLkund.getModel();
+
+    try {
+        for (int row = 0; row < model.getRowCount(); row++) {
+
+            String kundID = model.getValueAt(row, 0).toString();
+            String namn = model.getValueAt(row, 1).toString();
+            String epost = model.getValueAt(row, 2).toString();
+            String telefon = model.getValueAt(row, 3).toString();
+            String adress = model.getValueAt(row, 4).toString();
+
+            String sql = "UPDATE Kunder SET " +
+                         "Namn = '" + namn + "', " +
+                         "Epost = '" + epost + "', " +
+                         "Telefon = '" + telefon + "', " +
+                         "Adress = '" + adress + "' " +
+                         "WHERE KundID = '" + kundID + "'";
+
+            idb.update(sql);
+        }
+
+        JOptionPane.showMessageDialog(this, "Ändringar sparades!");
+
+    } catch (InfException e) {
+        JOptionPane.showMessageDialog(this,
+            "Fel vid sparning:\n" + e.getMessage(),
+            "Databasfel",
+            JOptionPane.ERROR_MESSAGE);
+        e.printStackTrace();
+    }
+    }//GEN-LAST:event_jButton1ActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton BTNmeny;
@@ -319,6 +353,7 @@ public class Kundsida extends javax.swing.JFrame {
     private javax.swing.JTable TBLkund;
     private javax.swing.JButton TXThantera;
     private javax.swing.JTextField TXTsokfunktion;
+    private javax.swing.JButton jButton1;
     private javax.swing.JScrollPane jScrollPane1;
     // End of variables declaration//GEN-END:variables
 }
