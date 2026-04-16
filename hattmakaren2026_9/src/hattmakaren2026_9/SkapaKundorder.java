@@ -15,6 +15,9 @@ import oru.inf.InfDB;
 import oru.inf.InfException;
 import java.util.HashMap;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+
 /**
  * Creates new form SkapaKundorder
  */
@@ -29,6 +32,12 @@ public class SkapaKundorder extends javax.swing.JFrame {
         initComponents();
         this.setExtendedState(javax.swing.JFrame.MAXIMIZED_BOTH);
         this.idb = idb;
+
+        LocalDate dagensDatum = LocalDate.now();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        txtDatum.setText(dagensDatum.format(formatter));
+        txtDatum.setEditable(false);
+        
         fyllRulllistaMedKunder();
         fyllRullistaMedHattar();
         fyllAlternativ();
@@ -130,7 +139,7 @@ public class SkapaKundorder extends javax.swing.JFrame {
         cmbValjKund.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Kurt Lupton", "Mikael Maskerad", "Lotta Larsson", "Sofia Sömmerska", "Erik Export" }));
         cmbValjKund.addActionListener(this::cmbValjKundActionPerformed);
 
-        btnPaborjaOrder.setText("Påbörja Order");
+        btnPaborjaOrder.setText("Registrera Order");
         btnPaborjaOrder.addActionListener(this::btnPaborjaOrderActionPerformed);
 
         cmbHatt.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
@@ -305,8 +314,8 @@ public class SkapaKundorder extends javax.swing.JFrame {
 
 
     private void btnPaborjaOrderActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPaborjaOrderActionPerformed
-        //
 
+        
     }//GEN-LAST:event_btnPaborjaOrderActionPerformed
 
     private void txtKundIdActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtKundIdActionPerformed
@@ -396,7 +405,7 @@ public class SkapaKundorder extends javax.swing.JFrame {
     }//GEN-LAST:event_txtAntalHattarActionPerformed
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        String snabborderText = "Nej"; 
+        String snabborderText = "Nej";
         if (chkSnabborder.isSelected()) {
             snabborderText = "Ja";
         }
@@ -406,15 +415,14 @@ public class SkapaKundorder extends javax.swing.JFrame {
         String tyg = (String) cmbTyg.getSelectedItem();
         String farg = (String) cmbFarg.getSelectedItem();
         String storlek = (String) cmbStorlek.getSelectedItem();
-       
+
         // Räknar priset på valda hattar och plussar på totalen
         double radPris = styckPrisHatt * antal;
         totaltPris += radPris;
-        
+
         // Uppdaterar textfältet
         txtPrisExklMoms.setText(String.format("%.2f", totaltPris));
-        
-        
+
         // 2. Lägg till raden i tabellen
         javax.swing.table.DefaultTableModel model = (javax.swing.table.DefaultTableModel) jTable1.getModel();
 

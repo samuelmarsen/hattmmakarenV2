@@ -204,7 +204,7 @@
     </Component>
     <Component class="javax.swing.JButton" name="btnPaborjaOrder">
       <Properties>
-        <Property name="text" type="java.lang.String" value="P&#xe5;b&#xf6;rja Order"/>
+        <Property name="text" type="java.lang.String" value="Registrera Order"/>
       </Properties>
       <Events>
         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnPaborjaOrderActionPerformed"/>
