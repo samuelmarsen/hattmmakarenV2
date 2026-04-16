@@ -109,7 +109,7 @@ public class ForsaljningsstatistikHattmodeller extends javax.swing.JFrame {
                     .addGroup(layout.createSequentialGroup()
                         .addGap(329, 329, 329)
                         .addComponent(lblForsaljningstatistik)))
-                .addContainerGap(992, Short.MAX_VALUE))
+                .addContainerGap(102, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
