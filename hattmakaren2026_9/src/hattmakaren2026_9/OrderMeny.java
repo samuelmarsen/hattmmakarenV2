@@ -1,4 +1,4 @@
-/*
+ /*
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
  */
@@ -20,6 +20,7 @@ public class OrderMeny extends javax.swing.JFrame {
      */
     public OrderMeny(InfDB idb) throws InfException {
         initComponents();
+        this.setExtendedState(javax.swing.JFrame.MAXIMIZED_BOTH);
         this.idb = idb;
     }
 
@@ -67,47 +68,48 @@ public class OrderMeny extends javax.swing.JFrame {
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(152, Short.MAX_VALUE)
-                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 77, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(171, 171, 171))
+                .addGap(263, 263, 263)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                    .addComponent(btnSkapaKundorder, javax.swing.GroupLayout.DEFAULT_SIZE, 197, Short.MAX_VALUE)
+                    .addComponent(btnOrderHistorik, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 9, Short.MAX_VALUE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addComponent(btnAktuellaOrdrar, javax.swing.GroupLayout.PREFERRED_SIZE, 207, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(btnOrderStatus, javax.swing.GroupLayout.PREFERRED_SIZE, 185, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(btnSkapaFraktsedel, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 185, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(339, 339, 339))
             .addGroup(layout.createSequentialGroup()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(34, 34, 34)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(btnOrderHistorik, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(btnSkapaKundorder, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                        .addGap(44, 44, 44)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(btnSkapaFraktsedel, javax.swing.GroupLayout.PREFERRED_SIZE, 172, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(btnOrderStatus, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                        .addContainerGap()
+                        .addComponent(btnTillbaka, javax.swing.GroupLayout.PREFERRED_SIZE, 131, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(14, 14, 14)
-                        .addComponent(btnTillbaka)))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-            .addGroup(layout.createSequentialGroup()
-                .addGap(131, 131, 131)
-                .addComponent(btnAktuellaOrdrar)
+                        .addGap(532, 532, 532)
+                        .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(14, 14, 14)
-                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(43, 43, 43)
+                .addGap(186, 186, 186)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(btnSkapaKundorder)
-                    .addComponent(btnSkapaFraktsedel))
-                .addGap(50, 50, 50)
+                    .addComponent(btnSkapaKundorder, javax.swing.GroupLayout.PREFERRED_SIZE, 74, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnSkapaFraktsedel, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(55, 55, 55)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(btnOrderHistorik)
-                    .addComponent(btnOrderStatus))
-                .addGap(39, 39, 39)
-                .addComponent(btnAktuellaOrdrar)
-                .addGap(13, 13, 13)
-                .addComponent(btnTillbaka)
-                .addContainerGap(18, Short.MAX_VALUE))
+                    .addComponent(btnOrderStatus, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnOrderHistorik, javax.swing.GroupLayout.PREFERRED_SIZE, 68, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addGap(74, 74, 74)
+                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 83, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(213, 213, 213)
+                .addComponent(btnAktuellaOrdrar, javax.swing.GroupLayout.PREFERRED_SIZE, 68, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 18, Short.MAX_VALUE)
+                .addComponent(btnTillbaka, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap())
         );
 
         pack();
@@ -131,27 +133,48 @@ public class OrderMeny extends javax.swing.JFrame {
     }//GEN-LAST:event_btnSkapaKundorderActionPerformed
 
     private void btnSkapaFraktsedelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSkapaFraktsedelActionPerformed
-//motorn för att skapafraktsedel
-        String idStr = javax.swing.JOptionPane.showInputDialog("Ange Order-ID:");
-    if (idStr != null && !idStr.isEmpty()) {
-        try {
-            String sql = "SELECT Kunder.Namn, Kunder.Adress, Hattmodeller.PrisExklMoms " +
-                         "FROM Ordrar " +
-                         "JOIN Kunder ON Ordrar.KundID = Kunder.KundID " +
-                         "JOIN Orderrader ON Ordrar.OrderID = Orderrader.OrderID " +
-                         "JOIN Hattmodeller ON Orderrader.ModellID = Hattmodeller.ModellID " +
-                         "WHERE Ordrar.OrderID = " + idStr;
+try {
+        // Hämta alla tillgängliga Order-IDn för att fylla rullistan
+        // Vi hämtar även kundnamnet så det blir lättare för användaren att välja rätt
+        String query = "SELECT Ordrar.OrderID, Kunder.Namn FROM Ordrar " +
+                       "JOIN Kunder ON Ordrar.KundID = Kunder.KundID";
+        java.util.ArrayList<java.util.HashMap<String, String>> allaOrdrar = idb.fetchRows(query);
 
-            java.util.HashMap<String, String> data = idb.fetchRow(sql);
-
-            if (data != null) {
-                skapaFraktsedelFil(Integer.parseInt(idStr), data.get("Namn"), data.get("Adress"), data.get("PrisExklMoms"));
-            } else {
-                javax.swing.JOptionPane.showMessageDialog(this, "Kunde inte hitta ordern i databasen.");
+        if (allaOrdrar != null && !allaOrdrar.isEmpty()) {
+            //Skapa en JComboBox och fyll den med "ID - Namn"
+            javax.swing.JComboBox<String> orderValjare = new javax.swing.JComboBox<>();
+            for (java.util.HashMap<String, String> rad : allaOrdrar) {
+                orderValjare.addItem(rad.get("OrderID") + " - " + rad.get("Namn"));
             }
-        } catch (InfException e) {
-            System.out.println("Fel vid hämtning: " + e.getMessage());
+
+            // Visa rullistan i en dialogruta
+            int val = javax.swing.JOptionPane.showConfirmDialog(this, orderValjare, 
+                    "Välj order för fraktsedel", javax.swing.JOptionPane.OK_CANCEL_OPTION);
+
+            if (val == javax.swing.JOptionPane.OK_OPTION) {
+                //Plocka ut bara siffran (OrderID) från det valda alternativet
+                String valtObjekt = (String) orderValjare.getSelectedItem();
+                String idStr = valtObjekt.split(" - ")[0];
+
+                // 5. Din befintliga SQL för att hämta detaljerna (JOIN-frågan)
+                String sql = "SELECT Kunder.Namn, Kunder.Adress, Hattmodeller.PrisExklMoms " +
+                             "FROM Ordrar " +
+                             "JOIN Kunder ON Ordrar.KundID = Kunder.KundID " +
+                             "JOIN Orderrader ON Ordrar.OrderID = Orderrader.OrderID " +
+                             "JOIN Hattmodeller ON Orderrader.ModellID = Hattmodeller.ModellID " +
+                             "WHERE Ordrar.OrderID = " + idStr;
+
+                java.util.HashMap<String, String> data = idb.fetchRow(sql);
+
+                if (data != null) {
+                    skapaFraktsedelFil(Integer.parseInt(idStr), data.get("Namn"), data.get("Adress"), data.get("PrisExklMoms"));
+                }
+            }
+        } else {
+            javax.swing.JOptionPane.showMessageDialog(this, "Inga ordrar hittades i systemet.");
         }
+    } catch (oru.inf.InfException e) {
+        System.out.println("Fel vid hämtning: " + e.getMessage());
     }
     }//GEN-LAST:event_btnSkapaFraktsedelActionPerformed
 
