@@ -1,0 +1,9 @@
+======= MATERIALBESTÄLLNING =======
+Datum: 2026-04-16 13:39
+-----------------------------------
+Material:  Ullfilt
+Antal:     2.0
+-----------------------------------
+Totalt antal enheter: 2.0
+===================================
+Beställning skapad av systemet.

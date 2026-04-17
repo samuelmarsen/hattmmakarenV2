@@ -1,0 +1,10 @@
+Datum: 2026-04-17 11:12 | Material: Kaninfilt | Antal: 1
+Datum: 2026-04-17 11:12 | Material: Toquillastrå | Antal: 1
+Datum: 2026-04-17 11:13 | Material: Toquillastrå | Antal: 0.0
+Datum: 2026-04-17 11:13 | Material: Toquillastrå | Antal: 1
+Datum: 2026-04-17 11:13 | Material: Kaninfilt | Antal: 1
+Datum: 2026-04-17 11:13 | Material: Ullfilt | Antal: 1
+Datum: 2026-04-17 11:14 | Material: Ullfilt | Antal: 0.0
+Datum: 2026-04-17 11:17 | Material: Kaninfilt | Antal: 1
+Datum: 2026-04-17 11:17 | Material: Bomullstyg | Antal: 1
+Datum: 2026-04-17 11:18 | Material: Läder | Antal: 1

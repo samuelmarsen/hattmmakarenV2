@@ -154,7 +154,7 @@ public class HuvudMeny extends javax.swing.JFrame {
     }//GEN-LAST:event_BTNkundSidaActionPerformed
 
     private void btnStatistikActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnStatistikActionPerformed
-    new StatistikMeny(idb).setVisible(true);
+        new StatistikDetaljer(idb).setVisible(true);
         // TODO add your handling code here:
     }//GEN-LAST:event_btnStatistikActionPerformed
 

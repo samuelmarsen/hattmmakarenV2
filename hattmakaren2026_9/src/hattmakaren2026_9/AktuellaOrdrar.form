@@ -67,7 +67,7 @@
                 <Column editable="true" title="Status" type="java.lang.Object"/>
                 <Column editable="true" title="ArSnabborder" type="java.lang.Object"/>
                 <Column editable="true" title="FraktAdress" type="java.lang.Object"/>
-                <Column editable="true" title="TotalPrisInclMoms" type="java.lang.Object"/>
+                <Column editable="true" title="TotalPrisExklMoms" type="java.lang.Object"/>
               </Table>
             </Property>
             <Property name="columnModel" type="javax.swing.table.TableColumnModel" editor="org.netbeans.modules.form.editors2.TableColumnModelEditor">
