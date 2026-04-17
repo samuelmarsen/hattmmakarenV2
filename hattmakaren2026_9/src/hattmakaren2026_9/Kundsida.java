@@ -30,6 +30,7 @@ public class Kundsida extends javax.swing.JFrame {
         initComponents();
         this.idb = idb;
         visaAllaKunder(); // ← istället för visaAllaKunder() 
+        this.setExtendedState(javax.swing.JFrame.MAXIMIZED_BOTH);
         
 }
     
@@ -140,6 +141,7 @@ public class Kundsida extends javax.swing.JFrame {
         e.printStackTrace();
     }
 }
+  
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -154,9 +156,10 @@ public class Kundsida extends javax.swing.JFrame {
         jScrollPane1 = new javax.swing.JScrollPane();
         TBLkund = new javax.swing.JTable();
         TXTsokfunktion = new javax.swing.JTextField();
-        TXThantera = new javax.swing.JButton();
+        TXTregNykund = new javax.swing.JButton();
         CBOXsortera = new javax.swing.JComboBox<>();
         jButton1 = new javax.swing.JButton();
+        btnTabortKund = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         addWindowListener(new java.awt.event.WindowAdapter() {
@@ -204,14 +207,17 @@ public class Kundsida extends javax.swing.JFrame {
             }
         });
 
-        TXThantera.setText("Hantera");
-        TXThantera.addActionListener(this::TXThanteraActionPerformed);
+        TXTregNykund.setText("Registrera ny kund");
+        TXTregNykund.addActionListener(this::TXTregNykundActionPerformed);
 
         CBOXsortera.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Namn A-Ö", "Namn Ö-A", "KundID stigande", "KundID fallande" }));
         CBOXsortera.addActionListener(this::CBOXsorteraActionPerformed);
 
         jButton1.setText("Spara");
         jButton1.addActionListener(this::jButton1ActionPerformed);
+
+        btnTabortKund.setText("Ta bort kund");
+        btnTabortKund.addActionListener(this::btnTabortKundActionPerformed);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -223,14 +229,13 @@ public class Kundsida extends javax.swing.JFrame {
                     .addComponent(jScrollPane1)
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(TXTsokfunktion, javax.swing.GroupLayout.PREFERRED_SIZE, 305, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(TXThantera)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED))
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(CBOXsortera, javax.swing.GroupLayout.PREFERRED_SIZE, 305, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(372, 372, 372)))
+                            .addComponent(TXTsokfunktion, javax.swing.GroupLayout.PREFERRED_SIZE, 305, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(CBOXsortera, javax.swing.GroupLayout.PREFERRED_SIZE, 305, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(TXTregNykund, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(btnTabortKund, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addComponent(jButton1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(BTNmeny, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
@@ -243,7 +248,7 @@ public class Kundsida extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                         .addComponent(BTNmeny)
-                        .addComponent(TXThantera))
+                        .addComponent(TXTregNykund))
                     .addComponent(TXTsokfunktion, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
@@ -251,9 +256,11 @@ public class Kundsida extends javax.swing.JFrame {
                         .addComponent(CBOXsortera, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(layout.createSequentialGroup()
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jButton1)))
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jButton1)
+                            .addComponent(btnTabortKund))))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 461, Short.MAX_VALUE)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 1009, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
@@ -303,11 +310,12 @@ public class Kundsida extends javax.swing.JFrame {
         
     }//GEN-LAST:event_formWindowOpened
 
-    private void TXThanteraActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_TXThanteraActionPerformed
-        RegistreraKunder RegKunder = new RegistreraKunder(idb);
-        RegKunder.setVisible(true);
+    private void TXTregNykundActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_TXTregNykundActionPerformed
+                                           
+    RegistreraKunder regKunder = new RegistreraKunder(idb, this);
+    regKunder.setVisible(true);
         // TODO add your handling code here:
-    }//GEN-LAST:event_TXThanteraActionPerformed
+    }//GEN-LAST:event_TXTregNykundActionPerformed
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
     if (TBLkund.isEditing()) {
@@ -346,13 +354,61 @@ public class Kundsida extends javax.swing.JFrame {
     }
     }//GEN-LAST:event_jButton1ActionPerformed
 
+    private void btnTabortKundActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnTabortKundActionPerformed
+    int valdRad = TBLkund.getSelectedRow();
+
+    if (valdRad == -1) {
+        JOptionPane.showMessageDialog(this, "Markera en kund först.");
+        return;
+    }
+
+    String kundID = TBLkund.getValueAt(valdRad, 0).toString();
+    String namn = TBLkund.getValueAt(valdRad, 1).toString();
+
+    try {
+        String kontrollSql = "SELECT KundID FROM Ordrar WHERE KundID = " + kundID;
+        String finnsOrder = idb.fetchSingle(kontrollSql);
+
+        if (finnsOrder != null) {
+            JOptionPane.showMessageDialog(this,
+                "Kunden kan inte tas bort eftersom den är kopplad till en eller flera ordrar.");
+            return;
+        }
+
+        int svar = JOptionPane.showConfirmDialog(
+            this,
+            "Vill du ta bort kunden " + namn + " (ID: " + kundID + ")?",
+            "Bekräfta borttagning",
+            JOptionPane.YES_NO_OPTION
+        );
+
+        if (svar != JOptionPane.YES_OPTION) {
+            return;
+        }
+
+        String sql = "DELETE FROM Kunder WHERE KundID = " + kundID;
+        idb.delete(sql);   // om delete inte funkar, använd idb.update(sql);
+
+        JOptionPane.showMessageDialog(this, "Kunden togs bort.");
+        visaAllaKunder();
+
+    } catch (InfException e) {
+        JOptionPane.showMessageDialog(this,
+            "Fel vid borttagning:\n" + e.getMessage(),
+            "Databasfel",
+            JOptionPane.ERROR_MESSAGE);
+        e.printStackTrace();
+    }      // TODO add your handling code here:
+    }//GEN-LAST:event_btnTabortKundActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton BTNmeny;
     private javax.swing.JComboBox<String> CBOXsortera;
     private javax.swing.JTable TBLkund;
-    private javax.swing.JButton TXThantera;
+    private javax.swing.JButton TXTregNykund;
     private javax.swing.JTextField TXTsokfunktion;
+    private javax.swing.JButton btnTabortKund;
     private javax.swing.JButton jButton1;
     private javax.swing.JScrollPane jScrollPane1;
     // End of variables declaration//GEN-END:variables

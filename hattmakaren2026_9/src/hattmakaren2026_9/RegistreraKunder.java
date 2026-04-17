@@ -18,56 +18,22 @@ import javax.swing.table.DefaultTableModel;
  */
 public class RegistreraKunder extends javax.swing.JFrame {
     private InfDB idb;
+    private Kundsida kundsida;
     
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(RegistreraKunder.class.getName());
 
     /**
      * Creates new form RegistreraKunder
      */
-    public RegistreraKunder(InfDB idb) {
+    public RegistreraKunder(InfDB idb, Kundsida kundsida) {
         this.idb = idb;
-        
+        this.kundsida = kundsida;
   
         initComponents();
-        fyllTabell();
         this.setExtendedState(javax.swing.JFrame.MAXIMIZED_BOTH);
     }
     
-        public void fyllTabell() {
-        
-        ((DefaultTableModel) TBLkundInfo.getModel()).setRowCount(0);
-
-        try {
-            String sql = "SELECT KundID, Namn FROM Kunder";
-        
-            ArrayList<HashMap<String, String>> resultat = idb.fetchRows(sql);
-
-            // Kolla om det kom tillbaka några resultat
-            if (resultat == null || resultat.isEmpty()) {
-                JOptionPane.showMessageDialog(this,
-                    "Det finns inga kunder i databasen",
-                    "Inga kunder", 
-                    JOptionPane.INFORMATION_MESSAGE);
-                return;
-            }
-
-            // Lägg till raderna i tabellen
-            for (HashMap<String, String> rad : resultat) {
-                Object[] row = {
-                    rad.get("Namn"),
-                    rad.get("KundID"),
-                };
-                ((DefaultTableModel) TBLkundInfo.getModel()).addRow(row);
-            }
-
-        } catch (InfException e) {
-            JOptionPane.showMessageDialog(this,
-                "Fel vid hämtning av kunder:\n" + e.getMessage(),
-                "Databasfel", 
-                JOptionPane.ERROR_MESSAGE);
-            e.printStackTrace();
-        }
-}
+  
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -83,39 +49,22 @@ public class RegistreraKunder extends javax.swing.JFrame {
         txtMejladress = new javax.swing.JTextField();
         txtAdress = new javax.swing.JTextField();
         btnRegNyKund = new javax.swing.JButton();
-        btnSpara = new javax.swing.JButton();
-        btnTaBort = new javax.swing.JButton();
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
-        lblSokKund = new javax.swing.JLabel();
-        tftSokFramKund = new javax.swing.JTextField();
-        jScrollPane1 = new javax.swing.JScrollPane();
-        TBLkundInfo = new javax.swing.JTable();
         BTNtillbaka = new javax.swing.JButton();
-        lblKundID = new javax.swing.JLabel();
-        txtKundID = new javax.swing.JTextField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-        txtTelefonnummer.setText("Telefonnummer");
         txtTelefonnummer.addActionListener(this::txtTelefonnummerActionPerformed);
 
-        txtNamn.setText("Namn");
+        txtNamn.addActionListener(this::txtNamnActionPerformed);
 
-        txtMejladress.setText("Mejladress");
-
-        txtAdress.setText("Adress");
+        txtAdress.addActionListener(this::txtAdressActionPerformed);
 
         btnRegNyKund.setText("Registrera ny kund");
         btnRegNyKund.addActionListener(this::btnRegNyKundActionPerformed);
-
-        btnSpara.setText("Spara");
-        btnSpara.addActionListener(this::btnSparaActionPerformed);
-
-        btnTaBort.setText("Ta bort");
-        btnTaBort.addActionListener(this::btnTaBortActionPerformed);
 
         jLabel1.setText("Telefonnummer");
 
@@ -125,30 +74,8 @@ public class RegistreraKunder extends javax.swing.JFrame {
 
         jLabel4.setText("Adress");
 
-        lblSokKund.setText("Sök fram kundID");
-
-        tftSokFramKund.addActionListener(this::tftSokFramKundActionPerformed);
-
-        TBLkundInfo.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
-                {null, null},
-                {null, null},
-                {null, null},
-                {null, null}
-            },
-            new String [] {
-                "KundID", "Namn"
-            }
-        ));
-        jScrollPane1.setViewportView(TBLkundInfo);
-
         BTNtillbaka.setText("Tillbaka");
         BTNtillbaka.addActionListener(this::BTNtillbakaActionPerformed);
-
-        lblKundID.setText("KundID");
-
-        txtKundID.setEditable(false);
-        txtKundID.addActionListener(this::txtKundIDActionPerformed);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -160,31 +87,16 @@ public class RegistreraKunder extends javax.swing.JFrame {
                     .addComponent(jLabel1)
                     .addComponent(jLabel2)
                     .addComponent(jLabel3)
-                    .addComponent(jLabel4)
-                    .addComponent(lblSokKund)
-                    .addComponent(lblKundID))
-                .addGap(50, 50, 50)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(tftSokFramKund)
-                        .addGap(29, 29, 29))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(txtTelefonnummer, javax.swing.GroupLayout.PREFERRED_SIZE, 342, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                .addComponent(txtNamn)
-                                .addComponent(txtMejladress, javax.swing.GroupLayout.DEFAULT_SIZE, 342, Short.MAX_VALUE)
-                                .addComponent(txtAdress))
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(btnSpara)
-                                .addGap(70, 70, 70)
-                                .addComponent(btnTaBort))
-                            .addComponent(txtKundID, javax.swing.GroupLayout.PREFERRED_SIZE, 168, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel4))
+                .addGap(58, 58, 58)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(btnRegNyKund)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 254, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(29, Short.MAX_VALUE))
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                        .addComponent(txtAdress, javax.swing.GroupLayout.DEFAULT_SIZE, 551, Short.MAX_VALUE)
+                        .addComponent(txtMejladress, javax.swing.GroupLayout.Alignment.LEADING)
+                        .addComponent(txtTelefonnummer, javax.swing.GroupLayout.Alignment.LEADING)
+                        .addComponent(txtNamn, javax.swing.GroupLayout.Alignment.LEADING)))
+                .addContainerGap(1137, Short.MAX_VALUE))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(BTNtillbaka)
@@ -193,108 +105,35 @@ public class RegistreraKunder extends javax.swing.JFrame {
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(39, 39, 39)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(lblSokKund)
-                            .addComponent(tftSokFramKund, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addContainerGap()
-                        .addComponent(BTNtillbaka)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(btnRegNyKund)))
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(38, 38, 38)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(lblKundID)
-                            .addComponent(txtKundID, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(30, 30, 30)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(txtNamn, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel2))
-                        .addGap(35, 35, 35)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(txtTelefonnummer, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel1))
-                        .addGap(50, 50, 50)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(txtMejladress, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel3))
-                        .addGap(43, 43, 43)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(txtAdress, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel4))
-                        .addGap(74, 74, 74)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(btnSpara)
-                            .addComponent(btnTaBort)))
-                    .addGroup(layout.createSequentialGroup()
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(72, Short.MAX_VALUE))
+                .addContainerGap()
+                .addComponent(BTNtillbaka)
+                .addGap(124, 124, 124)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(txtNamn, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel2))
+                .addGap(35, 35, 35)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(txtTelefonnummer, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel1))
+                .addGap(50, 50, 50)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(txtMejladress, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel3))
+                .addGap(43, 43, 43)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(txtAdress, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel4))
+                .addGap(74, 74, 74)
+                .addComponent(btnRegNyKund)
+                .addContainerGap(610, Short.MAX_VALUE))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void btnSparaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSparaActionPerformed
-    try {
-        String sokID = tftSokFramKund.getText(); // Vi utgår från ID:t vi sökte på
-        
-        String sql = "UPDATE Kunder SET "
-                     + "KundID = '" + txtKundID.getText() + "', "
-                     + "Namn = '" + txtNamn.getText() + "', "
-                     + "Adress = '" + txtAdress.getText() + "', "
-                     + "Epost = '" + txtMejladress.getText() + "', "
-                     + "Telefon = '" + txtTelefonnummer.getText() + "' "
-                     + "WHERE KundID = " + sokID;
-        
-        idb.update(sql);
-        JOptionPane.showMessageDialog(null, "Kunduppgifter har uppdaterats!");
-        fyllTabell();
-        
-    } catch (InfException ex) {
-        JOptionPane.showMessageDialog(null, "Kunde inte uppdatera. Kontrollera att KundID i sökrutan är korrekt.");
-    }
-
-        // TODO add your handling code here:
-    }//GEN-LAST:event_btnSparaActionPerformed
-
     private void txtTelefonnummerActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtTelefonnummerActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_txtTelefonnummerActionPerformed
-
-    private void tftSokFramKundActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tftSokFramKundActionPerformed
-    try {
-        String sokVarde = tftSokFramKund.getText().trim();         // Hämtar det användaren skrev
-        
-        if (sokVarde.isEmpty()) {
-            JOptionPane.showMessageDialog(null, "Vänligen skriv in ett KundID eller Namn för att söka.");
-            return;
-        }
-        
-        String sql = "SELECT * FROM Kunder WHERE KundID = '" + sokVarde + "' OR Namn LIKE '%" + sokVarde + "%'";
-        
-        HashMap<String, String> kundData = idb.fetchRow(sql);
-        
-        if (kundData != null) {
-            // Om kunden hittas, fyll i de andra rutorna
-            txtKundID.setText(kundData.get("KundID"));
-            txtNamn.setText(kundData.get("Namn"));
-            txtTelefonnummer.setText(kundData.get("Telefon"));
-            txtMejladress.setText(kundData.get("Epost"));
-            txtAdress.setText(kundData.get("Adress"));
-        } else {
-            JOptionPane.showMessageDialog(null, "Kunden '" + sokVarde + "' hittades inte.");
-        }
-        
-    } catch (InfException ex) {
-        JOptionPane.showMessageDialog(null, "Ett fel uppstod vid sökning!");
-        System.out.println(ex.getMessage());
-    }
-    }//GEN-LAST:event_tftSokFramKundActionPerformed
 
     private void btnRegNyKundActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegNyKundActionPerformed
     try {
@@ -306,8 +145,8 @@ public class RegistreraKunder extends javax.swing.JFrame {
        if (namn.isEmpty() || adress.isEmpty() || mejladress.isEmpty() || telefon.isEmpty()) {
            JOptionPane.showMessageDialog(null, "Alla fält måste fyllas i!");
        }
-       
-       String sql = "INSERT INTO Kunder (Namn, Adress, Telefon, Epost) VALUES ('" 
+       String nyttID = idb.getAutoIncrement("Kunder", "KundID");
+       String sql = "INSERT INTO Kunder (KundID, Namn, Adress, Telefon, Epost) " + "VALUES (" + nyttID + " ,'"
         + namn + "', '" 
         + adress + "', '" 
         + telefon + "', '" 
@@ -315,8 +154,12 @@ public class RegistreraKunder extends javax.swing.JFrame {
        
        
        idb.insert(sql);
+       
+       if (kundsida != null) {
+            kundsida.visaAllaKunder();
+        }
+       
        JOptionPane.showMessageDialog(null, "Ny kund har registrerats!");
-       fyllTabell();
        
        txtNamn.setText(""); txtAdress.setText(""); txtMejladress.setText(""); txtTelefonnummer.setText("");
        
@@ -325,76 +168,18 @@ public class RegistreraKunder extends javax.swing.JFrame {
     }
     }//GEN-LAST:event_btnRegNyKundActionPerformed
 
-    private void btnTaBortActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnTaBortActionPerformed
- // Fråga först om de är säkra
-    int svar = JOptionPane.showConfirmDialog(
-            null,
-            "Är du helt säker på att du vill ta bort kunden?",
-            "Ta bort kund",
-            JOptionPane.YES_NO_OPTION
-    );
-
-    if (svar == JOptionPane.YES_OPTION) {
-        try {
-            String sokID = tftSokFramKund.getText().trim();
-
-            if (sokID.isEmpty()) {
-                JOptionPane.showMessageDialog(null, "Ange ett KundID.");
-                return;
-            }
-
-            try {
-                Integer.parseInt(sokID);
-            } catch (NumberFormatException e) {
-                JOptionPane.showMessageDialog(null, "KundID måste vara ett heltal.");
-                return;
-            }
-
-            String sqlKundFinns = "SELECT KundID FROM Kunder WHERE KundID = " + sokID;
-            String kundFinns = idb.fetchSingle(sqlKundFinns);
-
-            if (kundFinns == null) {
-                JOptionPane.showMessageDialog(null, "Det finns ingen kund med det ID:t.");
-                return;
-            }
-
-            String sqlOrderKontroll = "SELECT OrderID FROM Ordrar WHERE KundID = " + sokID;
-            String orderFinns = idb.fetchSingle(sqlOrderKontroll);
-
-            if (orderFinns != null) {
-                JOptionPane.showMessageDialog(null, "Kunden kan inte tas bort eftersom den är kopplad till en order.");
-                return;
-            }
-
-            String sqlDelete = "DELETE FROM Kunder WHERE KundID = " + sokID;
-            idb.delete(sqlDelete);
-
-            JOptionPane.showMessageDialog(null, "Kunden har raderats.");
-            fyllTabell();
-
-            // Rensa fält
-            txtKundID.setText("");
-            txtNamn.setText("");
-            txtAdress.setText("");
-            txtMejladress.setText("");
-            txtTelefonnummer.setText("");
-            tftSokFramKund.setText("");
-
-        } catch (InfException ex) {
-            JOptionPane.showMessageDialog(null, "Fel vid borttagning: " + ex.getMessage());
-        }
-    }
-        // TODO add your handling code here:
-    }//GEN-LAST:event_btnTaBortActionPerformed
-
-
-    private void txtKundIDActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtKundIDActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_txtKundIDActionPerformed
 
     private void BTNtillbakaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BTNtillbakaActionPerformed
         this.dispose();
     }//GEN-LAST:event_BTNtillbakaActionPerformed
+
+    private void txtNamnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtNamnActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtNamnActionPerformed
+
+    private void txtAdressActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtAdressActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtAdressActionPerformed
 
 
     /**
@@ -403,20 +188,12 @@ public class RegistreraKunder extends javax.swing.JFrame {
    
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton BTNtillbaka;
-    private javax.swing.JTable TBLkundInfo;
     private javax.swing.JButton btnRegNyKund;
-    private javax.swing.JButton btnSpara;
-    private javax.swing.JButton btnTaBort;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
-    private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JLabel lblKundID;
-    private javax.swing.JLabel lblSokKund;
-    private javax.swing.JTextField tftSokFramKund;
     private javax.swing.JTextField txtAdress;
-    private javax.swing.JTextField txtKundID;
     private javax.swing.JTextField txtMejladress;
     private javax.swing.JTextField txtNamn;
     private javax.swing.JTextField txtTelefonnummer;

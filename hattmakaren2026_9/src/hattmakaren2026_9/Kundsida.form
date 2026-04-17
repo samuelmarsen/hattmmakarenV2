@@ -32,17 +32,15 @@
                   <Component id="jScrollPane1" max="32767" attributes="0"/>
                   <Group type="102" attributes="0">
                       <Group type="103" groupAlignment="0" attributes="0">
-                          <Group type="102" alignment="0" attributes="0">
-                              <Component id="TXTsokfunktion" min="-2" pref="305" max="-2" attributes="0"/>
-                              <EmptySpace max="32767" attributes="0"/>
-                              <Component id="TXThantera" min="-2" max="-2" attributes="0"/>
-                              <EmptySpace type="unrelated" max="-2" attributes="0"/>
-                          </Group>
-                          <Group type="102" alignment="0" attributes="0">
-                              <Component id="CBOXsortera" min="-2" pref="305" max="-2" attributes="0"/>
-                              <EmptySpace min="-2" pref="372" max="-2" attributes="0"/>
-                          </Group>
+                          <Component id="TXTsokfunktion" alignment="0" min="-2" pref="305" max="-2" attributes="0"/>
+                          <Component id="CBOXsortera" alignment="0" min="-2" pref="305" max="-2" attributes="0"/>
                       </Group>
+                      <EmptySpace min="220" max="32767" attributes="0"/>
+                      <Group type="103" groupAlignment="0" max="-2" attributes="0">
+                          <Component id="TXTregNykund" max="32767" attributes="0"/>
+                          <Component id="btnTabortKund" max="32767" attributes="0"/>
+                      </Group>
+                      <EmptySpace type="unrelated" max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="0" max="-2" attributes="0">
                           <Component id="jButton1" max="32767" attributes="0"/>
                           <Component id="BTNmeny" max="32767" attributes="0"/>
@@ -60,7 +58,7 @@
               <Group type="103" groupAlignment="0" attributes="0">
                   <Group type="103" groupAlignment="3" attributes="0">
                       <Component id="BTNmeny" alignment="3" min="-2" max="-2" attributes="0"/>
-                      <Component id="TXThantera" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="TXTregNykund" alignment="3" min="-2" max="-2" attributes="0"/>
                   </Group>
                   <Component id="TXTsokfunktion" min="-2" pref="23" max="-2" attributes="0"/>
               </Group>
@@ -71,11 +69,14 @@
                   </Group>
                   <Group type="102" alignment="0" attributes="0">
                       <EmptySpace max="-2" attributes="0"/>
-                      <Component id="jButton1" min="-2" max="-2" attributes="0"/>
+                      <Group type="103" groupAlignment="3" attributes="0">
+                          <Component id="jButton1" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="btnTabortKund" alignment="3" min="-2" max="-2" attributes="0"/>
+                      </Group>
                   </Group>
               </Group>
               <EmptySpace max="-2" attributes="0"/>
-              <Component id="jScrollPane1" pref="461" max="32767" attributes="0"/>
+              <Component id="jScrollPane1" pref="1009" max="32767" attributes="0"/>
               <EmptySpace max="-2" attributes="0"/>
           </Group>
       </Group>
@@ -150,12 +151,12 @@
         <EventHandler event="keyPressed" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="TXTsokfunktionKeyPressed"/>
       </Events>
     </Component>
-    <Component class="javax.swing.JButton" name="TXThantera">
+    <Component class="javax.swing.JButton" name="TXTregNykund">
       <Properties>
-        <Property name="text" type="java.lang.String" value="Hantera"/>
+        <Property name="text" type="java.lang.String" value="Registrera ny kund"/>
       </Properties>
       <Events>
-        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="TXThanteraActionPerformed"/>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="TXTregNykundActionPerformed"/>
       </Events>
     </Component>
     <Component class="javax.swing.JComboBox" name="CBOXsortera">
@@ -182,6 +183,14 @@
       </Properties>
       <Events>
         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jButton1ActionPerformed"/>
+      </Events>
+    </Component>
+    <Component class="javax.swing.JButton" name="btnTabortKund">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="Ta bort kund"/>
+      </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnTabortKundActionPerformed"/>
       </Events>
     </Component>
   </SubComponents>
