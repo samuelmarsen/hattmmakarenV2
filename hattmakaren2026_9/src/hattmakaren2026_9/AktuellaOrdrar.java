@@ -163,7 +163,7 @@ jtAktuellaOrdrar.getColumnModel().getColumn(6).setPreferredWidth(150);
                 {null, null, null, null, null, null, null}
             },
             new String [] {
-                "OrderID", "KundID", "OrderDatum", "Status", "ArSnabborder", "FraktAdress", "TotalPrisInclMoms"
+                "OrderID", "KundID", "OrderDatum", "Status", "ArSnabborder", "FraktAdress", "TotalPrisExklMoms"
             }
         ));
         jScrollPane2.setViewportView(jtAktuellaOrdrar);
