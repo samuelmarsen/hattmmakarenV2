@@ -9,7 +9,13 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.JOptionPane;
-
+import javax.swing.JComboBox;
+import java.awt.Color;
+import java.awt.Component;
+import java.awt.Font;
+import javax.swing.JTable;
+import javax.swing.table.DefaultTableCellRenderer;
+import javax.swing.JTextField;
 
 /**
  *
@@ -26,6 +32,7 @@ public class SchemaVy extends javax.swing.JFrame {
         initComponents();
         this.idb = idb;
         this.setExtendedState(javax.swing.JFrame.MAXIMIZED_BOTH);
+        jtSchema.setDefaultRenderer(Object.class, new SchemaFargsattare());
     }
 
     /**
@@ -37,22 +44,292 @@ public class SchemaVy extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        jScrollPane1 = new javax.swing.JScrollPane();
+        jtSchema = new javax.swing.JTable();
+        btnVisaSchema = new javax.swing.JButton();
+        btnPlaneraPass = new javax.swing.JButton();
+        btnTillbakaKnapp = new javax.swing.JButton();
+
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+
+        jtSchema.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+
+            },
+            new String [] {
+                "Anställda", "Måndag", "Tisdag", "Onsdag", "Torsdag", "Fredag"
+            }
+        ) {
+            boolean[] canEdit = new boolean [] {
+                false, false, false, false, false, false
+            };
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
+        jtSchema.setGridColor(new java.awt.Color(204, 204, 204));
+        jtSchema.setIntercellSpacing(new java.awt.Dimension(1, 1));
+        jtSchema.setRowHeight(40);
+        jtSchema.setRowSelectionAllowed(false);
+        jtSchema.setShowGrid(true);
+        jScrollPane1.setViewportView(jtSchema);
+
+        btnVisaSchema.setText("Visa schema...");
+        btnVisaSchema.addActionListener(this::btnVisaSchemaActionPerformed);
+
+        btnPlaneraPass.setText("Planera pass....");
+        btnPlaneraPass.addActionListener(this::btnPlaneraPassActionPerformed);
+
+        btnTillbakaKnapp.setText("Tillbaka......");
+        btnTillbakaKnapp.addActionListener(this::btnTillbakaKnappActionPerformed);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 400, Short.MAX_VALUE)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addContainerGap(500, Short.MAX_VALUE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(btnVisaSchema, javax.swing.GroupLayout.PREFERRED_SIZE, 217, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(btnPlaneraPass, javax.swing.GroupLayout.PREFERRED_SIZE, 198, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 1264, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(btnTillbakaKnapp, javax.swing.GroupLayout.PREFERRED_SIZE, 208, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 300, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addGap(14, 14, 14)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(btnTillbakaKnapp, javax.swing.GroupLayout.PREFERRED_SIZE, 56, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(btnVisaSchema, javax.swing.GroupLayout.PREFERRED_SIZE, 49, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(btnPlaneraPass, javax.swing.GroupLayout.PREFERRED_SIZE, 46, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 744, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(261, Short.MAX_VALUE))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    private void btnVisaSchemaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnVisaSchemaActionPerformed
+// 1. Skapa alternativen för rullistan
+    // Man kan hårdkoda dem eller generera dem med LocalDate
+    String[] veckor = {
+        "Vecka 16 (2026-04-13 - 2026-04-17)",
+        "Vecka 17 (2026-04-20 - 2026-04-24)",
+        "Vecka 18 (2026-04-27 - 2026-05-01)",
+        "Vecka 19 (2026-05-04 - 2026-05-08)"
+    };
+
+    JComboBox<String> cbVeckor = new JComboBox<>(veckor);
+
+    // 2. Visa dialogrutan
+    int option = JOptionPane.showConfirmDialog(this, cbVeckor, "Välj vecka att visa", JOptionPane.OK_CANCEL_OPTION);
+
+    if (option == JOptionPane.OK_OPTION) {
+        String valdVecka = cbVeckor.getSelectedItem().toString();
+        
+        // 3. Plocka ut startdatumet från strängen (vi klipper ut det som står mellan parenteserna)
+        // Ett enkelt sätt är att använda substring eller bara en if-sats
+        String startDatum = "";
+        String slutDatum = "";
+        
+        if (valdVecka.contains("Vecka 16")) {
+            startDatum = "2026-04-13";
+            slutDatum = "2026-04-17";
+        } else if (valdVecka.contains("Vecka 17")) {
+            startDatum = "2026-04-20";
+            slutDatum = "2026-04-24";
+        } // ... och så vidare för de andra veckorna
+        fyllSchemaTabell(startDatum, slutDatum);
+    }
+
+    }//GEN-LAST:event_btnVisaSchemaActionPerformed
+
+    private void btnPlaneraPassActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPlaneraPassActionPerformed
+try {
+        // 1. Hämta levande data till rullistorna
+        ArrayList<String> anstallda = idb.fetchColumn("SELECT Namn FROM Anstallda");
+        ArrayList<String> ordrar = idb.fetchColumn("SELECT OrderID FROM Ordrar");
+        ordrar.add(0, "Inget (Allmänt arbete)"); // Möjliggör pass utan order
+
+        // 2. Skapa komponenterna för rutan
+        JComboBox<String> cbPersonal = new JComboBox<>(anstallda.toArray(new String[0]));
+        JComboBox<String> cbOrder = new JComboBox<>(ordrar.toArray(new String[0]));
+        JTextField txtDatum = new JTextField("2026-04-13"); // Förifyll gärna
+        JTextField txtTimmar = new JTextField("8");
+        JTextField txtAktivitet = new JTextField("Beskrivning...");
+
+        Object[] formular = {
+            "Vem ska utföra arbetet?:", cbPersonal,
+            "Vilken order gäller det?:", cbOrder,
+            "Datum (ÅÅÅÅ-MM-DD):", txtDatum,
+            "Antal timmar:", txtTimmar,
+            "Vad ska göras?:", txtAktivitet
+        };
+
+        // 3. Visa rutan
+        int svar = JOptionPane.showConfirmDialog(this, formular, "Planera nytt arbetspass", JOptionPane.OK_CANCEL_OPTION);
+
+        if (svar == JOptionPane.OK_OPTION) {
+            // Hämta AnstalldID baserat på det valda namnet
+            String valtNamn = cbPersonal.getSelectedItem().toString();
+            String anstID = idb.fetchSingle("SELECT AnstalldID FROM Anstallda WHERE Namn = '" + valtNamn + "'");
+            
+            // Hantera OrderID (blir NULL om man valde "Inget")
+            String valtOrderID = cbOrder.getSelectedItem().toString();
+            String orderValue = valtOrderID.contains("Inget") ? "NULL" : valtOrderID;
+
+            // 4. Skicka in i databasen
+            String sql = "INSERT INTO Arbetspass (AnstalldID, OrderID, Datum, Timmar, Aktivitet) VALUES ("
+                    + anstID + ", " + orderValue + ", '" + txtDatum.getText() + "', " 
+                    + txtTimmar.getText() + ", '" + txtAktivitet.getText() + "')";
+
+            idb.insert(sql);
+            
+            // 5. UPPDATERA SCHEMAT DIREKT
+            // Här anropar vi din befintliga metod med de datum som är aktiva just nu
+            // (Tips: Du kan hämta dessa från dina datum-fält eller rullistan)
+            fyllSchemaTabell("2026-04-13", "2026-04-17"); 
+            
+            JOptionPane.showMessageDialog(this, "Passet har sparats och schemat är uppdaterat!");
+        }
+    } catch (Exception e) {
+        JOptionPane.showMessageDialog(this, "Kunde inte spara passet: " + e.getMessage());
+    }
+
+    }//GEN-LAST:event_btnPlaneraPassActionPerformed
+
+    private void btnTillbakaKnappActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnTillbakaKnappActionPerformed
+        this.dispose();
+
+    }//GEN-LAST:event_btnTillbakaKnappActionPerformed
+
+    private void fyllSchemaTabell(String startDatum, String slutDatum) {
+    try {
+        DefaultTableModel model = (DefaultTableModel) jtSchema.getModel();
+        model.setRowCount(0); 
+        
+        String sqlAnstallda = "SELECT AnstalldID, Namn FROM Anstallda";
+        ArrayList<HashMap<String, String>> listaAnstallda = idb.fetchRows(sqlAnstallda);
+
+        if (listaAnstallda != null) {
+            for (HashMap<String, String> anstalld : listaAnstallda) {
+                String id = anstalld.get("AnstalldID");
+                Object[] radData = new Object[6];
+                radData[0] = anstalld.get("Namn");
+
+                // Lägg till Timmar i SELECT-frågan
+                String sqlPass = "SELECT Datum, Aktivitet, OrderID, Timmar FROM Arbetspass " +
+                                 "WHERE AnstalldID = " + id + " " +
+                                 "AND Datum BETWEEN '" + startDatum + "' AND '" + slutDatum + "'";
+                
+                ArrayList<HashMap<String, String>> passData = idb.fetchRows(sqlPass);
+
+                if (passData != null) {
+                    for (HashMap<String, String> pass : passData) {
+                        String datum = pass.get("Datum");
+                        String aktivitet = pass.get("Aktivitet");
+                        String order = (pass.get("OrderID") != null) ? " (#" + pass.get("OrderID") + ")" : "";
+                        
+                        // Hämta timmar och baka in i texten för färg-renderaren
+                        String timmar = pass.get("Timmar");
+                        if (timmar == null) { timmar = "0"; } // Säkerhetskoll
+                        
+                        int kolumn = beraknaKolumnIndex(startDatum, datum);
+                        if (kolumn >= 1 && kolumn <= 5) {
+                            // Vi skriver texten som "Aktivitet (#12) [8h]" 
+                            // Renderaren kommer sen leta efter "[8" för att veta att det ska vara rött
+                            radData[kolumn] = aktivitet + order + " [" + timmar + "h]";
+                        }
+                    }
+                }
+                model.addRow(radData);
+            }
+        }
+    } catch (InfException ex) {
+        JOptionPane.showMessageDialog(this, "Fel vid hämtning: " + ex.getMessage());
+    }
+}
+    
+    
+    private int beraknaKolumnIndex(String startStr, String passStr) {
+    try {
+        // Gör om textsträngarna till riktiga datum-objekt
+        java.time.LocalDate start = java.time.LocalDate.parse(startStr);
+        java.time.LocalDate pass = java.time.LocalDate.parse(passStr);
+        
+        // Räknar ut hur många dagar det skiljer mellan startdatumet och passets datum
+        long skillnad = java.time.temporal.ChronoUnit.DAYS.between(start, pass);
+        
+        // Returnera skillnaden + 1 (eftersom kolumn 0 är "Personal")
+        return (int) skillnad + 1;
+    } catch (Exception e) {
+        return -1; // Om något går fel (t.ex. felaktigt datumformat)
+    }
+}
+    
+    public class SchemaFargsattare extends DefaultTableCellRenderer {
+
+    @Override
+    public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
+        // Hämta baskomponenten från DefaultTableCellRenderer
+        Component c = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
+
+        // Vi färglägger bara dag-kolumnerna 
+        if (column > 0 && value != null) {
+            String cellText = value.toString();
+
+            // Logik för RÖD (Hög belastning: 7-8 timmar eller mer)
+            if (cellText.contains("[7") || cellText.contains("[8") || cellText.contains("[9")) {
+                c.setBackground(new Color(255, 153, 153)); // Mjuk röd
+                c.setForeground(Color.BLACK); // Svart text för läsbarhet
+            } 
+            // Logik för GUL (Medel belastning: 4-6 timmar)
+            else if (cellText.contains("[4") || cellText.contains("[5") || cellText.contains("[6")) {
+                c.setBackground(new Color(255, 255, 153)); // Mjuk gul
+                c.setForeground(Color.BLACK);
+            } 
+            // Logik för GRÖN (Låg belastning: 1-3 timmar)
+            else if (cellText.contains("[1") || cellText.contains("[2") || cellText.contains("[3")) {
+                c.setBackground(new Color(153, 255, 153)); // Mjuk grön
+                c.setForeground(Color.BLACK);
+            }
+            // Om cellen är tom eller har annan text
+            else {
+                c.setBackground(Color.WHITE);
+                c.setForeground(Color.GRAY);
+            }
+        } else {
+            // Standardutseende för namnkolumnen (kolumn 0)
+            c.setBackground(new Color(245, 245, 245)); // Ljusgrå bakgrund för namn
+            c.setForeground(Color.BLACK);
+            c.setFont(c.getFont().deriveFont(Font.BOLD)); // Gör namnen feta
+        }
+
+        // Fixa färgen om raden är markerad (så man ser vad man valt)
+        if (isSelected) {
+            c.setBackground(c.getBackground().darker());
+        }
+
+        return c;
+    }
+}
+    
+    
+    
+    
+    
+    
+    
     /**
      * @param args the command line arguments
      */
@@ -78,5 +355,10 @@ public class SchemaVy extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnPlaneraPass;
+    private javax.swing.JButton btnTillbakaKnapp;
+    private javax.swing.JButton btnVisaSchema;
+    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JTable jtSchema;
     // End of variables declaration//GEN-END:variables
 }
