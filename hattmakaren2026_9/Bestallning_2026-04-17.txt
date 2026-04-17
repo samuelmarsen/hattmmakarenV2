@@ -104,3 +104,45 @@ INFO: En textfil har skapats.
 
 ----------------------------
 
+BEKRÄFTELSE PÅ BESTÄLLNING
+==========================
+- Ullfilt: 9.0 st (Lagerbeställning)
+- Kaninfilt: 20.0 st (Lagerbeställning)
+==========================
+Datum: 2026-04-17 11:51
+INFO: En textfil har skapats.
+
+
+----------------------------
+
+BEKRÄFTELSE PÅ BESTÄLLNING
+==========================
+- Toquillastrå: 4.0 st (Order #3)
+- Tygblommor: 2.0 st (Order #3)
+==========================
+Datum: 2026-04-17 11:52
+INFO: En textfil har skapats.
+
+
+----------------------------
+
+BEKRÄFTELSE PÅ BESTÄLLNING
+==========================
+- Kaninfilt: 5.0 st (Order #2)
+==========================
+Datum: 2026-04-17 11:54
+INFO: En textfil har skapats.
+
+
+----------------------------
+
+BEKRÄFTELSE PÅ BESTÄLLNING
+==========================
+- Siden/Silke: 8.0 st (Lagerbeställning)
+==========================
+Datum: 2026-04-17 11:54
+INFO: En textfil har skapats.
+
+
+----------------------------
+
