@@ -40,6 +40,7 @@ public class HuvudMeny extends javax.swing.JFrame {
         BTNkundSida = new javax.swing.JButton();
         btnStatistik = new javax.swing.JButton();
         btnSchemaVy = new javax.swing.JButton();
+        btnLogin = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -63,6 +64,9 @@ public class HuvudMeny extends javax.swing.JFrame {
         btnSchemaVy.setText("Schema");
         btnSchemaVy.addActionListener(this::btnSchemaVyActionPerformed);
 
+        btnLogin.setText("Login");
+        btnLogin.addActionListener(this::btnLoginActionPerformed);
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -74,16 +78,21 @@ public class HuvudMeny extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addGap(163, 163, 163)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                        .addComponent(btnOrderMeny, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(btnMaterial, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                    .addComponent(btnStatistik))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(btnLagerfordaModeller, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(BTNkundSida, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(btnSchemaVy, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addGap(183, 183, 183))
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(btnLogin, javax.swing.GroupLayout.PREFERRED_SIZE, 77, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                .addComponent(btnOrderMeny, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(btnMaterial, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                            .addComponent(btnStatistik))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(btnLagerfordaModeller, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(BTNkundSida, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(btnSchemaVy, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addGap(183, 183, 183))))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -102,7 +111,9 @@ public class HuvudMeny extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnStatistik)
                     .addComponent(btnSchemaVy))
-                .addContainerGap(199, Short.MAX_VALUE))
+                .addGap(43, 43, 43)
+                .addComponent(btnLogin)
+                .addContainerGap(133, Short.MAX_VALUE))
         );
 
         pack();
@@ -143,7 +154,7 @@ public class HuvudMeny extends javax.swing.JFrame {
     }//GEN-LAST:event_BTNkundSidaActionPerformed
 
     private void btnStatistikActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnStatistikActionPerformed
-    new StatistikMeny(idb).setVisible(true);
+        new StatistikDetaljer(idb).setVisible(true);
         // TODO add your handling code here:
     }//GEN-LAST:event_btnStatistikActionPerformed
 
@@ -151,6 +162,11 @@ public class HuvudMeny extends javax.swing.JFrame {
         SchemaVy sv = new SchemaVy(idb);
         sv.setVisible(true);
     }//GEN-LAST:event_btnSchemaVyActionPerformed
+
+    private void btnLoginActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLoginActionPerformed
+         LoginMedarbetare lm = new LoginMedarbetare(idb);
+        lm.setVisible(true);
+    }//GEN-LAST:event_btnLoginActionPerformed
 
     
     /**
@@ -182,6 +198,7 @@ public class HuvudMeny extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton BTNkundSida;
     private javax.swing.JButton btnLagerfordaModeller;
+    private javax.swing.JButton btnLogin;
     private javax.swing.JButton btnMaterial;
     private javax.swing.JButton btnOrderMeny;
     private javax.swing.JButton btnSchemaVy;

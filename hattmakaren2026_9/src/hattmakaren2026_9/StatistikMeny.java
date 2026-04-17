@@ -48,6 +48,7 @@ public class StatistikMeny extends javax.swing.JFrame {
         btnKunder.addActionListener(this::btnKunderActionPerformed);
 
         btnTid.setText("Försäljningsstatistik (år, månad, kvartal)");
+        btnTid.addActionListener(this::btnTidActionPerformed);
 
         btnTillbaka.setText("Tillbaka");
 
@@ -100,6 +101,11 @@ public class StatistikMeny extends javax.swing.JFrame {
     new StatistikKund(idb).setVisible(true);
         // TODO add your handling code here:
     }//GEN-LAST:event_btnKunderActionPerformed
+
+    private void btnTidActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnTidActionPerformed
+    new StatistikDetaljer (idb).setVisible(true);
+        
+    }//GEN-LAST:event_btnTidActionPerformed
 
     /**
      * @param args the command line arguments
