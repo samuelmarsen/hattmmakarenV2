@@ -1,0 +1,106 @@
+BEKRÄFTELSE PÅ BESTÄLLNING
+==========================
+- Linnetyg: 1.0 st (Lagerbeställning)
+==========================
+Datum: 2026-04-17 11:20
+INFO: En textfil har skapats.
+
+
+----------------------------
+
+BEKRÄFTELSE PÅ BESTÄLLNING
+==========================
+- Strutsfjäder: 1.0 st (Lagerbeställning)
+- Tygblommor: 1.0 st (Lagerbeställning)
+==========================
+Datum: 2026-04-17 11:21
+INFO: En textfil har skapats.
+
+
+----------------------------
+
+BEKRÄFTELSE PÅ BESTÄLLNING
+==========================
+- Toquillastrå: 1.0 st (Order #3)
+==========================
+Datum: 2026-04-17 11:25
+INFO: En textfil har skapats.
+
+
+----------------------------
+
+BEKRÄFTELSE PÅ BESTÄLLNING
+==========================
+- Bomullstyg: 7.0 st (Lagerbeställning)
+- Linnetyg: 1.0 st (Lagerbeställning)
+- Läder: 2.0 st (Lagerbeställning)
+==========================
+Datum: 2026-04-17 11:26
+INFO: En textfil har skapats.
+
+
+----------------------------
+
+BEKRÄFTELSE PÅ BESTÄLLNING
+==========================
+- Siden/Silke: 1.0 st (Lagerbeställning)
+==========================
+Datum: 2026-04-17 11:30
+INFO: En textfil har skapats.
+
+
+----------------------------
+
+BEKRÄFTELSE PÅ BESTÄLLNING
+==========================
+- Tweed: 1.0 st (Lagerbeställning)
+- Strutsfjäder: 1.0 st (Lagerbeställning)
+==========================
+Datum: 2026-04-17 11:31
+INFO: En textfil har skapats.
+
+
+----------------------------
+
+BEKRÄFTELSE PÅ BESTÄLLNING
+==========================
+- Kaninfilt: 1.0 st (Order #2)
+- Ullfilt: 5.0 st (Order #4)
+==========================
+Datum: 2026-04-17 11:31
+INFO: En textfil har skapats.
+
+
+----------------------------
+
+BEKRÄFTELSE PÅ BESTÄLLNING
+==========================
+- Tygblommor: 1.0 st (Lagerbeställning)
+- Pärlor: 1.0 st (Lagerbeställning)
+==========================
+Datum: 2026-04-17 11:32
+INFO: En textfil har skapats.
+
+
+----------------------------
+
+BEKRÄFTELSE PÅ BESTÄLLNING
+==========================
+- Toquillastrå: 1.0 st (Order #3)
+==========================
+Datum: 2026-04-17 11:38
+INFO: En textfil har skapats.
+
+
+----------------------------
+
+BEKRÄFTELSE PÅ BESTÄLLNING
+==========================
+- Ullfilt: 1.2 st (Lagerbeställning)
+==========================
+Datum: 2026-04-17 11:39
+INFO: En textfil har skapats.
+
+
+----------------------------
+

@@ -19,24 +19,23 @@ import java.util.stream.Collectors;
  */
 public class MaterialBestallningsSidan extends javax.swing.JFrame {
     private InfDB idb;
-
-    
     private DefaultTableModel materialModel;
-
     private DefaultTableModel lagerModel;
-
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(MaterialBestallningsSidan.class.getName());
 
     /**
      * Creates new form MaterialBestallningsSidan
      */
     public MaterialBestallningsSidan(InfDB idb)throws InfException {
-        this.idb = idb;
-        initComponents();
-        initMaterialTabell();
-       laddaHelaTabellen();
-       initMaterialListaTabell();
-       laddaMaterialLista();
+this.idb = idb;
+    initComponents();
+    setExtendedState(JFrame.MAXIMIZED_BOTH);
+    
+    initMaterialTabell();     
+    initMaterialListaTabell(); 
+    
+    uppdateraTabell();       
+    laddaMaterialLista();
        
 
     }
@@ -57,6 +56,14 @@ public class MaterialBestallningsSidan extends javax.swing.JFrame {
         tblMaterialLista = new javax.swing.JTable();
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
+        jLabel3 = new javax.swing.JLabel();
+        jLabel4 = new javax.swing.JLabel();
+        btnSokDatum = new javax.swing.JButton();
+        txtFranDatum = new javax.swing.JTextField();
+        txtTillDatum = new javax.swing.JTextField();
+        jScrollPane3 = new javax.swing.JScrollPane();
+        txtLogg = new javax.swing.JTextArea();
+        jLabel5 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -93,307 +100,290 @@ public class MaterialBestallningsSidan extends javax.swing.JFrame {
 
         jLabel2.setText("Allt material");
 
+        jLabel3.setText("Från Datum: ");
+
+        jLabel4.setText("Till Datum: ");
+
+        btnSokDatum.setText("Sök");
+        btnSokDatum.addActionListener(this::btnSokDatumActionPerformed);
+
+        txtFranDatum.addActionListener(this::txtFranDatumActionPerformed);
+
+        txtTillDatum.addActionListener(this::txtTillDatumActionPerformed);
+
+        txtLogg.setEditable(false);
+        txtLogg.setColumns(20);
+        txtLogg.setRows(5);
+        jScrollPane3.setViewportView(txtLogg);
+
+        jLabel5.setText("Format:             YYYY-MM-DD");
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(23, 23, 23)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(btnSkapaPdf)
-                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                        .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 128, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 117, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 750, Short.MAX_VALUE)
-                        .addComponent(jScrollPane2)))
-                .addContainerGap(19, Short.MAX_VALUE))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(23, 23, 23)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(btnSkapaPdf)
+                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 128, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 117, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 750, Short.MAX_VALUE)
+                                .addComponent(jScrollPane2)))
+                        .addGap(134, 134, 134)
+                        .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 330, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addContainerGap()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                            .addComponent(jLabel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jLabel3, javax.swing.GroupLayout.DEFAULT_SIZE, 70, Short.MAX_VALUE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(txtFranDatum, javax.swing.GroupLayout.DEFAULT_SIZE, 85, Short.MAX_VALUE)
+                            .addComponent(txtTillDatum)))
+                    .addGroup(layout.createSequentialGroup()
+                        .addContainerGap()
+                        .addComponent(btnSokDatum, javax.swing.GroupLayout.PREFERRED_SIZE, 64, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addContainerGap()
+                        .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 175, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(683, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(23, 23, 23)
-                .addComponent(jLabel1)
-                .addGap(18, 18, 18)
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 118, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
-                .addComponent(jLabel2)
+                .addGap(9, 9, 9)
+                .addComponent(jLabel5)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(txtFranDatum, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel3))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(txtTillDatum, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel4))
+                .addGap(4, 4, 4)
+                .addComponent(btnSokDatum)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jLabel1)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 118, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jLabel2)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 234, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 392, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(btnSkapaPdf)
-                .addContainerGap(274, Short.MAX_VALUE))
+                .addContainerGap(517, Short.MAX_VALUE))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+// </editor-fold>                        
 
-    private void laddaHelaTabellen() {
-        try {
-            String sqlOrdrar = "SELECT OrderID FROM Ordrar WHERE Status IN ('Registrerad', 'Tillverkning')";
-            ArrayList<HashMap<String, String>> aktivaOrdrar = idb.fetchRows(sqlOrdrar);
-
-            if (aktivaOrdrar == null || aktivaOrdrar.isEmpty()) {
-                JOptionPane.showMessageDialog(this, "Det finns inga aktiva ordrar att beställa material till just nu.");
-                return;
-            }
-
-            List<Integer> orderIds = new ArrayList<>();
-            for (HashMap<String, String> order : aktivaOrdrar) {
-                orderIds.add(Integer.parseInt(order.get("OrderID")));
-            }
-
-            List<HashMap<String, String>> resultatLista = hamtaMaterialbehov(orderIds);
-
-            materialModel.setRowCount(0); 
-
-            if (resultatLista != null && !resultatLista.isEmpty()) {
-                for (HashMap<String, String> rad : resultatLista) {
-                    int orderId = Integer.parseInt(rad.get("OrderID"));
-                    
-                    String material = rad.get("Namn"); 
-                    
-                    double behov = Double.parseDouble(rad.get("TotaltBehov"));
-                    double saldo = Double.parseDouble(rad.get("LagerSaldo"));
-                    
-                    double bestall = Math.max(0.0, behov - saldo);
-
-                    materialModel.addRow(new Object[]{orderId, material, behov, saldo, bestall});
-                }
-            } else {
-                JOptionPane.showMessageDialog(this, "Inget materialbehov hittades för de aktiva ordrarna.");
-            }
-
-        } catch (Exception e) {
-            JOptionPane.showMessageDialog(this, "Ett fel uppstod när tabellen skulle laddas: " + e.getMessage(), "Fel", JOptionPane.ERROR_MESSAGE);
-        }
-    }
     
     private void initMaterialListaTabell() {
-    lagerModel = new DefaultTableModel(
-        new Object[]{"MaterialID", "Material", "Antal i lager", "Antal att beställa", "Genomför beställning", "Markera som beställd"}, 0
+lagerModel = new DefaultTableModel(
+        // Här ändrar vi rubriken på sista kolumnen
+        new Object[]{"MaterialID", "Material", "Antal i lager", "Antal att beställa", "Beställt senast:"}, 0
     ) {
         @Override
-        public Class<?> getColumnClass(int columnIndex) {
-            return (columnIndex == 4 || columnIndex == 5) ? Boolean.class : String.class;
-        }
-
-        @Override
         public boolean isCellEditable(int row, int column) {
-            return column == 3 || column == 4 || column == 5;
+            return column == 3; // Endast "Antal att beställa" ska gå att skriva i
         }
     };
-
     tblMaterialLista.setModel(lagerModel);
-    lagerModel.addTableModelListener(e -> {
-    int row = e.getFirstRow();
-    int col = e.getColumn();
-
-    // Kolumn 5 = "Beställt (DB)"
-    if (col == 5) {
-        sparaBestalltStatus(row);
-    }
-});
-
 }
-    private void sparaBestalltStatus(int row) {
-    try {
-        String materialID = lagerModel.getValueAt(row, 0).toString();
-        boolean bestallt = Boolean.TRUE.equals(lagerModel.getValueAt(row, 5));
 
-        String sql = "UPDATE Material SET Bestallt = " + (bestallt ? "TRUE" : "FALSE") +
-                     " WHERE MaterialID = " + materialID;
-
-        idb.update(sql);
-
-    } catch (Exception e) {
-        JOptionPane.showMessageDialog(this, "Fel vid sparande av beställt-status: " + e.getMessage());
-    }
-}
 
     private void laddaMaterialLista() {
-    try {
-        String sql = "SELECT MaterialID, Namn, LagerSaldo, Bestallt FROM Material";
+try {
+        String sql = "SELECT MaterialID, Namn, LagerSaldo, Bestallt, BestallningsDatum FROM Material";
         ArrayList<HashMap<String, String>> materialLista = idb.fetchRows(sql);
-
         lagerModel.setRowCount(0);
 
         for (HashMap<String, String> rad : materialLista) {
+            String statusCell = "Ej beställt"; 
+            
+
+            if ("1".equals(rad.get("Bestallt")) || "true".equalsIgnoreCase(rad.get("Bestallt"))) {
+                String datum = rad.get("BestallningsDatum");
+                statusCell = "Beställt (" + (datum != null ? datum : "-") + ")";
+            }
+            
             lagerModel.addRow(new Object[]{
                 rad.get("MaterialID"),
                 rad.get("Namn"),
                 rad.get("LagerSaldo"),
-                0,                          // Beställ antal
-                false,                      // Beställ?
-                "1".equals(rad.get("Bestallt")) || "true".equalsIgnoreCase(rad.get("Bestallt"))
-
+                0,
+                statusCell
             });
         }
-
     } catch (Exception e) {
-        JOptionPane.showMessageDialog(this, "Fel vid laddning av materiallistan: " + e.getMessage());
-    }
-}
-
-    private List<MaterialRad> hamtaBestallningsraderLager() {
-    List<MaterialRad> lista = new ArrayList<>();
-
-    for (int i = 0; i < lagerModel.getRowCount(); i++) {
-
-        boolean villBestalla = Boolean.TRUE.equals(lagerModel.getValueAt(i, 4));
-        boolean markeraBestallt = Boolean.TRUE.equals(lagerModel.getValueAt(i, 5));
-
-        String material = lagerModel.getValueAt(i, 1).toString();
-        double saldo = Double.parseDouble(lagerModel.getValueAt(i, 2).toString());
-        double bestall = Double.parseDouble(lagerModel.getValueAt(i, 3).toString());
-
-        // Om användaren vill beställa
-        if (villBestalla && bestall > 0) {
-            lista.add(new MaterialRad(0, material, 0, saldo, bestall));
-        }
-
-        // Uppdatera "Beställt" i databasen
-        if (markeraBestallt) {
-            try {
-                idb.update("UPDATE Material SET Bestallt = TRUE WHERE Namn = '" + material + "'");
-            } catch (Exception e) {
-                JOptionPane.showMessageDialog(this, "Fel vid uppdatering av beställt-status: " + e.getMessage());
-            }
-        }
+        System.out.println("Lagerfel: " + e.getMessage());
     }
 
-    return lista;
 }
+
  
-    private void exporteraMaterialbestallning(List<MaterialRad> bestallning) {
-    String datum = java.time.LocalDate.now().toString();
-    String filnamn = "Materialbestallning_" + datum + ".txt";
-
-    try (java.io.PrintWriter writer = new java.io.PrintWriter(filnamn, "UTF-8")) {
-        writer.println("======= MATERIALBESTÄLLNING =======");
-        writer.println("Datum: " + java.time.LocalDateTime.now().format(java.time.format.DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm")));
-        writer.println("-----------------------------------");
-
-        double totaltAntalEnheter = 0;
-
-        for (MaterialRad rad : bestallning) {
-            writer.println("Material:  " + rad.material);
-            writer.println("Antal:     " + rad.bestall);
-            writer.println("-----------------------------------");
-            totaltAntalEnheter += rad.bestall;
-        }
-
-        writer.println("Totalt antal enheter: " + totaltAntalEnheter);
-        writer.println("===================================");
-        writer.println("Beställning skapad av systemet.");
-
-        javax.swing.JOptionPane.showMessageDialog(this, "Success! Beställningsfil skapad: " + filnamn);
-        
-    } catch (Exception e) {
-        javax.swing.JOptionPane.showMessageDialog(this, "Fel vid export: " + e.getMessage());
-    }
-}
     private void initMaterialTabell() {
-        materialModel = new DefaultTableModel(
-                new Object[]{"Kundorder", "Material", "Antal material", "Antal i lager", "Antal att beställa", "Genomför beställning"},
-                0
-        ) {
-            @Override
-            public Class<?> getColumnClass(int columnIndex) {
-                if (columnIndex == 5) return Boolean.class; 
-                return super.getColumnClass(columnIndex);
-            }
-            @Override
-            public boolean isCellEditable(int row, int column) {
-                return column == 4 || column == 5; 
-            }
-        };
-        tblMaterial.setModel(materialModel);
+materialModel = new DefaultTableModel(
+        new Object[]{"Kundorder", "Material", "Antal material", "Antal i lager", "Antal att beställa"}, 0
+    ) {
+        @Override
+        public boolean isCellEditable(int row, int column) {
+            return column == 4; 
+        }
+    };
+    tblMaterial.setModel(materialModel);
     }
     private List<HashMap<String, String>> hamtaMaterialbehov(List<Integer> orderIds) throws InfException {
 
-        String ids = orderIds.stream()
-                .map(String::valueOf)
-                .collect(Collectors.joining(", "));
-
-        String sql =
-                "SELECT o.OrderID, m.Namn, " +
-                        "SUM(r.Antal * hm.Antal) AS TotaltBehov, " +
-                        "m.LagerSaldo " +
-                        "FROM Ordrar o " +
-                        "JOIN Orderrader r ON o.OrderID = r.OrderID " +
-                        "JOIN Hatt_Material hm ON r.ModellID = hm.ModellID " +
-                        "JOIN Material m ON hm.MaterialID = m.MaterialID " +
-                        "WHERE o.OrderID IN (" + ids + ") " +
-                        "GROUP BY o.OrderID, m.MaterialID, m.Namn, m.LagerSaldo;";
-
-        return idb.fetchRows(sql);
+    if (orderIds == null || orderIds.isEmpty()) {
+        return new ArrayList<>();
     }
+
+    String ids = orderIds.stream()
+            .map(String::valueOf)
+            .collect(Collectors.joining(", "));
+
+    String sql =
+        "SELECT o.OrderID, m.Namn, " +
+        "SUM(r.Antal * hm.Antal) AS TotaltBehov, " +
+        "m.LagerSaldo " +
+        "FROM Ordrar o " +
+        "JOIN Orderrader r ON o.OrderID = r.OrderID " +
+        "JOIN Hatt_Material hm ON r.ModellID = hm.ModellID " +
+        "JOIN Material m ON hm.MaterialID = m.MaterialID " +
+        "WHERE o.OrderID IN (" + ids + ") " +
+        "GROUP BY o.OrderID, m.MaterialID, m.Namn, m.LagerSaldo";
+
+    return idb.fetchRows(sql);
+
+
+    }
+    private void uppdateraTabell() {
+    try {
+        String fran = txtFranDatum.getText().trim();
+        String till = txtTillDatum.getText().trim();
+
+        StringBuilder sql = new StringBuilder(
+            "SELECT OrderID FROM Ordrar " +
+            "WHERE Status IN ('Registrerad', 'Tillverkning', 'Under tillverkning') " +
+            "AND MaterialBestallt = FALSE "
+        );
+
+        if (!fran.isEmpty() && !fran.equals("xxxx-xx-xx")) {
+            sql.append("AND OrderDatum >= '").append(fran).append(" 00:00:00' ");
+        }
+        if (!till.isEmpty() && !till.equals("xxxx-xx-xx")) {
+            sql.append("AND OrderDatum <= '").append(till).append(" 23:59:59' ");
+        }
+
+        ArrayList<HashMap<String, String>> aktivaOrdrar = idb.fetchRows(sql.toString());
+        materialModel.setRowCount(0); 
+
+        if (aktivaOrdrar != null && !aktivaOrdrar.isEmpty()) {
+            List<Integer> orderIds = aktivaOrdrar.stream()
+                    .map(o -> Integer.parseInt(o.get("OrderID")))
+                    .collect(Collectors.toList());
+
+            List<HashMap<String, String>> behovsLista = hamtaMaterialbehov(orderIds);
+
+            for (HashMap<String, String> rad : behovsLista) {
+                double behov = Double.parseDouble(rad.get("TotaltBehov"));
+                double saldo = Double.parseDouble(rad.get("LagerSaldo"));
+                double bestall = Math.max(0.0, behov - saldo);
+
+                materialModel.addRow(new Object[]{
+                    rad.get("OrderID"),
+                    rad.get("Namn"),
+                    behov,
+                    saldo,
+                    bestall
+                });
+            }
+        }
+    } catch (Exception e) {
+        JOptionPane.showMessageDialog(this, "Fel vid uppdatering: " + e.getMessage());
+    }
+}
     
     private void btnSkapaPdfActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSkapaPdfActionPerformed
-        if (tblMaterial.isEditing()) {
-            tblMaterial.getCellEditor().stopCellEditing();
-        }
-        List<MaterialRad> bestallning = new ArrayList<>();
 
-bestallning.addAll(hamtaBestallningsrader());
-bestallning.addAll(hamtaBestallningsraderLager()); 
+    if (tblMaterialLista.isEditing()) tblMaterialLista.getCellEditor().stopCellEditing();
+    if (tblMaterial.isEditing()) tblMaterial.getCellEditor().stopCellEditing();
 
+    // 2. Nollställ rutan för den nya beställningen
+    txtLogg.setText("BEKRÄFTELSE PÅ BESTÄLLNING\n");
+    txtLogg.append("==========================\n");
+    
+    String nuvarandeDatum = java.time.LocalDateTime.now().format(java.time.format.DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm"));
+    boolean harBestalltNagot = false;
 
-        if (bestallning.isEmpty()) {
-            JOptionPane.showMessageDialog(this, "Du måste kryssa i 'Beställ?' på minst ett material och ange ett antal över 0.");
-            return;
-        }
-        StringBuilder kvitto = new StringBuilder("Följande material kommer beställas och läggas till i lagret:\n\n");
-        for(MaterialRad rad : bestallning) {
-            kvitto.append("- ").append(rad.material).append(" - Antal: ").append(rad.bestall).append("\n");
-        }
-        kvitto.append("\nVill du genomföra beställningen, och skapa en textfil?");
-
-        int svar = JOptionPane.showConfirmDialog(this, kvitto.toString(), "Bekräfta beställning", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
-        
-        if (svar == JOptionPane.YES_OPTION) {
-            try {
-                for(MaterialRad rad : bestallning) {
-                    String sqlUpdate = "UPDATE Material SET LagerSaldo = LagerSaldo + " + rad.bestall + " WHERE Namn = '" + rad.material + "'";
-                    idb.update(sqlUpdate);
-                }
-                                exporteraMaterialbestallning(bestallning);
-                JOptionPane.showMessageDialog(this, "Lagret är nu påfyllt i databasen!", "Succé", JOptionPane.INFORMATION_MESSAGE);
-                
-                laddaHelaTabellen();
-                
-            } catch (InfException e) {
-                JOptionPane.showMessageDialog(this, "Ett fel uppstod när lagret skulle uppdateras: " + e.getMessage(), "Databasfel", JOptionPane.ERROR_MESSAGE);
-            }
-        }
-    }
-
-    private List<MaterialRad> hamtaBestallningsrader() {
-        List<MaterialRad> lista = new ArrayList<>();
-
+    try {
         for (int i = 0; i < materialModel.getRowCount(); i++) {
-            boolean villBestalla = false;
-            Object checkbox = materialModel.getValueAt(i, 5);
-            if (checkbox != null) {
-                villBestalla = (boolean) checkbox;
-            }
-
-            if (villBestalla) {
-                int orderId = Integer.parseInt(materialModel.getValueAt(i, 0).toString());
-                String material = materialModel.getValueAt(i, 1).toString();
+            double antal = Double.parseDouble(materialModel.getValueAt(i, 4).toString());
+            if (antal > 0) {
+                String orderID = materialModel.getValueAt(i, 0).toString();
+                String namn = materialModel.getValueAt(i, 1).toString();
                 
-                double behov = Double.parseDouble(materialModel.getValueAt(i, 2).toString());
-                double saldo = Double.parseDouble(materialModel.getValueAt(i, 3).toString());
-                double bestall = Double.parseDouble(materialModel.getValueAt(i, 4).toString());
-
-                if (bestall > 0) {
-                    lista.add(new MaterialRad(orderId, material, behov, saldo, bestall));
-                }
+                String matID = idb.fetchSingle("SELECT MaterialID FROM Material WHERE Namn = '" + namn + "'");
+                
+                idb.update("UPDATE Material SET Bestallt = TRUE, BestallningsDatum = '" + nuvarandeDatum + "' WHERE MaterialID = " + matID);
+                idb.update("UPDATE Ordrar SET MaterialBestallt = TRUE WHERE OrderID = " + orderID);
+                
+                txtLogg.append("- " + namn + ": " + antal + " st (Order #" + orderID + ")\n");
+                harBestalltNagot = true;
             }
         }
 
-        return lista;
+        for (int i = 0; i < lagerModel.getRowCount(); i++) {
+            double antal = Double.parseDouble(lagerModel.getValueAt(i, 3).toString());
+            if (antal > 0) {
+                String matID = lagerModel.getValueAt(i, 0).toString();
+                String namn = lagerModel.getValueAt(i, 1).toString();
+                
+                idb.update("UPDATE Material SET Bestallt = TRUE, BestallningsDatum = '" + nuvarandeDatum + "' WHERE MaterialID = " + matID);
+                
+                txtLogg.append("- " + namn + ": " + antal + " st (Lagerbeställning)\n");
+                harBestalltNagot = true;
+            }
+        }
+
+        if (harBestalltNagot) {
+            txtLogg.append("==========================\n");
+            txtLogg.append("Datum: " + nuvarandeDatum + "\n");
+            txtLogg.append("INFO: En textfil har skapats.\n");
+            
+            sparaOrderTillFil(txtLogg.getText());
+          
+            uppdateraTabell();
+            laddaMaterialLista();
+        } else {
+            txtLogg.setText("INGET MATERIAL VALT.\nSkriv in ett antal i kolumnen 'Antal att beställa'.");
+        }
+
+    } catch (Exception e) {
+        JOptionPane.showMessageDialog(this, "Fel vid samlingsbeställning: " + e.getMessage());
     }
+    }
+    private void sparaOrderTillFil(String innehall) {
+    String filnamn = "Bestallning_" + java.time.LocalDate.now().toString() + ".txt";
+    try (java.io.PrintWriter writer = new java.io.PrintWriter(new java.io.FileWriter(filnamn, true))) {
+        writer.println(innehall);
+        writer.println("\n----------------------------\n");
+    } catch (Exception e) {
+        System.out.println("Kunde inte spara fil: " + e.getMessage());
+    }
+}
+    
 
     public static class MaterialRad {
         public int orderId;
@@ -411,13 +401,33 @@ bestallning.addAll(hamtaBestallningsraderLager());
         }
     }//GEN-LAST:event_btnSkapaPdfActionPerformed
 
+    private void txtTillDatumActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtTillDatumActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtTillDatumActionPerformed
+
+    private void btnSokDatumActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSokDatumActionPerformed
+uppdateraTabell();
+    }//GEN-LAST:event_btnSokDatumActionPerformed
+
+    private void txtFranDatumActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtFranDatumActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtFranDatumActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnSkapaPdf;
+    private javax.swing.JButton btnSokDatum;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel5;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JTable tblMaterial;
     private javax.swing.JTable tblMaterialLista;
+    private javax.swing.JTextField txtFranDatum;
+    private javax.swing.JTextArea txtLogg;
+    private javax.swing.JTextField txtTillDatum;
     // End of variables declaration//GEN-END:variables
 }
