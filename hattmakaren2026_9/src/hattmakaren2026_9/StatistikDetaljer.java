@@ -13,6 +13,13 @@ package hattmakaren2026_9;
 import oru.inf.InfDB;
 import oru.inf.InfException;
 
+import org.jfree.chart.ChartFactory;
+import org.jfree.chart.ChartPanel;
+import org.jfree.chart.JFreeChart;
+import org.jfree.data.category.DefaultCategoryDataset;
+import javax.swing.JPanel;
+import java.awt.BorderLayout;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -21,6 +28,7 @@ import javax.swing.table.DefaultTableModel;
 
 public class StatistikDetaljer extends javax.swing.JFrame {
     private InfDB idb;
+    private boolean visaDiagram = false;
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(StatistikDetaljer.class.getName());
 
     /**
@@ -28,12 +36,17 @@ public class StatistikDetaljer extends javax.swing.JFrame {
      */
     public StatistikDetaljer(InfDB idb) {
         initComponents();
+        
         this.idb = idb;
+        
+        main.addChangeListener(e -> uppdateraVy());
+        
         hamtaIntaktPerAr();
         hamtaIntaktPerKvartal();
         hamtaIntaktPerManad();
         statistikKund();
         modellStatistik();
+        uppdateraVy();
         
     }
     
@@ -230,6 +243,174 @@ public class StatistikDetaljer extends javax.swing.JFrame {
     }
     }
     
+    public ChartPanel visaDiagramAr() {
+
+        DefaultCategoryDataset dataset = new DefaultCategoryDataset();
+
+        for (int i = 0; i < TBar.getRowCount(); i++) {
+
+            String ar = TBar.getValueAt(i, 0).toString();
+
+            double intakt = Double.parseDouble(TBar.getValueAt(i, 1).toString());
+
+            dataset.addValue(intakt, "Intäkt", ar);
+        }
+
+        JFreeChart chart = ChartFactory.createBarChart(
+            "Intäkt per år",
+            "År",
+            "Intäkt",
+            dataset
+        );
+
+        return new ChartPanel(chart);
+    }
+    
+    public ChartPanel visaDiagramKvartal() {
+
+        DefaultCategoryDataset dataset = new DefaultCategoryDataset();
+
+        for (int i = 0; i < TBkvartal.getRowCount(); i++) {
+
+            String period = TBkvartal.getValueAt(i, 0).toString();
+
+            double intakt = Double.parseDouble(TBkvartal.getValueAt(i, 1).toString());
+
+            dataset.addValue(intakt, "Intäkt", period);
+        }
+
+        JFreeChart chart = ChartFactory.createBarChart(
+            "Intäkt per kvartal",
+            "Kvartal",
+            "Intäkt",
+            dataset
+        );
+
+        return new ChartPanel(chart);
+    }
+    
+    public ChartPanel visaDiagramManad() {
+
+        DefaultCategoryDataset dataset = new DefaultCategoryDataset();
+
+        for (int i = 0; i < TBmanad.getRowCount(); i++) {
+
+            String period = TBmanad.getValueAt(i, 0).toString();
+
+            double intakt = Double.parseDouble(TBmanad.getValueAt(i, 1).toString());
+
+            dataset.addValue(intakt, "Intäkt", period);
+        }
+
+        JFreeChart chart = ChartFactory.createBarChart(
+            "Intäkt per månad",
+            "Månad",
+            "Intäkt",
+            dataset
+        );
+
+        return new ChartPanel(chart);
+    }
+    
+    public ChartPanel visaDiagramModell() {
+
+        DefaultCategoryDataset dataset = new DefaultCategoryDataset();
+
+        for (int i = 0; i < TBmodell.getRowCount(); i++) {
+
+            String modell = TBmodell.getValueAt(i, 0).toString();
+
+            double intakt = Double.parseDouble(
+                TBmodell.getValueAt(i, 2).toString().replace(" kr", "")
+            );
+
+            dataset.addValue(intakt, "Intäkt", modell);
+        }
+
+        JFreeChart chart = ChartFactory.createBarChart(
+            "Intäkt per hattmodell",
+            "Modell",
+            "Intäkt",
+            dataset
+        );
+
+        return new ChartPanel(chart);
+    }
+    
+    public ChartPanel visaDiagramKund() {
+
+        DefaultCategoryDataset dataset = new DefaultCategoryDataset();
+
+        for (int i = 0; i < TBkund.getRowCount(); i++) {
+
+            String kund = TBkund.getValueAt(i, 0).toString();
+
+            double spendering = Double.parseDouble(
+                TBkund.getValueAt(i, 2).toString().replace(" kr", "")
+            );
+
+            dataset.addValue(spendering, "Spendering", kund);
+        }
+
+        JFreeChart chart = ChartFactory.createBarChart(
+            "Kundstatistik",
+            "Kund",
+            "Spendering",
+            dataset
+        );
+
+        return new ChartPanel(chart);
+    }
+    
+    private void uppdateraVy() {
+
+        int index = main.getSelectedIndex();
+
+        if (index == 0) {
+
+            if (visaDiagram) {
+                jScrollPane1.setViewportView(visaDiagramAr());
+            } else {
+                jScrollPane1.setViewportView(TBar);
+            }
+
+        } else if (index == 1) {
+
+            if (visaDiagram) {
+                Scrollpane.setViewportView(visaDiagramKvartal());
+            } else {
+                Scrollpane.setViewportView(TBkvartal);
+            }
+
+        } else if (index == 2) {
+
+            if (visaDiagram) {
+                Scrollpane2.setViewportView(visaDiagramManad());
+            } else {
+                Scrollpane2.setViewportView(TBmanad);
+            }
+
+        } else if (index == 3) {
+
+            if (visaDiagram) {
+                jScrollPane2.setViewportView(visaDiagramModell());
+            } else {
+                jScrollPane2.setViewportView(TBmodell);
+            }
+
+        } else if (index == 4) {
+
+            if (visaDiagram) {
+                jScrollPane3.setViewportView(visaDiagramKund());
+            } else {
+                jScrollPane3.setViewportView(TBkund);
+            }
+        }
+
+        revalidate();
+        repaint();
+    }
+    
     
 
     /**
@@ -242,7 +423,7 @@ public class StatistikDetaljer extends javax.swing.JFrame {
     private void initComponents() {
 
         jButton1 = new javax.swing.JButton();
-        Main = new javax.swing.JTabbedPane();
+        main = new javax.swing.JTabbedPane();
         JPar = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
         TBar = new javax.swing.JTable();
@@ -258,6 +439,7 @@ public class StatistikDetaljer extends javax.swing.JFrame {
         JPkund = new javax.swing.JPanel();
         jScrollPane3 = new javax.swing.JScrollPane();
         TBkund = new javax.swing.JTable();
+        jButton2 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -294,7 +476,7 @@ public class StatistikDetaljer extends javax.swing.JFrame {
                 .addContainerGap())
         );
 
-        Main.addTab("  År  ", JPar);
+        main.addTab("  År  ", JPar);
 
         TBkvartal.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -326,7 +508,7 @@ public class StatistikDetaljer extends javax.swing.JFrame {
                 .addContainerGap())
         );
 
-        Main.addTab("Kvartal", JPkvartal);
+        main.addTab("Kvartal", JPkvartal);
 
         TBmanad.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -358,7 +540,7 @@ public class StatistikDetaljer extends javax.swing.JFrame {
                 .addContainerGap())
         );
 
-        Main.addTab("Månad", JPmanad);
+        main.addTab("Månad", JPmanad);
 
         TBmodell.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -390,7 +572,7 @@ public class StatistikDetaljer extends javax.swing.JFrame {
                 .addContainerGap())
         );
 
-        Main.addTab("Modell", JPmodell);
+        main.addTab("Modell", JPmodell);
 
         TBkund.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -422,7 +604,10 @@ public class StatistikDetaljer extends javax.swing.JFrame {
                 .addContainerGap())
         );
 
-        Main.addTab("Kund", JPkund);
+        main.addTab("Kund", JPkund);
+
+        jButton2.setText("Byt läge");
+        jButton2.addActionListener(this::jButton2ActionPerformed);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -431,9 +616,11 @@ public class StatistikDetaljer extends javax.swing.JFrame {
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(Main)
+                    .addComponent(main)
                     .addGroup(layout.createSequentialGroup()
                         .addGap(0, 0, Short.MAX_VALUE)
+                        .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jButton1)))
                 .addContainerGap())
         );
@@ -441,9 +628,11 @@ public class StatistikDetaljer extends javax.swing.JFrame {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jButton1)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jButton1)
+                    .addComponent(jButton2))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(Main)
+                .addComponent(main)
                 .addContainerGap())
         );
 
@@ -454,6 +643,13 @@ public class StatistikDetaljer extends javax.swing.JFrame {
         this.dispose();        // TODO add your handling code here:
     }//GEN-LAST:event_jButton1ActionPerformed
 
+    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+        visaDiagram = !visaDiagram;
+
+        uppdateraVy();
+
+    }//GEN-LAST:event_jButton2ActionPerformed
+
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -462,7 +658,6 @@ public class StatistikDetaljer extends javax.swing.JFrame {
     private javax.swing.JPanel JPkvartal;
     private javax.swing.JPanel JPmanad;
     private javax.swing.JPanel JPmodell;
-    private javax.swing.JTabbedPane Main;
     private javax.swing.JScrollPane Scrollpane;
     private javax.swing.JScrollPane Scrollpane2;
     private javax.swing.JTable TBar;
@@ -471,8 +666,10 @@ public class StatistikDetaljer extends javax.swing.JFrame {
     private javax.swing.JTable TBmanad;
     private javax.swing.JTable TBmodell;
     private javax.swing.JButton jButton1;
+    private javax.swing.JButton jButton2;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
+    private javax.swing.JTabbedPane main;
     // End of variables declaration//GEN-END:variables
 }
