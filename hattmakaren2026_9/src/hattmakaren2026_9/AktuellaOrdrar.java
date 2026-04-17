@@ -94,8 +94,10 @@ jtAktuellaOrdrar.getColumnModel().getColumn(6).setPreferredWidth(150);
         // Hämta OrderID från första kolumnen i tabellen
         String orderID = jtAktuellaOrdrar.getValueAt(valdRad, 0).toString();
 
-        String sql = "SELECT OrderradID, ModellID, Antal, Anpassningstext, RadPrisExklMoms "
-                   + "FROM Orderrader WHERE OrderID = " + orderID;
+        String sql =  "SELECT H.ModellNamn, H.Farg, H.Tyg, H.Storlek, O.Antal " + 
+                "FROM Orderrader O " + "JOIN Hattmodeller H ON O.ModellID = H.ModellID " +                      
+                "WHERE O.OrderID = " + orderID;
+ 
 
         ArrayList<HashMap<String, String>> rader = idb.fetchRows(sql);
 
@@ -108,16 +110,17 @@ jtAktuellaOrdrar.getColumnModel().getColumn(6).setPreferredWidth(150);
         }
 
         // Skapa kolumner för popup-tabellen
-        String[] kolumner = {"OrderradID", "ModellID", "Antal", "Anpassningstext", "RadPrisExklMoms"};
+        String[] kolumner = {"Modell", "Färg", "Tyg", "Storlek", "Antal"};
         DefaultTableModel model = new DefaultTableModel(kolumner, 0);
 
         for (HashMap<String, String> rad : rader) {
             model.addRow(new Object[]{
-                rad.get("OrderradID"),
-                rad.get("ModellID"),
-                rad.get("Antal"),
-                rad.get("Anpassningstext"),
-                rad.get("RadPrisExklMoms")
+                rad.get("ModellNamn"),
+                rad.get("Farg"),
+                rad.get("Tyg"),
+                rad.get("Storlek"),
+                rad.get("Antal")
+            
             });
         }
 
