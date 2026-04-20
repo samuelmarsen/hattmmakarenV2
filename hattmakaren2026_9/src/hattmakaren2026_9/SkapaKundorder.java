@@ -320,7 +320,7 @@ public class SkapaKundorder extends javax.swing.JFrame {
 
     private void btnPaborjaOrderActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPaborjaOrderActionPerformed
         try {
-        // 1. Hämta data för huvudordern
+        
         String kundID = txtKundId.getText();
         String fraktAdress = txtFraktadress.getText();
         String datum = txtDatum.getText();
@@ -330,7 +330,7 @@ public class SkapaKundorder extends javax.swing.JFrame {
             return;
         }
  
-        // 2. Kontrollera om någon hatt i tabellen är en snabborder
+        
         int arSnabborder = 0;
         DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
         if (model.getRowCount() == 0) {
@@ -345,8 +345,7 @@ public class SkapaKundorder extends javax.swing.JFrame {
             }
         }
  
-        // 3. Skapa huvudordern i tabellen 'Ordrar'
-        // Vi hämtar totalpriset från er pris-variabel (kom ihåg att ersätta , med .)
+        
         String totalPrisStr = txtPrisExklMoms.getText().replace(",", ".");
         double totalPrisInklMoms = Double.parseDouble(totalPrisStr) * 1.25;
  
@@ -354,10 +353,10 @@ public class SkapaKundorder extends javax.swing.JFrame {
                 + "VALUES (" + kundID + ", '" + datum + "', 'Registrerad', " + arSnabborder + ", '" + fraktAdress + "', " + totalPrisInklMoms + ")";
         idb.insert(orderSql);
  
-        // 4. Hämta det OrderID som just skapades
+      
         String nyttOrderID = idb.fetchSingle("SELECT MAX(OrderID) FROM Ordrar");
  
-        // 5. LOOPA igenom tabellen för att spara varje rad
+        
         for (int i = 0; i < model.getRowCount(); i++) {
             String hattNamn = model.getValueAt(i, 0).toString();
             String farg = model.getValueAt(i, 1).toString();
@@ -365,18 +364,18 @@ public class SkapaKundorder extends javax.swing.JFrame {
             String storlek = model.getValueAt(i, 3).toString();
             String antal = model.getValueAt(i, 4).toString();
  
-            // Hämta ModellID för hatten
+          
             String modellID = idb.fetchSingle("SELECT ModellID FROM Hattmodeller WHERE ModellNamn = '" + hattNamn + "'");
-            // Bygg anpassningstexten (User Story: Anpassning)
+         
             String anpassning = "Färg: " + farg + ", Tyg: " + tyg + ", Storlek: " + storlek;
  
-            // Spara raden i 'Orderrader'
+           
             String radSql = "INSERT INTO Orderrader (OrderID, ModellID, Antal, Anpassningstext) "
                     + "VALUES (" + nyttOrderID + ", " + modellID + ", " + antal + ", '" + anpassning + "')";
             idb.insert(radSql);
         }
  
-        // 6. Avsluta och gå till nästa fönster
+        
         JOptionPane.showMessageDialog(this, "Order #" + nyttOrderID + " har registrerats!");
         
  
@@ -398,7 +397,7 @@ public class SkapaKundorder extends javax.swing.JFrame {
     private void cmbHattActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmbHattActionPerformed
         String valtNamn = (String) cmbHatt.getSelectedItem();
 
-        // 1. Viktigt: Gör inget om vi bara har rensat boxen
+        
         if (valtNamn == null || valtNamn.isEmpty()) {
             return;
         }
@@ -408,7 +407,7 @@ public class SkapaKundorder extends javax.swing.JFrame {
             java.util.HashMap<String, String> rad = idb.fetchRow(fraga);
 
             if (rad != null) {
-                // Vi hämtar datan först
+                
                 String f = rad.get("Farg");
                 String t = rad.get("Tyg");
                 String s = rad.get("Storlek");
@@ -418,21 +417,18 @@ public class SkapaKundorder extends javax.swing.JFrame {
                     styckPrisHatt = Double.parseDouble(p);
                 }
 
-                // 2. Tvinga Swing att uppdatera rutorna på "rätt" sätt
+                
                 javax.swing.SwingUtilities.invokeLater(() -> {
-                    // Töm och fyll Färg
-                    // cmbFarg.removeAllItems();
+                   
                     cmbFarg.setSelectedItem(f != null ? f : "Saknas");
 
-                    // Töm och fyll Tyg
-                    // cmbTyg.removeAllItems();
+                    
                     cmbTyg.setSelectedItem(t != null ? t : "Saknas");
 
-                    // Töm och fyll Storlek
-                    // cmbStorlek.removeAllItems();
+                   
                     cmbStorlek.setSelectedItem(s != null ? s : "Saknas");
 
-                    // 3. Tvinga rutorna att ritas om (Repaint)
+                  
                     cmbFarg.revalidate();
                     cmbFarg.repaint();
                     cmbTyg.revalidate();
@@ -485,7 +481,7 @@ public class SkapaKundorder extends javax.swing.JFrame {
         String farg = (String) cmbFarg.getSelectedItem();
         String storlek = (String) cmbStorlek.getSelectedItem();
 
-        // Räknar priset på valda hattar och plussar på totalen
+        
         double radPris = styckPrisHatt * antal;
         if (chkSnabborder.isSelected()) {
            radPris *= 0.8; 
@@ -493,13 +489,13 @@ public class SkapaKundorder extends javax.swing.JFrame {
         totaltPris += radPris;
         
 
-        // Uppdaterar textfältet
+        
         txtPrisExklMoms.setText(String.format("%.2f", totaltPris));
 
-        // 2. Lägg till raden i tabellen
+        
         javax.swing.table.DefaultTableModel model = (javax.swing.table.DefaultTableModel) jTable1.getModel();
 
-        // Vi sparar priset som en formaterad sträng i tabellen
+        
         model.addRow(new Object[]{hattModell, tyg, farg, storlek, antal, snabborderText});
 
 
