@@ -28,6 +28,7 @@ public class Kundsida extends javax.swing.JFrame {
      */
     public Kundsida(InfDB idb) {
         initComponents();
+        setExtendedState(javax.swing.JFrame.MAXIMIZED_BOTH);
         this.idb = idb;
         visaAllaKunder(); // ← istället för visaAllaKunder() 
         this.setExtendedState(javax.swing.JFrame.MAXIMIZED_BOTH);
@@ -260,7 +261,7 @@ public class Kundsida extends javax.swing.JFrame {
                             .addComponent(jButton1)
                             .addComponent(btnTabortKund))))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 1009, Short.MAX_VALUE)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 446, Short.MAX_VALUE)
                 .addContainerGap())
         );
 

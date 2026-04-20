@@ -36,6 +36,7 @@ public class StatistikDetaljer extends javax.swing.JFrame {
      */
     public StatistikDetaljer(InfDB idb) {
         initComponents();
+        setExtendedState(javax.swing.JFrame.MAXIMIZED_BOTH);
         
         this.idb = idb;
         
@@ -456,7 +457,15 @@ public class StatistikDetaljer extends javax.swing.JFrame {
             new String [] {
                 "År", "Intäkt"
             }
-        ));
+        ) {
+            boolean[] canEdit = new boolean [] {
+                false, false
+            };
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
         jScrollPane1.setViewportView(TBar);
 
         javax.swing.GroupLayout JParLayout = new javax.swing.GroupLayout(JPar);
@@ -520,7 +529,15 @@ public class StatistikDetaljer extends javax.swing.JFrame {
             new String [] {
                 "Datum", "Intäkt"
             }
-        ));
+        ) {
+            boolean[] canEdit = new boolean [] {
+                false, false
+            };
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
         Scrollpane2.setViewportView(TBmanad);
 
         javax.swing.GroupLayout JPmanadLayout = new javax.swing.GroupLayout(JPmanad);
@@ -552,7 +569,15 @@ public class StatistikDetaljer extends javax.swing.JFrame {
             new String [] {
                 "Hattmodell", "Antal sålda", "Intäkt"
             }
-        ));
+        ) {
+            boolean[] canEdit = new boolean [] {
+                false, false, false
+            };
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
         jScrollPane2.setViewportView(TBmodell);
 
         javax.swing.GroupLayout JPmodellLayout = new javax.swing.GroupLayout(JPmodell);
@@ -584,7 +609,15 @@ public class StatistikDetaljer extends javax.swing.JFrame {
             new String [] {
                 "Epost", "Antal hattar", "Spendering "
             }
-        ));
+        ) {
+            boolean[] canEdit = new boolean [] {
+                false, false, false
+            };
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
         jScrollPane3.setViewportView(TBkund);
 
         javax.swing.GroupLayout JPkundLayout = new javax.swing.GroupLayout(JPkund);
