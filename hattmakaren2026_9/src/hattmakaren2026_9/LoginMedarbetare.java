@@ -20,6 +20,7 @@ public class LoginMedarbetare extends javax.swing.JFrame {
     this.idb = idb;
     this.setLocationRelativeTo(null);
     initComponents();
+    this.setExtendedState(javax.swing.JFrame.MAXIMIZED_BOTH);
     txtEmail.setText("");
     txtLosenord.setText("");
 
