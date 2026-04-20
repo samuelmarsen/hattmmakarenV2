@@ -162,6 +162,7 @@ public class SkapaKundorder extends javax.swing.JFrame {
         lblEgenText = new javax.swing.JLabel();
         txtEgenHattText = new javax.swing.JTextField();
         lblAntalDekoration = new javax.swing.JLabel();
+        lblDekoration = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -236,6 +237,8 @@ public class SkapaKundorder extends javax.swing.JFrame {
 
         lblAntalDekoration.setText("Antal");
 
+        lblDekoration.setText("Dekoration");
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -280,7 +283,9 @@ public class SkapaKundorder extends javax.swing.JFrame {
                                         .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 136, javax.swing.GroupLayout.PREFERRED_SIZE)
                                         .addGap(136, 136, 136))
                                     .addGroup(layout.createSequentialGroup()
-                                        .addComponent(lblHattmodell, javax.swing.GroupLayout.PREFERRED_SIZE, 139, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                            .addComponent(lblHattmodell, javax.swing.GroupLayout.PREFERRED_SIZE, 139, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                            .addComponent(lblDekoration))
                                         .addGap(18, 18, 18)
                                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                             .addGroup(layout.createSequentialGroup()
@@ -371,7 +376,8 @@ public class SkapaKundorder extends javax.swing.JFrame {
                             .addComponent(cmbDekoration, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(txtDekorationAntal, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(btnAdderaDekoration)
-                            .addComponent(lblAntalDekoration))
+                            .addComponent(lblAntalDekoration)
+                            .addComponent(lblDekoration))
                         .addGap(11, 11, 11)
                         .addComponent(jLabel5)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
@@ -671,6 +677,7 @@ public class SkapaKundorder extends javax.swing.JFrame {
     private javax.swing.JTable jTable1;
     private javax.swing.JLabel lblAntalDekoration;
     private javax.swing.JLabel lblDatum;
+    private javax.swing.JLabel lblDekoration;
     private javax.swing.JLabel lblEgenText;
     private javax.swing.JLabel lblFraktadress;
     private javax.swing.JLabel lblHattmodell;
