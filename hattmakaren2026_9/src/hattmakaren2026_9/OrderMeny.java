@@ -32,85 +32,72 @@ public class OrderMeny extends javax.swing.JFrame {
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
+        java.awt.GridBagConstraints gridBagConstraints;
 
         jLabel1 = new javax.swing.JLabel();
-        btnSkapaKundorder = new javax.swing.JButton();
-        btnOrderHistorik = new javax.swing.JButton();
-        btnSkapaFraktsedel = new javax.swing.JButton();
+        jPanel1 = new javax.swing.JPanel();
         btnOrderStatus = new javax.swing.JButton();
-        btnAktuellaOrdrar = new javax.swing.JButton();
+        btnSkapaKundorder = new javax.swing.JButton();
+        btnSkapaFraktsedel = new javax.swing.JButton();
+        btnOrderHistorik = new javax.swing.JButton();
         btnTillbaka = new javax.swing.JButton();
+        btnAktuellaOrdrar = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        getContentPane().setLayout(new java.awt.GridBagLayout());
 
+        jLabel1.setFont(new java.awt.Font("Segoe UI Semibold", 0, 36)); // NOI18N
         jLabel1.setText("Order Meny");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.ipadx = 28;
+        gridBagConstraints.ipady = 67;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.insets = new java.awt.Insets(0, 584, 0, 0);
+        getContentPane().add(jLabel1, gridBagConstraints);
 
-        btnSkapaKundorder.setText("Skapa kundorder");
-        btnSkapaKundorder.addActionListener(this::btnSkapaKundorderActionPerformed);
+        jPanel1.setLayout(new java.awt.GridLayout(0, 2, 20, 20));
 
-        btnOrderHistorik.setText("Orderhistorik");
-        btnOrderHistorik.addActionListener(this::btnOrderHistorikActionPerformed);
-
-        btnSkapaFraktsedel.setText("Skapa fraktsedel");
-        btnSkapaFraktsedel.addActionListener(this::btnSkapaFraktsedelActionPerformed);
-
+        btnOrderStatus.setFont(new java.awt.Font("Segoe UI Semibold", 0, 18)); // NOI18N
         btnOrderStatus.setText("Orderstatus");
         btnOrderStatus.addActionListener(this::btnOrderStatusActionPerformed);
+        jPanel1.add(btnOrderStatus);
 
-        btnAktuellaOrdrar.setText("Aktuella ordrar");
-        btnAktuellaOrdrar.addActionListener(this::btnAktuellaOrdrarActionPerformed);
+        btnSkapaKundorder.setFont(new java.awt.Font("Segoe UI Semibold", 0, 18)); // NOI18N
+        btnSkapaKundorder.setText("Skapa kundorder");
+        btnSkapaKundorder.addActionListener(this::btnSkapaKundorderActionPerformed);
+        jPanel1.add(btnSkapaKundorder);
 
+        btnSkapaFraktsedel.setFont(new java.awt.Font("Segoe UI Semibold", 0, 18)); // NOI18N
+        btnSkapaFraktsedel.setText("Skapa fraktsedel");
+        btnSkapaFraktsedel.addActionListener(this::btnSkapaFraktsedelActionPerformed);
+        jPanel1.add(btnSkapaFraktsedel);
+
+        btnOrderHistorik.setFont(new java.awt.Font("Segoe UI Semibold", 0, 18)); // NOI18N
+        btnOrderHistorik.setText("Orderhistorik");
+        btnOrderHistorik.addActionListener(this::btnOrderHistorikActionPerformed);
+        jPanel1.add(btnOrderHistorik);
+
+        btnTillbaka.setBackground(new java.awt.Color(204, 204, 204));
+        btnTillbaka.setFont(new java.awt.Font("Segoe UI Semibold", 0, 18)); // NOI18N
         btnTillbaka.setText("Tillbaka..");
         btnTillbaka.addActionListener(this::btnTillbakaActionPerformed);
+        jPanel1.add(btnTillbaka);
 
-        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
-        getContentPane().setLayout(layout);
-        layout.setHorizontalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addGap(263, 263, 263)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                    .addComponent(btnSkapaKundorder, javax.swing.GroupLayout.DEFAULT_SIZE, 197, Short.MAX_VALUE)
-                    .addComponent(btnOrderHistorik, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addComponent(btnAktuellaOrdrar, javax.swing.GroupLayout.PREFERRED_SIZE, 207, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(btnOrderStatus, javax.swing.GroupLayout.PREFERRED_SIZE, 185, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(btnSkapaFraktsedel, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 185, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(339, 339, 339))
-            .addGroup(layout.createSequentialGroup()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addContainerGap()
-                        .addComponent(btnTillbaka, javax.swing.GroupLayout.PREFERRED_SIZE, 131, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(532, 532, 532)
-                        .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(587, Short.MAX_VALUE))
-        );
-        layout.setVerticalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addGap(186, 186, 186)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(btnSkapaKundorder, javax.swing.GroupLayout.PREFERRED_SIZE, 74, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnSkapaFraktsedel, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(55, 55, 55)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(btnOrderStatus, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnOrderHistorik, javax.swing.GroupLayout.PREFERRED_SIZE, 68, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addGap(74, 74, 74)
-                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 83, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(213, 213, 213)
-                .addComponent(btnAktuellaOrdrar, javax.swing.GroupLayout.PREFERRED_SIZE, 68, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 18, Short.MAX_VALUE)
-                .addComponent(btnTillbaka, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap())
-        );
+        btnAktuellaOrdrar.setFont(new java.awt.Font("Segoe UI Semibold", 0, 18)); // NOI18N
+        btnAktuellaOrdrar.setText("Aktuella ordrar");
+        btnAktuellaOrdrar.addActionListener(this::btnAktuellaOrdrarActionPerformed);
+        jPanel1.add(btnAktuellaOrdrar);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.gridwidth = 2;
+        gridBagConstraints.ipadx = 402;
+        gridBagConstraints.ipady = 171;
+        gridBagConstraints.insets = new java.awt.Insets(12, 298, 139, 254);
+        getContentPane().add(jPanel1, gridBagConstraints);
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -271,6 +258,7 @@ boolean arExport = adress.toLowerCase().contains("london");
     private javax.swing.JButton btnSkapaKundorder;
     private javax.swing.JButton btnTillbaka;
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JPanel jPanel1;
     // End of variables declaration//GEN-END:variables
 }
 

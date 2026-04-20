@@ -4,7 +4,7 @@
  */
 package hattmakaren2026_9;
 
-import oru.inf.InfDB;   // ⬅ lägg till den här raden
+import oru.inf.InfDB;   
 
 /**
  *
@@ -21,7 +21,8 @@ public class LoginMedarbetare extends javax.swing.JFrame {
     this.setLocationRelativeTo(null);
     initComponents();
     txtEmail.setText("");
-    txtLosenord.setText("");
+    jpfLosenord.setText("");
+    this.setExtendedState(javax.swing.JFrame.MAXIMIZED_BOTH);
 
     btnLoggaIn.addActionListener((java.awt.event.ActionEvent evt) -> {
         loggaIn();
@@ -35,73 +36,62 @@ public class LoginMedarbetare extends javax.swing.JFrame {
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
+        java.awt.GridBagConstraints gridBagConstraints;
 
-        btnLoggaIn = new javax.swing.JButton();
+        jPanel1 = new javax.swing.JPanel();
+        lblEpost = new javax.swing.JLabel();
         txtEmail = new javax.swing.JTextField();
-        jLabel1 = new javax.swing.JLabel();
-        txtLosenord = new javax.swing.JPasswordField();
-        jLabel2 = new javax.swing.JLabel();
-        jLabel3 = new javax.swing.JLabel();
+        lblLosenord = new javax.swing.JLabel();
+        jpfLosenord = new javax.swing.JPasswordField();
+        btnLoggaIn = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        getContentPane().setLayout(new java.awt.GridBagLayout());
+
+        jPanel1.setLayout(new java.awt.GridLayout(0, 2, 10, 20));
+
+        lblEpost.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
+        lblEpost.setText("Epost");
+        jPanel1.add(lblEpost);
+
+        txtEmail.addActionListener(this::txtEmailActionPerformed);
+        jPanel1.add(txtEmail);
+
+        lblLosenord.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
+        lblLosenord.setText("Lösenord");
+        jPanel1.add(lblLosenord);
+
+        jpfLosenord.setText("jPasswordField1");
+        jpfLosenord.addActionListener(this::jpfLosenordActionPerformed);
+        jPanel1.add(jpfLosenord);
 
         btnLoggaIn.setText("Logga In");
+        jPanel1.add(btnLoggaIn);
 
-        jLabel1.setText("Email Adress");
-
-        jLabel2.setText("Lösenord");
-
-        jLabel3.setText("Hattmakaren");
-
-        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
-        getContentPane().setLayout(layout);
-        layout.setHorizontalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addGap(31, 31, 31)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 123, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(0, 0, Short.MAX_VALUE))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                            .addComponent(txtLosenord)
-                            .addComponent(jLabel2, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(txtEmail, javax.swing.GroupLayout.Alignment.LEADING))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 154, Short.MAX_VALUE)
-                        .addComponent(btnLoggaIn)
-                        .addGap(72, 72, 72))
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(jLabel1)
-                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
-        );
-        layout.setVerticalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addGap(31, 31, 31)
-                .addComponent(jLabel3, javax.swing.GroupLayout.DEFAULT_SIZE, 36, Short.MAX_VALUE)
-                .addGap(18, 18, 18)
-                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 17, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
-                .addComponent(txtEmail, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(33, 33, 33)
-                .addComponent(jLabel2)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(btnLoggaIn)
-                    .addComponent(txtLosenord, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(72, 72, 72))
-        );
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.ipadx = 26;
+        gridBagConstraints.insets = new java.awt.Insets(105, 158, 84, 184);
+        getContentPane().add(jPanel1, gridBagConstraints);
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void txtEmailActionPerformed(java.awt.event.ActionEvent evt) {                                              
+    private void txtEmailActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtEmailActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtEmailActionPerformed
+
+    private void jpfLosenordActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jpfLosenordActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jpfLosenordActionPerformed
+
+    private void txtEpostActionPerformed(java.awt.event.ActionEvent evt) {                                              
     loggaIn(); // Kör inloggningskontrollen direkt när man trycker Enter
     }                                              
 private void loggaIn() {
     String email = txtEmail.getText().trim();
-    String losenord = new String(txtLosenord.getPassword());
+    String losenord = new String(jpfLosenord.getPassword());
 
     if (email.isEmpty() || losenord.isEmpty()) {
         javax.swing.JOptionPane.showMessageDialog(this, "Fyll i både email och lösenord.");
@@ -153,11 +143,11 @@ private void loggaIn() {
     }  
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnLoggaIn;
-    private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel2;
-    private javax.swing.JLabel jLabel3;
+    private javax.swing.JPanel jPanel1;
+    private javax.swing.JPasswordField jpfLosenord;
+    private javax.swing.JLabel lblEpost;
+    private javax.swing.JLabel lblLosenord;
     private javax.swing.JTextField txtEmail;
-    private javax.swing.JPasswordField txtLosenord;
     // End of variables declaration//GEN-END:variables
     private final oru.inf.InfDB idb; 
 }
