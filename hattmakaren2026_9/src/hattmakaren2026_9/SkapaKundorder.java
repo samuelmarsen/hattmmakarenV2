@@ -484,7 +484,7 @@ public class SkapaKundorder extends javax.swing.JFrame {
         
         double radPris = styckPrisHatt * antal;
         if (chkSnabborder.isSelected()) {
-           radPris *= 0.8; 
+           radPris *= 1.2; 
         }
         totaltPris += radPris;
         
@@ -496,7 +496,7 @@ public class SkapaKundorder extends javax.swing.JFrame {
         javax.swing.table.DefaultTableModel model = (javax.swing.table.DefaultTableModel) jTable1.getModel();
 
         
-        model.addRow(new Object[]{hattModell, tyg, farg, storlek, antal, snabborderText});
+        model.addRow(new Object[]{hattModell, farg, tyg, storlek, antal, snabborderText});
 
 
     }//GEN-LAST:event_btnLaggTillIOrderActionPerformed
