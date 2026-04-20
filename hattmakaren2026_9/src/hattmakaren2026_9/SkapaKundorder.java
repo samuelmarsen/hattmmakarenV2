@@ -28,6 +28,7 @@ public class SkapaKundorder extends javax.swing.JFrame {
 
     private double totaltPris = 0.0;
     private double styckPrisHatt = 0.0;
+    private double extraKostnadMaterial = 0.0;
 
     public SkapaKundorder(InfDB idb) throws InfException {
         initComponents();
@@ -42,6 +43,7 @@ public class SkapaKundorder extends javax.swing.JFrame {
         fyllRulllistaMedKunder();
         fyllRullistaMedHattar();
         fyllAlternativ();
+        fyllRullistaMedMaterial();
 
     }
 
@@ -76,6 +78,24 @@ public class SkapaKundorder extends javax.swing.JFrame {
         }
 
     }
+    
+    private void fyllRullistaMedMaterial() {
+    try {
+        cmbDekoration.removeAllItems();
+       
+        String fraga = "SELECT Namn FROM Material WHERE Kategori = 'Dekoration'";
+        
+        ArrayList<String> material = idb.fetchColumn(fraga);
+        
+        if (material != null) {
+            for (String namn : material) {
+                cmbDekoration.addItem(namn);
+            }
+        }
+    } catch (InfException e) {
+        System.out.println("Fel vid hämtning av dekorationer: " + e.getMessage());
+    }
+}
 
     private void fyllAlternativ() {
         cmbFarg.addItem("Svart");
@@ -134,6 +154,14 @@ public class SkapaKundorder extends javax.swing.JFrame {
         jLabel2 = new javax.swing.JLabel();
         chkSnabborder = new javax.swing.JCheckBox();
         btnTillbaka = new javax.swing.JButton();
+        cmbDekoration = new javax.swing.JComboBox<>();
+        txtDekorationAntal = new javax.swing.JTextField();
+        btnAdderaDekoration = new javax.swing.JButton();
+        jScrollPane2 = new javax.swing.JScrollPane();
+        txtAreaSpecial = new javax.swing.JTextArea();
+        lblEgenText = new javax.swing.JLabel();
+        txtEgenHattText = new javax.swing.JTextField();
+        lblAntalDekoration = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -169,7 +197,7 @@ public class SkapaKundorder extends javax.swing.JFrame {
 
             },
             new String [] {
-                "Hattmodell", "Färg", "Tyg", "Storlek", "Antal", "Snabborder"
+                "Hattmodell", "Färg", "Tyg", "Storlek", "Antal", "Snabborder", "Dekoration"
             }
         ));
         jScrollPane1.setViewportView(jTable1);
@@ -194,61 +222,24 @@ public class SkapaKundorder extends javax.swing.JFrame {
         btnTillbaka.setText("Tillbaka");
         btnTillbaka.addActionListener(this::btnTillbakaActionPerformed);
 
+        cmbDekoration.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+
+        btnAdderaDekoration.setText("Lägg till dekoration");
+        btnAdderaDekoration.addActionListener(this::btnAdderaDekorationActionPerformed);
+
+        txtAreaSpecial.setEditable(false);
+        txtAreaSpecial.setColumns(20);
+        txtAreaSpecial.setRows(5);
+        jScrollPane2.setViewportView(txtAreaSpecial);
+
+        lblEgenText.setText("Egen text på hatt");
+
+        lblAntalDekoration.setText("Antal");
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addGap(16, 16, 16)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addComponent(cmbValjKund, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 328, Short.MAX_VALUE)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                                .addComponent(lblDatum, javax.swing.GroupLayout.PREFERRED_SIZE, 178, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(205, 205, 205))
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                                .addComponent(lblFraktadress, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(txtFraktadress, javax.swing.GroupLayout.PREFERRED_SIZE, 187, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(120, 120, 120))))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(layout.createSequentialGroup()
-                                .addGap(391, 391, 391)
-                                .addComponent(cmbTyg, javax.swing.GroupLayout.PREFERRED_SIZE, 98, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 136, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGroup(layout.createSequentialGroup()
-                                    .addComponent(lblHattmodell, javax.swing.GroupLayout.PREFERRED_SIZE, 139, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addGap(18, 18, 18)
-                                    .addComponent(cmbHatt, javax.swing.GroupLayout.PREFERRED_SIZE, 81, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addGap(30, 30, 30)
-                                    .addComponent(cmbFarg, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                        .addGap(20, 20, 20)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                                .addComponent(txtDatum, javax.swing.GroupLayout.PREFERRED_SIZE, 118, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(87, 87, 87)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                    .addComponent(lblKundIdForOrder, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                    .addComponent(txtKundId, javax.swing.GroupLayout.PREFERRED_SIZE, 102, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                                .addComponent(cmbStorlek, javax.swing.GroupLayout.PREFERRED_SIZE, 111, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(43, 43, 43)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(btnLaggTillIOrder)
-                                    .addGroup(layout.createSequentialGroup()
-                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                                            .addComponent(lblVäljAntal, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                            .addComponent(txtAntalHattar, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 71, Short.MAX_VALUE))
-                                        .addGap(18, 18, 18)
-                                        .addComponent(chkSnabborder))))))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addGap(0, 0, Short.MAX_VALUE)
-                        .addComponent(btnPaborjaOrder)))
-                .addGap(25, 25, 25))
             .addGroup(layout.createSequentialGroup()
                 .addGap(96, 96, 96)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -261,8 +252,79 @@ public class SkapaKundorder extends javax.swing.JFrame {
                             .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 99, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(btnTillbaka)
                             .addComponent(txtPrisExklMoms, javax.swing.GroupLayout.PREFERRED_SIZE, 107, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(0, 0, Short.MAX_VALUE)))
+                        .addGap(0, 925, Short.MAX_VALUE)))
                 .addContainerGap())
+            .addGroup(layout.createSequentialGroup()
+                .addGap(16, 16, 16)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(lblEgenText)
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                                .addComponent(cmbValjKund, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                                        .addComponent(lblDatum, javax.swing.GroupLayout.PREFERRED_SIZE, 178, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addGap(205, 205, 205))
+                                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                                        .addComponent(lblFraktadress, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                        .addComponent(txtFraktadress, javax.swing.GroupLayout.PREFERRED_SIZE, 187, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addGap(120, 120, 120))))
+                            .addGroup(layout.createSequentialGroup()
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 136, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addGap(136, 136, 136))
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addComponent(lblHattmodell, javax.swing.GroupLayout.PREFERRED_SIZE, 139, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addGap(18, 18, 18)
+                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                            .addGroup(layout.createSequentialGroup()
+                                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                                    .addComponent(cmbHatt, javax.swing.GroupLayout.PREFERRED_SIZE, 81, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                    .addComponent(cmbDekoration, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                                .addGap(30, 30, 30)
+                                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                                    .addComponent(cmbFarg, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                    .addComponent(lblAntalDekoration, javax.swing.GroupLayout.PREFERRED_SIZE, 46, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                                .addGap(18, 18, 18)
+                                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                                    .addGroup(layout.createSequentialGroup()
+                                                        .addComponent(cmbTyg, javax.swing.GroupLayout.PREFERRED_SIZE, 98, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                        .addGap(18, 18, 18)
+                                                        .addComponent(cmbStorlek, javax.swing.GroupLayout.PREFERRED_SIZE, 111, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                                    .addComponent(txtDekorationAntal, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                            .addComponent(txtEgenHattText, javax.swing.GroupLayout.PREFERRED_SIZE, 341, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                                .addComponent(btnAdderaDekoration)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                        .addComponent(txtDatum, javax.swing.GroupLayout.PREFERRED_SIZE, 118, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addGap(87, 87, 87)
+                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                            .addComponent(lblKundIdForOrder, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                            .addComponent(txtKundId, javax.swing.GroupLayout.PREFERRED_SIZE, 102, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addGap(29, 29, 29)
+                                        .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 129, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                            .addComponent(btnLaggTillIOrder)
+                                            .addGroup(layout.createSequentialGroup()
+                                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                                                    .addComponent(lblVäljAntal, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                                    .addComponent(txtAntalHattar, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 71, Short.MAX_VALUE))
+                                                .addGap(18, 18, 18)
+                                                .addComponent(chkSnabborder))))))
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                                .addGap(0, 0, Short.MAX_VALUE)
+                                .addComponent(btnPaborjaOrder)))
+                        .addGap(25, 25, 25))))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -272,7 +334,7 @@ public class SkapaKundorder extends javax.swing.JFrame {
                         .addGap(19, 19, 19)
                         .addComponent(lblKundIdForOrder))
                     .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 13, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 10, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(txtKundId, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(layout.createSequentialGroup()
@@ -286,7 +348,11 @@ public class SkapaKundorder extends javax.swing.JFrame {
                         .addGap(6, 6, 6)
                         .addComponent(lblFraktadress))
                     .addComponent(txtFraktadress, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(37, 37, 37)
+                .addGap(18, 18, 18)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(lblEgenText)
+                    .addComponent(txtEgenHattText, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(2, 2, 2)
                 .addComponent(lblVäljAntal)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
@@ -297,21 +363,31 @@ public class SkapaKundorder extends javax.swing.JFrame {
                     .addComponent(cmbTyg, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(cmbStorlek, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(chkSnabborder))
-                .addGap(18, 18, 18)
-                .addComponent(btnLaggTillIOrder)
-                .addGap(11, 11, 11)
-                .addComponent(jLabel5)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 324, Short.MAX_VALUE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jLabel2)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(txtPrisExklMoms, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(7, 7, 7)
-                .addComponent(btnPaborjaOrder)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(btnTillbaka)
-                .addGap(40, 40, 40))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(btnLaggTillIOrder)
+                            .addComponent(cmbDekoration, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(txtDekorationAntal, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(btnAdderaDekoration)
+                            .addComponent(lblAntalDekoration))
+                        .addGap(11, 11, 11)
+                        .addComponent(jLabel5)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 333, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(jLabel2)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(txtPrisExklMoms, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(7, 7, 7)
+                        .addComponent(btnPaborjaOrder)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(btnTillbaka)
+                        .addGap(40, 40, 40))
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 59, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
         );
 
         pack();
@@ -363,20 +439,30 @@ public class SkapaKundorder extends javax.swing.JFrame {
             String tyg = model.getValueAt(i, 2).toString();
             String storlek = model.getValueAt(i, 3).toString();
             String antal = model.getValueAt(i, 4).toString();
+            
+            String dekoration = model.getValueAt(i, 6).toString();
+            
+            String komplettAnpassning = "Färg: " + farg + ", Tyg: " + tyg + ", Storlek: " + storlek;
+            if (!dekoration.isEmpty()) {
+                komplettAnpassning += " | EXTRA: " + dekoration;
+            }
  
           
             String modellID = idb.fetchSingle("SELECT ModellID FROM Hattmodeller WHERE ModellNamn = '" + hattNamn + "'");
          
-            String anpassning = "Färg: " + farg + ", Tyg: " + tyg + ", Storlek: " + storlek;
  
            
             String radSql = "INSERT INTO Orderrader (OrderID, ModellID, Antal, Anpassningstext) "
-                    + "VALUES (" + nyttOrderID + ", " + modellID + ", " + antal + ", '" + anpassning + "')";
+                    + "VALUES (" + nyttOrderID + ", " + modellID + ", " + antal + ", '" + komplettAnpassning + "')";
             idb.insert(radSql);
         }
  
         
         JOptionPane.showMessageDialog(this, "Order #" + nyttOrderID + " har registrerats!");
+        
+        model.setRowCount(0);
+        totaltPris = 0;
+        txtPrisExklMoms.setText("0.00");
         
  
     } catch (InfException ex) {
@@ -480,23 +566,47 @@ public class SkapaKundorder extends javax.swing.JFrame {
         String tyg = (String) cmbTyg.getSelectedItem();
         String farg = (String) cmbFarg.getSelectedItem();
         String storlek = (String) cmbStorlek.getSelectedItem();
-
         
-        double radPris = styckPrisHatt * antal;
+        double extraTextPris = 0.0;
+        String egenText = txtEgenHattText.getText().trim();
+        if (!egenText.isEmpty()) {
+            extraTextPris = 150.0;
+        }
+        
+        double radPris = (styckPrisHatt + extraKostnadMaterial + extraTextPris) * antal;
+
         if (chkSnabborder.isSelected()) {
-           radPris *= 1.2; 
+        radPris *= 1.2;
         }
         totaltPris += radPris;
         
 
         
         txtPrisExklMoms.setText(String.format("%.2f", totaltPris));
+        
+        String dekorationer = txtAreaSpecial.getText().replace("\n", ", ").trim();
+        
+        if (!egenText.isEmpty()) {
+            if (!dekorationer.isEmpty()) {
+                dekorationer += ", ";
+            }
+            dekorationer += "Egen text: '" + egenText + "'";
+        }
+
+
+        if (dekorationer.endsWith(",")) {
+        dekorationer = dekorationer.substring(0, dekorationer.length() - 1);
+        }
 
         
         javax.swing.table.DefaultTableModel model = (javax.swing.table.DefaultTableModel) jTable1.getModel();
 
         
-        model.addRow(new Object[]{hattModell, farg, tyg, storlek, antal, snabborderText});
+        model.addRow(new Object[]{hattModell, farg, tyg, storlek, antal, snabborderText, dekorationer});
+        
+        extraKostnadMaterial = 0.0;
+        txtAreaSpecial.setText("");
+        txtEgenHattText.setText("");
 
 
     }//GEN-LAST:event_btnLaggTillIOrderActionPerformed
@@ -513,6 +623,26 @@ public class SkapaKundorder extends javax.swing.JFrame {
         this.dispose();
     }//GEN-LAST:event_btnTillbakaActionPerformed
 
+    private void btnAdderaDekorationActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAdderaDekorationActionPerformed
+    try {
+        String valtMat = cmbDekoration.getSelectedItem().toString();
+        int antal = Integer.parseInt(txtDekorationAntal.getText().trim());
+
+        // Hämta priset för materialet från databasen
+        String prisStr = idb.fetchSingle("SELECT EnhetsPris FROM Material WHERE Namn = '" + valtMat + "'");
+        double styckPris = Double.parseDouble(prisStr);
+
+        // Addera till den temporära potten
+        extraKostnadMaterial += (styckPris * antal);
+
+        // Visa i loggen för Otto
+        txtAreaSpecial.append(antal + "x " + valtMat + "\n");
+        txtDekorationAntal.setText(""); 
+    } catch (Exception e) {
+        JOptionPane.showMessageDialog(this, "Vänligen ange antal i siffror.");
+    }        // TODO add your handling code here:
+    }//GEN-LAST:event_btnAdderaDekorationActionPerformed
+
     //public static void main(String args[]) {
     // java.awt.EventQueue.invokeLater(new Runnable() {S
     //  public void run() {
@@ -522,10 +652,12 @@ public class SkapaKundorder extends javax.swing.JFrame {
     //}
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnAdderaDekoration;
     private javax.swing.JButton btnLaggTillIOrder;
     private javax.swing.JButton btnPaborjaOrder;
     private javax.swing.JButton btnTillbaka;
     private javax.swing.JCheckBox chkSnabborder;
+    private javax.swing.JComboBox<String> cmbDekoration;
     private javax.swing.JComboBox<String> cmbFarg;
     private javax.swing.JComboBox<String> cmbHatt;
     private javax.swing.JComboBox<String> cmbStorlek;
@@ -535,14 +667,20 @@ public class SkapaKundorder extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JTable jTable1;
+    private javax.swing.JLabel lblAntalDekoration;
     private javax.swing.JLabel lblDatum;
+    private javax.swing.JLabel lblEgenText;
     private javax.swing.JLabel lblFraktadress;
     private javax.swing.JLabel lblHattmodell;
     private javax.swing.JLabel lblKundIdForOrder;
     private javax.swing.JLabel lblVäljAntal;
     private javax.swing.JTextField txtAntalHattar;
+    private javax.swing.JTextArea txtAreaSpecial;
     private javax.swing.JTextField txtDatum;
+    private javax.swing.JTextField txtDekorationAntal;
+    private javax.swing.JTextField txtEgenHattText;
     private javax.swing.JTextField txtFraktadress;
     private javax.swing.JTextField txtKundId;
     private javax.swing.JTextField txtPrisExklMoms;
