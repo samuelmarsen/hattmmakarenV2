@@ -163,6 +163,8 @@ public class SkapaKundorder extends javax.swing.JFrame {
         txtEgenHattText = new javax.swing.JTextField();
         lblAntalDekoration = new javax.swing.JLabel();
         lblDekoration = new javax.swing.JLabel();
+        lblUppskattadTid = new javax.swing.JLabel();
+        txtUppskattadTid = new javax.swing.JTextField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -239,6 +241,11 @@ public class SkapaKundorder extends javax.swing.JFrame {
 
         lblDekoration.setText("Dekoration");
 
+        lblUppskattadTid.setText("Uppskattad tid(h)");
+
+        txtUppskattadTid.setColumns(10);
+        txtUppskattadTid.addActionListener(this::txtUppskattadTidActionPerformed);
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -278,34 +285,38 @@ public class SkapaKundorder extends javax.swing.JFrame {
                                         .addComponent(txtFraktadress, javax.swing.GroupLayout.PREFERRED_SIZE, 187, javax.swing.GroupLayout.PREFERRED_SIZE)
                                         .addGap(120, 120, 120))))
                             .addGroup(layout.createSequentialGroup()
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addGroup(layout.createSequentialGroup()
-                                        .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 136, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addGap(136, 136, 136))
-                                    .addGroup(layout.createSequentialGroup()
-                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                            .addComponent(lblHattmodell, javax.swing.GroupLayout.PREFERRED_SIZE, 139, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                            .addComponent(lblDekoration))
-                                        .addGap(18, 18, 18)
-                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                            .addGroup(layout.createSequentialGroup()
+                                                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 136, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                .addGap(136, 136, 136))
                                             .addGroup(layout.createSequentialGroup()
                                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                                    .addComponent(cmbHatt, javax.swing.GroupLayout.PREFERRED_SIZE, 81, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                                    .addComponent(cmbDekoration, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                                .addGap(30, 30, 30)
-                                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                                    .addComponent(cmbFarg, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                                    .addComponent(lblAntalDekoration, javax.swing.GroupLayout.PREFERRED_SIZE, 46, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                                    .addComponent(lblHattmodell, javax.swing.GroupLayout.PREFERRED_SIZE, 139, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                    .addComponent(lblDekoration))
                                                 .addGap(18, 18, 18)
                                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                                     .addGroup(layout.createSequentialGroup()
-                                                        .addComponent(cmbTyg, javax.swing.GroupLayout.PREFERRED_SIZE, 98, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                                            .addComponent(cmbHatt, javax.swing.GroupLayout.PREFERRED_SIZE, 81, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                            .addComponent(cmbDekoration, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                                        .addGap(30, 30, 30)
+                                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                                            .addComponent(cmbFarg, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                            .addComponent(lblAntalDekoration, javax.swing.GroupLayout.PREFERRED_SIZE, 46, javax.swing.GroupLayout.PREFERRED_SIZE))
                                                         .addGap(18, 18, 18)
-                                                        .addComponent(cmbStorlek, javax.swing.GroupLayout.PREFERRED_SIZE, 111, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                                    .addComponent(txtDekorationAntal, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                                            .addComponent(txtEgenHattText, javax.swing.GroupLayout.PREFERRED_SIZE, 341, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
-                                .addComponent(btnAdderaDekoration)
+                                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                                            .addGroup(layout.createSequentialGroup()
+                                                                .addComponent(cmbTyg, javax.swing.GroupLayout.PREFERRED_SIZE, 98, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                                .addGap(18, 18, 18)
+                                                                .addComponent(cmbStorlek, javax.swing.GroupLayout.PREFERRED_SIZE, 111, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                                            .addComponent(txtDekorationAntal, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                                    .addComponent(txtEgenHattText, javax.swing.GroupLayout.PREFERRED_SIZE, 341, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                    .addComponent(txtUppskattadTid, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                                        .addComponent(btnAdderaDekoration))
+                                    .addComponent(lblUppskattadTid))
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                                     .addGroup(layout.createSequentialGroup()
                                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -339,7 +350,7 @@ public class SkapaKundorder extends javax.swing.JFrame {
                         .addGap(19, 19, 19)
                         .addComponent(lblKundIdForOrder))
                     .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 10, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 7, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(txtKundId, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(layout.createSequentialGroup()
@@ -358,7 +369,10 @@ public class SkapaKundorder extends javax.swing.JFrame {
                     .addComponent(lblEgenText)
                     .addComponent(txtEgenHattText, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(2, 2, 2)
-                .addComponent(lblVäljAntal)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(lblVäljAntal)
+                    .addComponent(lblUppskattadTid)
+                    .addComponent(txtUppskattadTid, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(cmbHatt, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -381,7 +395,7 @@ public class SkapaKundorder extends javax.swing.JFrame {
                         .addGap(11, 11, 11)
                         .addComponent(jLabel5)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 333, Short.MAX_VALUE)
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 330, Short.MAX_VALUE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(jLabel2)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -573,13 +587,18 @@ public class SkapaKundorder extends javax.swing.JFrame {
         String farg = (String) cmbFarg.getSelectedItem();
         String storlek = (String) cmbStorlek.getSelectedItem();
         
+        double timpris = 50.0; 
+        String tidStr = txtUppskattadTid.getText().trim().replace(",", ".");
+        double antalTimmar = tidStr.isEmpty() ? 0.0 : Double.parseDouble(tidStr);
+        double arbetskostnad = antalTimmar * timpris;
+        
         double extraTextPris = 0.0;
         String egenText = txtEgenHattText.getText().trim();
         if (!egenText.isEmpty()) {
             extraTextPris = 150.0;
         }
         
-        double radPris = (styckPrisHatt + extraKostnadMaterial + extraTextPris) * antal;
+        double radPris = (styckPrisHatt + extraKostnadMaterial + extraTextPris + arbetskostnad) * antal;
 
         if (chkSnabborder.isSelected()) {
         radPris *= 1.2;
@@ -598,6 +617,13 @@ public class SkapaKundorder extends javax.swing.JFrame {
             }
             dekorationer += "Egen text: '" + egenText + "'";
         }
+        
+        if (antalTimmar > 0) {
+            if (!dekorationer.isEmpty()) {
+                dekorationer += ", ";
+            }
+            dekorationer += "Arbetstid: " + antalTimmar + "h";
+        }
 
 
         if (dekorationer.endsWith(",")) {
@@ -613,6 +639,7 @@ public class SkapaKundorder extends javax.swing.JFrame {
         extraKostnadMaterial = 0.0;
         txtAreaSpecial.setText("");
         txtEgenHattText.setText("");
+        txtUppskattadTid.setText("");
 
 
     }//GEN-LAST:event_btnLaggTillIOrderActionPerformed
@@ -649,6 +676,10 @@ public class SkapaKundorder extends javax.swing.JFrame {
     }        // TODO add your handling code here:
     }//GEN-LAST:event_btnAdderaDekorationActionPerformed
 
+    private void txtUppskattadTidActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtUppskattadTidActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtUppskattadTidActionPerformed
+
     //public static void main(String args[]) {
     // java.awt.EventQueue.invokeLater(new Runnable() {S
     //  public void run() {
@@ -682,6 +713,7 @@ public class SkapaKundorder extends javax.swing.JFrame {
     private javax.swing.JLabel lblFraktadress;
     private javax.swing.JLabel lblHattmodell;
     private javax.swing.JLabel lblKundIdForOrder;
+    private javax.swing.JLabel lblUppskattadTid;
     private javax.swing.JLabel lblVäljAntal;
     private javax.swing.JTextField txtAntalHattar;
     private javax.swing.JTextArea txtAreaSpecial;
@@ -691,5 +723,6 @@ public class SkapaKundorder extends javax.swing.JFrame {
     private javax.swing.JTextField txtFraktadress;
     private javax.swing.JTextField txtKundId;
     private javax.swing.JTextField txtPrisExklMoms;
+    private javax.swing.JTextField txtUppskattadTid;
     // End of variables declaration//GEN-END:variables
 }
