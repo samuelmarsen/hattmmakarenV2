@@ -41,7 +41,6 @@ public class HuvudMeny extends javax.swing.JFrame {
         btnSchemaVy = new javax.swing.JButton();
         btnStatistik = new javax.swing.JButton();
         btnLagerfordaModeller = new javax.swing.JButton();
-        btnLogin = new javax.swing.JButton();
         lblValkommenText = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -84,12 +83,6 @@ public class HuvudMeny extends javax.swing.JFrame {
         btnLagerfordaModeller.setPreferredSize(new java.awt.Dimension(250, 80));
         btnLagerfordaModeller.addActionListener(this::btnLagerfordaModellerActionPerformed);
         jPanel1.add(btnLagerfordaModeller);
-
-        btnLogin.setFont(new java.awt.Font("Segoe UI Semibold", 0, 18)); // NOI18N
-        btnLogin.setText("Login");
-        btnLogin.setPreferredSize(new java.awt.Dimension(250, 80));
-        btnLogin.addActionListener(this::btnLoginActionPerformed);
-        jPanel1.add(btnLogin);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -152,11 +145,6 @@ public class HuvudMeny extends javax.swing.JFrame {
         sv.setVisible(true);
     }//GEN-LAST:event_btnSchemaVyActionPerformed
 
-    private void btnLoginActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLoginActionPerformed
-         LoginMedarbetare lm = new LoginMedarbetare(idb);
-        lm.setVisible(true);
-    }//GEN-LAST:event_btnLoginActionPerformed
-
     
     /**
      * @param args the command line arguments
@@ -187,7 +175,6 @@ public class HuvudMeny extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton BTNkundSida;
     private javax.swing.JButton btnLagerfordaModeller;
-    private javax.swing.JButton btnLogin;
     private javax.swing.JButton btnMaterial;
     private javax.swing.JButton btnOrderMeny;
     private javax.swing.JButton btnSchemaVy;
