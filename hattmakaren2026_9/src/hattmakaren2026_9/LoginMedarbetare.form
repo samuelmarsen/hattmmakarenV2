@@ -71,6 +71,14 @@
             <Property name="text" type="java.lang.String" value="Logga In"/>
           </Properties>
         </Component>
+        <Component class="javax.swing.JLabel" name="lblFelmeddelande">
+          <Properties>
+            <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+              <Color blue="33" green="33" red="ff" type="rgb"/>
+            </Property>
+            <Property name="text" type="java.lang.String" value="Felaktigt l&#xf6;senord eller Epost"/>
+          </Properties>
+        </Component>
       </SubComponents>
     </Container>
   </SubComponents>

@@ -23,6 +23,7 @@ public class LoginMedarbetare extends javax.swing.JFrame {
     txtEmail.setText("");
     jpfLosenord.setText("");
     this.setExtendedState(javax.swing.JFrame.MAXIMIZED_BOTH);
+    lblFelmeddelande.setVisible(false);
 
     btnLoggaIn.addActionListener((java.awt.event.ActionEvent evt) -> {
         loggaIn();
@@ -44,6 +45,7 @@ public class LoginMedarbetare extends javax.swing.JFrame {
         lblLosenord = new javax.swing.JLabel();
         jpfLosenord = new javax.swing.JPasswordField();
         btnLoggaIn = new javax.swing.JButton();
+        lblFelmeddelande = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         getContentPane().setLayout(new java.awt.GridBagLayout());
@@ -67,6 +69,10 @@ public class LoginMedarbetare extends javax.swing.JFrame {
 
         btnLoggaIn.setText("Logga In");
         jPanel1.add(btnLoggaIn);
+
+        lblFelmeddelande.setForeground(new java.awt.Color(255, 51, 51));
+        lblFelmeddelande.setText("Felaktigt lösenord eller Epost");
+        jPanel1.add(lblFelmeddelande);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -116,14 +122,12 @@ private void loggaIn() {
 
             boolean arChef = roll != null && roll.equalsIgnoreCase("Chef");
 
-            javax.swing.JOptionPane.showMessageDialog(this,
-                    "Inloggning lyckades! Du är inloggad som " + roll + ".");
 
             new SchemaVy(idb).setVisible(true);
             this.dispose();
 
         } else {
-            javax.swing.JOptionPane.showMessageDialog(this, "Fel email eller lösenord.");
+            lblFelmeddelande.setVisible(true);
         }
 
     } catch (oru.inf.InfException e) {
@@ -161,6 +165,7 @@ private void loggaIn() {
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPasswordField jpfLosenord;
     private javax.swing.JLabel lblEpost;
+    private javax.swing.JLabel lblFelmeddelande;
     private javax.swing.JLabel lblLosenord;
     private javax.swing.JTextField txtEmail;
     // End of variables declaration//GEN-END:variables
