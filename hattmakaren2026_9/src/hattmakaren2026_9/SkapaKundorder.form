@@ -74,8 +74,11 @@
                                       <EmptySpace min="-2" pref="136" max="-2" attributes="0"/>
                                   </Group>
                                   <Group type="102" alignment="1" attributes="0">
-                                      <Component id="lblHattmodell" min="-2" pref="139" max="-2" attributes="0"/>
-                                      <EmptySpace type="separate" min="-2" max="-2" attributes="0"/>
+                                      <Group type="103" groupAlignment="0" attributes="0">
+                                          <Component id="lblHattmodell" min="-2" pref="139" max="-2" attributes="0"/>
+                                          <Component id="lblDekoration" min="-2" max="-2" attributes="0"/>
+                                      </Group>
+                                      <EmptySpace type="separate" max="-2" attributes="0"/>
                                       <Group type="103" groupAlignment="0" attributes="0">
                                           <Group type="102" attributes="0">
                                               <Group type="103" groupAlignment="0" attributes="0">
@@ -196,6 +199,7 @@
                           <Component id="txtDekorationAntal" alignment="3" min="-2" max="-2" attributes="0"/>
                           <Component id="btnAdderaDekoration" alignment="3" min="-2" max="-2" attributes="0"/>
                           <Component id="lblAntalDekoration" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="lblDekoration" alignment="3" min="-2" max="-2" attributes="0"/>
                       </Group>
                       <EmptySpace min="-2" pref="11" max="-2" attributes="0"/>
                       <Component id="jLabel5" min="-2" max="-2" attributes="0"/>
@@ -508,6 +512,11 @@
     <Component class="javax.swing.JLabel" name="lblAntalDekoration">
       <Properties>
         <Property name="text" type="java.lang.String" value="Antal"/>
+      </Properties>
+    </Component>
+    <Component class="javax.swing.JLabel" name="lblDekoration">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="Dekoration"/>
       </Properties>
     </Component>
   </SubComponents>

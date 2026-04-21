@@ -107,8 +107,8 @@
                   <Properties>
                     <Property name="model" type="javax.swing.table.TableModel" editor="org.netbeans.modules.form.editors2.TableModelEditor">
                       <Table columnCount="2" rowCount="4">
-                        <Column editable="true" title="&#xc5;r" type="java.lang.Object"/>
-                        <Column editable="true" title="Int&#xe4;kt" type="java.lang.Object"/>
+                        <Column editable="false" title="&#xc5;r" type="java.lang.Object"/>
+                        <Column editable="false" title="Int&#xe4;kt" type="java.lang.Object"/>
                       </Table>
                     </Property>
                     <Property name="columnModel" type="javax.swing.table.TableColumnModel" editor="org.netbeans.modules.form.editors2.TableColumnModelEditor">
@@ -243,8 +243,8 @@
                   <Properties>
                     <Property name="model" type="javax.swing.table.TableModel" editor="org.netbeans.modules.form.editors2.TableModelEditor">
                       <Table columnCount="2" rowCount="4">
-                        <Column editable="true" title="Datum" type="java.lang.Object"/>
-                        <Column editable="true" title="Int&#xe4;kt" type="java.lang.Object"/>
+                        <Column editable="false" title="Datum" type="java.lang.Object"/>
+                        <Column editable="false" title="Int&#xe4;kt" type="java.lang.Object"/>
                       </Table>
                     </Property>
                     <Property name="columnModel" type="javax.swing.table.TableColumnModel" editor="org.netbeans.modules.form.editors2.TableColumnModelEditor">
@@ -311,9 +311,9 @@
                   <Properties>
                     <Property name="model" type="javax.swing.table.TableModel" editor="org.netbeans.modules.form.editors2.TableModelEditor">
                       <Table columnCount="3" rowCount="4">
-                        <Column editable="true" title="Hattmodell" type="java.lang.Object"/>
-                        <Column editable="true" title="Antal s&#xe5;lda" type="java.lang.Object"/>
-                        <Column editable="true" title="Int&#xe4;kt" type="java.lang.Object"/>
+                        <Column editable="false" title="Hattmodell" type="java.lang.Object"/>
+                        <Column editable="false" title="Antal s&#xe5;lda" type="java.lang.Object"/>
+                        <Column editable="false" title="Int&#xe4;kt" type="java.lang.Object"/>
                       </Table>
                     </Property>
                     <Property name="columnModel" type="javax.swing.table.TableColumnModel" editor="org.netbeans.modules.form.editors2.TableColumnModelEditor">
@@ -385,9 +385,9 @@
                   <Properties>
                     <Property name="model" type="javax.swing.table.TableModel" editor="org.netbeans.modules.form.editors2.TableModelEditor">
                       <Table columnCount="3" rowCount="4">
-                        <Column editable="true" title="Epost" type="java.lang.Object"/>
-                        <Column editable="true" title="Antal hattar" type="java.lang.Object"/>
-                        <Column editable="true" title="Spendering " type="java.lang.Object"/>
+                        <Column editable="false" title="Epost" type="java.lang.Object"/>
+                        <Column editable="false" title="Antal hattar" type="java.lang.Object"/>
+                        <Column editable="false" title="Spendering " type="java.lang.Object"/>
                       </Table>
                     </Property>
                     <Property name="columnModel" type="javax.swing.table.TableColumnModel" editor="org.netbeans.modules.form.editors2.TableColumnModelEditor">
