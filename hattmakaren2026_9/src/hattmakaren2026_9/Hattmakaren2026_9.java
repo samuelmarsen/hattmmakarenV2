@@ -34,7 +34,7 @@ public class Hattmakaren2026_9 {
 
             // HÄR ÖPPNAR DU HUVUDMENYN:
             // Vi skapar ett objekt av din fönster-klass och gör det synligt 
-            new HuvudMeny(idb).setVisible(true);
+            new LoginMedarbetare(idb).setVisible(true);
         } catch (InfException ex) {
             // Om något går fel skrivs felet ut här
             System.out.println("Ett fel uppstod vid uppstart: " + ex.getMessage());
