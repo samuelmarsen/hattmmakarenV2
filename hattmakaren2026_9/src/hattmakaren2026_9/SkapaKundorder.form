@@ -68,44 +68,50 @@
                               </Group>
                           </Group>
                           <Group type="102" attributes="0">
-                              <Group type="103" groupAlignment="1" attributes="0">
+                              <Group type="103" groupAlignment="0" attributes="0">
                                   <Group type="102" attributes="0">
-                                      <Component id="jLabel1" min="-2" pref="136" max="-2" attributes="0"/>
-                                      <EmptySpace min="-2" pref="136" max="-2" attributes="0"/>
-                                  </Group>
-                                  <Group type="102" alignment="1" attributes="0">
-                                      <Group type="103" groupAlignment="0" attributes="0">
-                                          <Component id="lblHattmodell" min="-2" pref="139" max="-2" attributes="0"/>
-                                          <Component id="lblDekoration" min="-2" max="-2" attributes="0"/>
-                                      </Group>
-                                      <EmptySpace type="separate" max="-2" attributes="0"/>
-                                      <Group type="103" groupAlignment="0" attributes="0">
+                                      <Group type="103" groupAlignment="1" attributes="0">
                                           <Group type="102" attributes="0">
+                                              <Component id="jLabel1" min="-2" pref="136" max="-2" attributes="0"/>
+                                              <EmptySpace min="-2" pref="136" max="-2" attributes="0"/>
+                                          </Group>
+                                          <Group type="102" alignment="1" attributes="0">
                                               <Group type="103" groupAlignment="0" attributes="0">
-                                                  <Component id="cmbHatt" alignment="0" min="-2" pref="81" max="-2" attributes="0"/>
-                                                  <Component id="cmbDekoration" alignment="0" min="-2" max="-2" attributes="0"/>
-                                              </Group>
-                                              <EmptySpace min="-2" pref="30" max="-2" attributes="0"/>
-                                              <Group type="103" groupAlignment="0" attributes="0">
-                                                  <Component id="cmbFarg" min="-2" pref="90" max="-2" attributes="0"/>
-                                                  <Component id="lblAntalDekoration" min="-2" pref="46" max="-2" attributes="0"/>
+                                                  <Component id="lblHattmodell" min="-2" pref="139" max="-2" attributes="0"/>
+                                                  <Component id="lblDekoration" min="-2" max="-2" attributes="0"/>
                                               </Group>
                                               <EmptySpace type="separate" max="-2" attributes="0"/>
                                               <Group type="103" groupAlignment="0" attributes="0">
                                                   <Group type="102" attributes="0">
-                                                      <Component id="cmbTyg" min="-2" pref="98" max="-2" attributes="0"/>
+                                                      <Group type="103" groupAlignment="0" attributes="0">
+                                                          <Component id="cmbHatt" alignment="0" min="-2" pref="81" max="-2" attributes="0"/>
+                                                          <Component id="cmbDekoration" alignment="0" min="-2" max="-2" attributes="0"/>
+                                                      </Group>
+                                                      <EmptySpace min="-2" pref="30" max="-2" attributes="0"/>
+                                                      <Group type="103" groupAlignment="0" attributes="0">
+                                                          <Component id="cmbFarg" min="-2" pref="90" max="-2" attributes="0"/>
+                                                          <Component id="lblAntalDekoration" min="-2" pref="46" max="-2" attributes="0"/>
+                                                      </Group>
                                                       <EmptySpace type="separate" max="-2" attributes="0"/>
-                                                      <Component id="cmbStorlek" min="-2" pref="111" max="-2" attributes="0"/>
+                                                      <Group type="103" groupAlignment="0" attributes="0">
+                                                          <Group type="102" attributes="0">
+                                                              <Component id="cmbTyg" min="-2" pref="98" max="-2" attributes="0"/>
+                                                              <EmptySpace type="separate" max="-2" attributes="0"/>
+                                                              <Component id="cmbStorlek" min="-2" pref="111" max="-2" attributes="0"/>
+                                                          </Group>
+                                                          <Component id="txtDekorationAntal" min="-2" pref="90" max="-2" attributes="0"/>
+                                                      </Group>
                                                   </Group>
-                                                  <Component id="txtDekorationAntal" min="-2" pref="90" max="-2" attributes="0"/>
+                                                  <Component id="txtEgenHattText" min="-2" pref="341" max="-2" attributes="0"/>
+                                                  <Component id="txtUppskattadTid" alignment="0" min="-2" max="-2" attributes="0"/>
                                               </Group>
+                                              <EmptySpace max="32767" attributes="0"/>
                                           </Group>
-                                          <Component id="txtEgenHattText" min="-2" pref="341" max="-2" attributes="0"/>
                                       </Group>
-                                      <EmptySpace max="32767" attributes="0"/>
+                                      <Component id="btnAdderaDekoration" min="-2" max="-2" attributes="0"/>
                                   </Group>
+                                  <Component id="lblUppskattadTid" alignment="0" min="-2" max="-2" attributes="0"/>
                               </Group>
-                              <Component id="btnAdderaDekoration" min="-2" max="-2" attributes="0"/>
                               <Group type="103" groupAlignment="1" attributes="0">
                                   <Group type="102" alignment="1" attributes="0">
                                       <EmptySpace max="32767" attributes="0"/>
@@ -155,7 +161,7 @@
                   </Group>
                   <Component id="jLabel1" alignment="0" min="-2" pref="30" max="-2" attributes="0"/>
               </Group>
-              <EmptySpace pref="10" max="32767" attributes="0"/>
+              <EmptySpace pref="7" max="32767" attributes="0"/>
               <Group type="103" groupAlignment="0" attributes="0">
                   <Component id="txtKundId" min="-2" max="-2" attributes="0"/>
                   <Group type="102" alignment="0" attributes="0">
@@ -179,7 +185,11 @@
                   <Component id="txtEgenHattText" alignment="3" min="-2" max="-2" attributes="0"/>
               </Group>
               <EmptySpace min="-2" pref="2" max="-2" attributes="0"/>
-              <Component id="lblVäljAntal" min="-2" max="-2" attributes="0"/>
+              <Group type="103" groupAlignment="3" attributes="0">
+                  <Component id="lblVäljAntal" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="lblUppskattadTid" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="txtUppskattadTid" alignment="3" min="-2" max="-2" attributes="0"/>
+              </Group>
               <EmptySpace min="-2" max="-2" attributes="0"/>
               <Group type="103" groupAlignment="3" attributes="0">
                   <Component id="cmbHatt" alignment="3" min="-2" max="-2" attributes="0"/>
@@ -204,7 +214,7 @@
                       <EmptySpace min="-2" pref="11" max="-2" attributes="0"/>
                       <Component id="jLabel5" min="-2" max="-2" attributes="0"/>
                       <EmptySpace type="unrelated" min="-2" max="-2" attributes="0"/>
-                      <Component id="jScrollPane1" pref="333" max="32767" attributes="0"/>
+                      <Component id="jScrollPane1" pref="330" max="32767" attributes="0"/>
                       <EmptySpace type="unrelated" min="-2" max="-2" attributes="0"/>
                       <Component id="jLabel2" min="-2" max="-2" attributes="0"/>
                       <EmptySpace min="-2" max="-2" attributes="0"/>
@@ -518,6 +528,19 @@
       <Properties>
         <Property name="text" type="java.lang.String" value="Dekoration"/>
       </Properties>
+    </Component>
+    <Component class="javax.swing.JLabel" name="lblUppskattadTid">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="Uppskattad tid(h)"/>
+      </Properties>
+    </Component>
+    <Component class="javax.swing.JTextField" name="txtUppskattadTid">
+      <Properties>
+        <Property name="columns" type="int" value="10"/>
+      </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="txtUppskattadTidActionPerformed"/>
+      </Events>
     </Component>
   </SubComponents>
 </Form>
