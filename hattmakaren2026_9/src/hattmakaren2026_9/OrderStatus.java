@@ -24,6 +24,7 @@ public class OrderStatus extends javax.swing.JFrame {
     public OrderStatus(InfDB idb) throws InfException {
         initComponents();
         this.idb = idb;
+        this.setExtendedState(javax.swing.JFrame.MAXIMIZED_BOTH);
         fyllRullListaMedKunder();
         
     }
@@ -50,65 +51,65 @@ public class OrderStatus extends javax.swing.JFrame {
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
+        java.awt.GridBagConstraints gridBagConstraints;
 
-        cmbVisaKunder = new javax.swing.JComboBox<>();
         lblOrderStatusRubrik = new javax.swing.JLabel();
+        jPanel1 = new javax.swing.JPanel();
+        cmbVisaKunder = new javax.swing.JComboBox<>();
         btnVisaStatus = new javax.swing.JButton();
+        btnTillbaka = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
         txtVisaOrderStatus = new javax.swing.JTextArea();
-        btnTillbaka = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        getContentPane().setLayout(new java.awt.GridBagLayout());
+
+        lblOrderStatusRubrik.setFont(new java.awt.Font("Segoe UI Semibold", 0, 24)); // NOI18N
+        lblOrderStatusRubrik.setText("Orderstatus");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHEAST;
+        getContentPane().add(lblOrderStatusRubrik, gridBagConstraints);
+
+        jPanel1.setLayout(new java.awt.GridLayout(0, 2, 15, 15));
 
         cmbVisaKunder.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
-
-        lblOrderStatusRubrik.setText("Visa orderstatus för kunder");
+        jPanel1.add(cmbVisaKunder);
 
         btnVisaStatus.setText("Visa status");
         btnVisaStatus.addActionListener(this::btnVisaStatusActionPerformed);
-
-        txtVisaOrderStatus.setColumns(20);
-        txtVisaOrderStatus.setRows(5);
-        jScrollPane1.setViewportView(txtVisaOrderStatus);
+        jPanel1.add(btnVisaStatus);
 
         btnTillbaka.setText("Tillbaka");
         btnTillbaka.addActionListener(this::btnTillbakaActionPerformed);
+        jPanel1.add(btnTillbaka);
 
-        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
-        getContentPane().setLayout(layout);
-        layout.setHorizontalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addGap(99, 99, 99)
-                .addComponent(lblOrderStatusRubrik, javax.swing.GroupLayout.PREFERRED_SIZE, 201, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(227, Short.MAX_VALUE))
-            .addGroup(layout.createSequentialGroup()
-                .addGap(25, 25, 25)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(cmbVisaKunder, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnTillbaka))
-                .addGap(45, 45, 45)
-                .addComponent(btnVisaStatus)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(38, 38, 38))
-        );
-        layout.setVerticalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(lblOrderStatusRubrik)
-                .addGap(27, 27, 27)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(cmbVisaKunder, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(btnVisaStatus))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(btnTillbaka))
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 242, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(53, Short.MAX_VALUE))
-        );
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.ipadx = 37;
+        gridBagConstraints.ipady = 44;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.insets = new java.awt.Insets(210, 163, 0, 0);
+        getContentPane().add(jPanel1, gridBagConstraints);
+
+        txtVisaOrderStatus.setColumns(20);
+        txtVisaOrderStatus.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        txtVisaOrderStatus.setRows(5);
+        jScrollPane1.setViewportView(txtVisaOrderStatus);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.gridwidth = 3;
+        gridBagConstraints.gridheight = 2;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.ipadx = 327;
+        gridBagConstraints.ipady = 281;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.weighty = 1.0;
+        gridBagConstraints.insets = new java.awt.Insets(111, 79, 172, 208);
+        getContentPane().add(jScrollPane1, gridBagConstraints);
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -194,6 +195,7 @@ public class OrderStatus extends javax.swing.JFrame {
     private javax.swing.JButton btnTillbaka;
     private javax.swing.JButton btnVisaStatus;
     private javax.swing.JComboBox<String> cmbVisaKunder;
+    private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JLabel lblOrderStatusRubrik;
     private javax.swing.JTextArea txtVisaOrderStatus;

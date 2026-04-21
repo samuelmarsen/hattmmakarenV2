@@ -91,7 +91,7 @@ public class LoginMedarbetare extends javax.swing.JFrame {
     }                                              
 private void loggaIn() {
     String email = txtEmail.getText().trim();
-    String losenord = new String(jpfLosenord.getPassword());
+    String losenord = new String(jpfLosenord.getPassword()).trim();
 
     if (email.isEmpty() || losenord.isEmpty()) {
         javax.swing.JOptionPane.showMessageDialog(this, "Fyll i både email och lösenord.");
@@ -99,14 +99,29 @@ private void loggaIn() {
     }
 
     try {
-        String sql = "SELECT * FROM Anstallda WHERE Email = '" + email + "' AND Losenord = '" + losenord + "'";
-        java.util.HashMap<String, String> resultat = idb.fetchRow(sql);
+        String kontrollSql = "SELECT COUNT(*) FROM Anstallda "
+                + "WHERE Email = '" + email + "' AND Losenord = '" + losenord + "'";
 
-        if (resultat != null) {
-            javax.swing.JOptionPane.showMessageDialog(this, "Inloggning lyckades!");
+        String antalTraffar = idb.fetchSingle(kontrollSql);
+
+        if (antalTraffar != null && antalTraffar.equals("1")) {
+
+            String infoSql = "SELECT Namn, Roll FROM Anstallda "
+                    + "WHERE Email = '" + email + "' AND Losenord = '" + losenord + "'";
+
+            java.util.HashMap<String, String> resultat = idb.fetchRow(infoSql);
+
+            String namn = resultat.get("Namn");
+            String roll = resultat.get("Roll");
+
+            boolean arChef = roll != null && roll.equalsIgnoreCase("Chef");
+
+            javax.swing.JOptionPane.showMessageDialog(this,
+                    "Inloggning lyckades! Du är inloggad som " + roll + ".");
 
             new SchemaVy(idb).setVisible(true);
             this.dispose();
+
         } else {
             javax.swing.JOptionPane.showMessageDialog(this, "Fel email eller lösenord.");
         }
