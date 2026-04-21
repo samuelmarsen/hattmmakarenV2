@@ -32,98 +32,78 @@ public class HuvudMeny extends javax.swing.JFrame {
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
+        java.awt.GridBagConstraints gridBagConstraints;
 
-        lblValkommenText = new javax.swing.JLabel();
+        jPanel1 = new javax.swing.JPanel();
+        BTNkundSida = new javax.swing.JButton();
         btnMaterial = new javax.swing.JButton();
         btnOrderMeny = new javax.swing.JButton();
-        btnLagerfordaModeller = new javax.swing.JButton();
-        BTNkundSida = new javax.swing.JButton();
-        btnStatistik = new javax.swing.JButton();
         btnSchemaVy = new javax.swing.JButton();
+        btnStatistik = new javax.swing.JButton();
+        btnLagerfordaModeller = new javax.swing.JButton();
         btnLogin = new javax.swing.JButton();
+        lblValkommenText = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        getContentPane().setLayout(new java.awt.GridBagLayout());
 
-        lblValkommenText.setText("Välkommen till huvudmenyn!");
+        jPanel1.setLayout(new java.awt.GridLayout(0, 2, 15, 15));
 
-        btnMaterial.setText("Material");
-        btnMaterial.setPreferredSize(new java.awt.Dimension(250, 80));
-        btnMaterial.addActionListener(this::btnMaterialActionPerformed);
-
-        btnOrderMeny.setText("Order meny");
-        btnOrderMeny.setPreferredSize(new java.awt.Dimension(250, 80));
-        btnOrderMeny.addActionListener(this::btnOrderMenyActionPerformed);
-
-        btnLagerfordaModeller.setText("Lagerförda modeller");
-        btnLagerfordaModeller.setPreferredSize(new java.awt.Dimension(250, 80));
-        btnLagerfordaModeller.addActionListener(this::btnLagerfordaModellerActionPerformed);
-
+        BTNkundSida.setFont(new java.awt.Font("Segoe UI Semibold", 0, 18)); // NOI18N
         BTNkundSida.setText("Kundsida");
         BTNkundSida.setPreferredSize(new java.awt.Dimension(250, 80));
         BTNkundSida.addActionListener(this::BTNkundSidaActionPerformed);
+        jPanel1.add(BTNkundSida);
 
-        btnStatistik.setText("Statistik");
-        btnStatistik.setPreferredSize(new java.awt.Dimension(250, 80));
-        btnStatistik.addActionListener(this::btnStatistikActionPerformed);
+        btnMaterial.setFont(new java.awt.Font("Segoe UI Semibold", 0, 18)); // NOI18N
+        btnMaterial.setText("Material");
+        btnMaterial.setPreferredSize(new java.awt.Dimension(250, 80));
+        btnMaterial.addActionListener(this::btnMaterialActionPerformed);
+        jPanel1.add(btnMaterial);
 
+        btnOrderMeny.setFont(new java.awt.Font("Segoe UI Semibold", 0, 18)); // NOI18N
+        btnOrderMeny.setText("Order meny");
+        btnOrderMeny.setPreferredSize(new java.awt.Dimension(250, 80));
+        btnOrderMeny.addActionListener(this::btnOrderMenyActionPerformed);
+        jPanel1.add(btnOrderMeny);
+
+        btnSchemaVy.setFont(new java.awt.Font("Segoe UI Semibold", 0, 18)); // NOI18N
         btnSchemaVy.setText("Schema");
         btnSchemaVy.setPreferredSize(new java.awt.Dimension(250, 80));
         btnSchemaVy.addActionListener(this::btnSchemaVyActionPerformed);
+        jPanel1.add(btnSchemaVy);
 
+        btnStatistik.setFont(new java.awt.Font("Segoe UI Semibold", 0, 18)); // NOI18N
+        btnStatistik.setText("Statistik");
+        btnStatistik.setPreferredSize(new java.awt.Dimension(250, 80));
+        btnStatistik.addActionListener(this::btnStatistikActionPerformed);
+        jPanel1.add(btnStatistik);
+
+        btnLagerfordaModeller.setFont(new java.awt.Font("Segoe UI Semibold", 0, 18)); // NOI18N
+        btnLagerfordaModeller.setText("Lagerförda modeller");
+        btnLagerfordaModeller.setPreferredSize(new java.awt.Dimension(250, 80));
+        btnLagerfordaModeller.addActionListener(this::btnLagerfordaModellerActionPerformed);
+        jPanel1.add(btnLagerfordaModeller);
+
+        btnLogin.setFont(new java.awt.Font("Segoe UI Semibold", 0, 18)); // NOI18N
         btnLogin.setText("Login");
         btnLogin.setPreferredSize(new java.awt.Dimension(250, 80));
         btnLogin.addActionListener(this::btnLoginActionPerformed);
+        jPanel1.add(btnLogin);
 
-        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
-        getContentPane().setLayout(layout);
-        layout.setHorizontalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addGap(119, 119, 119)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(BTNkundSida, javax.swing.GroupLayout.PREFERRED_SIZE, 162, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnOrderMeny, javax.swing.GroupLayout.PREFERRED_SIZE, 162, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnStatistik, javax.swing.GroupLayout.PREFERRED_SIZE, 162, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(403, 403, 403)
-                        .addComponent(btnLogin, javax.swing.GroupLayout.PREFERRED_SIZE, 77, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(18, 18, 18)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(btnSchemaVy, javax.swing.GroupLayout.PREFERRED_SIZE, 162, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(btnMaterial, javax.swing.GroupLayout.PREFERRED_SIZE, 162, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(btnLagerfordaModeller, javax.swing.GroupLayout.PREFERRED_SIZE, 162, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                .addGap(190, 190, 190))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(lblValkommenText, javax.swing.GroupLayout.PREFERRED_SIZE, 174, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(333, 333, 333))
-        );
-        layout.setVerticalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(lblValkommenText)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(111, 111, 111)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(btnOrderMeny, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(btnSchemaVy, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(18, 18, 18)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(btnStatistik, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(btnLagerfordaModeller, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(39, 39, 39)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(BTNkundSida, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(btnMaterial, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                .addGap(251, 251, 251)
-                .addComponent(btnLogin, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(89, Short.MAX_VALUE))
-        );
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.gridwidth = 2;
+        gridBagConstraints.insets = new java.awt.Insets(0, 0, 100, 0);
+        getContentPane().add(jPanel1, gridBagConstraints);
+
+        lblValkommenText.setFont(new java.awt.Font("Segoe UI Semibold", 0, 40)); // NOI18N
+        lblValkommenText.setText("Välkommen till huvudmenyn!");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTH;
+        gridBagConstraints.insets = new java.awt.Insets(0, 0, 150, 0);
+        getContentPane().add(lblValkommenText, gridBagConstraints);
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -212,6 +192,7 @@ public class HuvudMeny extends javax.swing.JFrame {
     private javax.swing.JButton btnOrderMeny;
     private javax.swing.JButton btnSchemaVy;
     private javax.swing.JButton btnStatistik;
+    private javax.swing.JPanel jPanel1;
     private javax.swing.JLabel lblValkommenText;
     // End of variables declaration//GEN-END:variables
 }

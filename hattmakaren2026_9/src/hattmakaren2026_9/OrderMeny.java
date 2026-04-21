@@ -36,8 +36,8 @@ public class OrderMeny extends javax.swing.JFrame {
 
         jLabel1 = new javax.swing.JLabel();
         jPanel1 = new javax.swing.JPanel();
-        btnOrderStatus = new javax.swing.JButton();
         btnSkapaKundorder = new javax.swing.JButton();
+        btnOrderStatus = new javax.swing.JButton();
         btnSkapaFraktsedel = new javax.swing.JButton();
         btnOrderHistorik = new javax.swing.JButton();
         btnTillbaka = new javax.swing.JButton();
@@ -59,15 +59,15 @@ public class OrderMeny extends javax.swing.JFrame {
 
         jPanel1.setLayout(new java.awt.GridLayout(0, 2, 20, 20));
 
-        btnOrderStatus.setFont(new java.awt.Font("Segoe UI Semibold", 0, 18)); // NOI18N
-        btnOrderStatus.setText("Orderstatus");
-        btnOrderStatus.addActionListener(this::btnOrderStatusActionPerformed);
-        jPanel1.add(btnOrderStatus);
-
         btnSkapaKundorder.setFont(new java.awt.Font("Segoe UI Semibold", 0, 18)); // NOI18N
         btnSkapaKundorder.setText("Skapa kundorder");
         btnSkapaKundorder.addActionListener(this::btnSkapaKundorderActionPerformed);
         jPanel1.add(btnSkapaKundorder);
+
+        btnOrderStatus.setFont(new java.awt.Font("Segoe UI Semibold", 0, 18)); // NOI18N
+        btnOrderStatus.setText("Orderstatus");
+        btnOrderStatus.addActionListener(this::btnOrderStatusActionPerformed);
+        jPanel1.add(btnOrderStatus);
 
         btnSkapaFraktsedel.setFont(new java.awt.Font("Segoe UI Semibold", 0, 18)); // NOI18N
         btnSkapaFraktsedel.setText("Skapa fraktsedel");
