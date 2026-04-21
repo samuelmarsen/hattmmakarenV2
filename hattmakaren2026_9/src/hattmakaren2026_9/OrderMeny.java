@@ -14,14 +14,16 @@ public class OrderMeny extends javax.swing.JFrame {
     
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(OrderMeny.class.getName());
     private InfDB idb;
+    private String InloggadEmail; 
     
     /**
      * Creates new form OrderMeny
      */
-    public OrderMeny(InfDB idb) throws InfException {
+    public OrderMeny(InfDB idb, String InloggadEmail) throws InfException {
         initComponents();
         this.setExtendedState(javax.swing.JFrame.MAXIMIZED_BOTH);
         this.idb = idb;
+        this.InloggadEmail = InloggadEmail;
     }
 
     /**
@@ -112,7 +114,7 @@ public class OrderMeny extends javax.swing.JFrame {
 
     private void btnSkapaKundorderActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSkapaKundorderActionPerformed
         try {
-            new SkapaKundorder(idb).setVisible(true);
+            new SkapaKundorder(idb, InloggadEmail).setVisible(true);
         } catch(InfException e) {
             System.out.println("Error: " + e.getMessage());
         }

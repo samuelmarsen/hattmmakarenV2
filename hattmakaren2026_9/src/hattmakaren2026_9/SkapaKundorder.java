@@ -25,19 +25,23 @@ import java.time.format.DateTimeFormatter;
 public class SkapaKundorder extends javax.swing.JFrame {
 
     private InfDB idb;
+    private String InloggadEmail;
 
     private double totaltPris = 0.0;
     private double styckPrisHatt = 0.0;
     private double extraKostnadMaterial = 0.0;
     private String valdBildSokvag = "";
 
-    public SkapaKundorder(InfDB idb) throws InfException {
+    public SkapaKundorder(InfDB idb, String InloggadEmail) throws InfException {
         initComponents();
         this.setExtendedState(javax.swing.JFrame.MAXIMIZED_BOTH);
         this.idb = idb;
+        this.InloggadEmail = InloggadEmail;
 
         LocalDate dagensDatum = LocalDate.now();
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        txtInloggadEmail.setText(InloggadEmail);
+    txtInloggadEmail.setEditable(false);
         txtDatum.setText(dagensDatum.format(formatter));
         txtDatum.setEditable(false);
         
@@ -169,6 +173,8 @@ public class SkapaKundorder extends javax.swing.JFrame {
         txtUppskattadTid = new javax.swing.JTextField();
         lblBildStatus = new javax.swing.JLabel();
         btnBifogaReferensBild = new javax.swing.JButton();
+        txtInloggadEmail = new javax.swing.JTextField();
+        lblInloggadAnstalld = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -253,6 +259,10 @@ public class SkapaKundorder extends javax.swing.JFrame {
         btnBifogaReferensBild.setText("Bifoga Referensbild ");
         btnBifogaReferensBild.addActionListener(this::btnBifogaReferensBildActionPerformed);
 
+        txtInloggadEmail.addActionListener(this::txtInloggadEmailActionPerformed);
+
+        lblInloggadAnstalld.setText("Inloggad anställd");
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -275,15 +285,18 @@ public class SkapaKundorder extends javax.swing.JFrame {
                         .addGap(0, 847, Short.MAX_VALUE)))
                 .addContainerGap())
             .addGroup(layout.createSequentialGroup()
-                .addGap(16, 16, 16)
+                .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
+                        .addGap(10, 10, 10)
                         .addComponent(lblEgenText)
                         .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                                .addComponent(cmbValjKund, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(cmbValjKund, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(txtInloggadEmail, javax.swing.GroupLayout.PREFERRED_SIZE, 309, javax.swing.GroupLayout.PREFERRED_SIZE))
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
@@ -298,9 +311,6 @@ public class SkapaKundorder extends javax.swing.JFrame {
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addGroup(layout.createSequentialGroup()
                                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                            .addGroup(layout.createSequentialGroup()
-                                                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 136, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                                .addGap(136, 136, 136))
                                             .addGroup(layout.createSequentialGroup()
                                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                                     .addComponent(lblHattmodell, javax.swing.GroupLayout.PREFERRED_SIZE, 139, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -324,7 +334,12 @@ public class SkapaKundorder extends javax.swing.JFrame {
                                                             .addComponent(txtDekorationAntal, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE)))
                                                     .addComponent(txtEgenHattText, javax.swing.GroupLayout.PREFERRED_SIZE, 341, javax.swing.GroupLayout.PREFERRED_SIZE)
                                                     .addComponent(txtUppskattadTid, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                                            .addGroup(layout.createSequentialGroup()
+                                                .addComponent(lblInloggadAnstalld, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                                .addGap(205, 205, 205)
+                                                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 136, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                .addGap(136, 136, 136)))
                                         .addComponent(btnAdderaDekoration))
                                     .addComponent(lblUppskattadTid))
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
@@ -357,17 +372,25 @@ public class SkapaKundorder extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(19, 19, 19)
-                        .addComponent(lblKundIdForOrder))
-                    .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 7, Short.MAX_VALUE)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(txtKundId, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addGap(19, 19, 19)
+                                .addComponent(lblKundIdForOrder))
+                            .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 7, Short.MAX_VALUE)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(txtKundId, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGroup(layout.createSequentialGroup()
+                                .addGap(6, 6, 6)
+                                .addComponent(lblDatum))
+                            .addComponent(txtDatum, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(18, 18, 18))
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(6, 6, 6)
-                        .addComponent(lblDatum))
-                    .addComponent(txtDatum, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
+                        .addGap(8, 8, 8)
+                        .addComponent(lblInloggadAnstalld)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(txtInloggadEmail, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(cmbValjKund, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(layout.createSequentialGroup()
@@ -725,6 +748,10 @@ javax.swing.JFileChooser fc = new javax.swing.JFileChooser();
         lblBildStatus.setText(""); 
     }      // TODO add your handling code here:
     }//GEN-LAST:event_btnBifogaReferensBildActionPerformed
+
+    private void txtInloggadEmailActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtInloggadEmailActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtInloggadEmailActionPerformed
     
     //public static void main(String args[]) {
     // java.awt.EventQueue.invokeLater(new Runnable() {S
@@ -760,6 +787,7 @@ javax.swing.JFileChooser fc = new javax.swing.JFileChooser();
     private javax.swing.JLabel lblEgenText;
     private javax.swing.JLabel lblFraktadress;
     private javax.swing.JLabel lblHattmodell;
+    private javax.swing.JLabel lblInloggadAnstalld;
     private javax.swing.JLabel lblKundIdForOrder;
     private javax.swing.JLabel lblUppskattadTid;
     private javax.swing.JLabel lblVäljAntal;
@@ -769,6 +797,7 @@ javax.swing.JFileChooser fc = new javax.swing.JFileChooser();
     private javax.swing.JTextField txtDekorationAntal;
     private javax.swing.JTextField txtEgenHattText;
     private javax.swing.JTextField txtFraktadress;
+    private javax.swing.JTextField txtInloggadEmail;
     private javax.swing.JTextField txtKundId;
     private javax.swing.JTextField txtPrisExklMoms;
     private javax.swing.JTextField txtUppskattadTid;

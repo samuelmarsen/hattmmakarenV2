@@ -14,13 +14,15 @@ public class HuvudMeny extends javax.swing.JFrame {
     
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(HuvudMeny.class.getName());
     private InfDB idb;
+    private String InloggadEmail;
     
     /**
      * Creates new form HuvudMeny
      */
-    public HuvudMeny(InfDB idb) {
+    public HuvudMeny(InfDB idb, String InloggadEmail) {
         initComponents();
         this.idb = idb;
+        this.InloggadEmail = InloggadEmail;
         this.setExtendedState(javax.swing.JFrame.MAXIMIZED_BOTH);
     }
 
@@ -88,6 +90,7 @@ public class HuvudMeny extends javax.swing.JFrame {
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 1;
         gridBagConstraints.gridwidth = 2;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
         gridBagConstraints.insets = new java.awt.Insets(0, 0, 100, 0);
         getContentPane().add(jPanel1, gridBagConstraints);
 
@@ -116,7 +119,7 @@ public class HuvudMeny extends javax.swing.JFrame {
     private void btnOrderMenyActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnOrderMenyActionPerformed
         // TODO add your handling code here:
         try {
-            new OrderMeny(idb).setVisible(true);
+            new OrderMeny(idb, InloggadEmail).setVisible(true);
         } catch (InfException e) {
             System.out.println("Error: " + e.getMessage());
         }

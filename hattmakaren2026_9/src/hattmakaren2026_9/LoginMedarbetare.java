@@ -123,7 +123,7 @@ private void loggaIn() {
             boolean arChef = roll != null && roll.equalsIgnoreCase("Chef");
 
 
-            new HuvudMeny(idb).setVisible(true);
+            new HuvudMeny(idb, email).setVisible(true);
             this.dispose();
 
         } else {
