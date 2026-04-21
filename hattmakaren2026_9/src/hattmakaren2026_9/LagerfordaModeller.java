@@ -26,6 +26,8 @@ public class LagerfordaModeller extends javax.swing.JFrame {
     public LagerfordaModeller(InfDB idb) {
         this.idb = idb;
         initComponents();
+        tftModellID.setEditable(false);
+        this.setExtendedState(javax.swing.JFrame.MAXIMIZED_BOTH);
         
         
         
@@ -87,6 +89,11 @@ public class LagerfordaModeller extends javax.swing.JFrame {
                 "ModellID", "ModellNamn", "Beskrivning", "PrisExklMoms", "Lagersaldo"
             }
         ));
+        jtHattmodeller.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jtHattmodellerMouseClicked(evt);
+            }
+        });
         jScrollPane1.setViewportView(jtHattmodeller);
 
         tftModellID.setColumns(10);
@@ -194,6 +201,12 @@ public class LagerfordaModeller extends javax.swing.JFrame {
     private void btnTillbakaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnTillbakaActionPerformed
     this.dispose();        // TODO add your handling code here:
     }//GEN-LAST:event_btnTillbakaActionPerformed
+
+    private void jtHattmodellerMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jtHattmodellerMouseClicked
+    int rad = jtHattmodeller.getSelectedRow();
+    String modellID = jtHattmodeller.getValueAt(rad, 0).toString();
+    tftModellID.setText(modellID);// TODO add your handling code here:
+    }//GEN-LAST:event_jtHattmodellerMouseClicked
 
     /**
      * @param args the command line arguments
