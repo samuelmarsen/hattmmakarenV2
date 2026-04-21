@@ -29,6 +29,7 @@ public class SkapaKundorder extends javax.swing.JFrame {
     private double totaltPris = 0.0;
     private double styckPrisHatt = 0.0;
     private double extraKostnadMaterial = 0.0;
+    private String valdBildSokvag = "";
 
     public SkapaKundorder(InfDB idb) throws InfException {
         initComponents();
@@ -44,6 +45,7 @@ public class SkapaKundorder extends javax.swing.JFrame {
         fyllRullistaMedHattar();
         fyllAlternativ();
         fyllRullistaMedMaterial();
+        
 
     }
 
@@ -165,6 +167,8 @@ public class SkapaKundorder extends javax.swing.JFrame {
         lblDekoration = new javax.swing.JLabel();
         lblUppskattadTid = new javax.swing.JLabel();
         txtUppskattadTid = new javax.swing.JTextField();
+        lblBildStatus = new javax.swing.JLabel();
+        btnBifogaReferensBild = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -246,12 +250,18 @@ public class SkapaKundorder extends javax.swing.JFrame {
         txtUppskattadTid.setColumns(10);
         txtUppskattadTid.addActionListener(this::txtUppskattadTidActionPerformed);
 
+        btnBifogaReferensBild.setText("Bifoga Referensbild ");
+        btnBifogaReferensBild.addActionListener(this::btnBifogaReferensBildActionPerformed);
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(96, 96, 96)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(lblBildStatus, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(btnBifogaReferensBild, javax.swing.GroupLayout.PREFERRED_SIZE, 168, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
                         .addGap(6, 6, 6)
@@ -262,7 +272,7 @@ public class SkapaKundorder extends javax.swing.JFrame {
                             .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 99, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(btnTillbaka)
                             .addComponent(txtPrisExklMoms, javax.swing.GroupLayout.PREFERRED_SIZE, 107, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(0, 925, Short.MAX_VALUE)))
+                        .addGap(0, 847, Short.MAX_VALUE)))
                 .addContainerGap())
             .addGroup(layout.createSequentialGroup()
                 .addGap(16, 16, 16)
@@ -394,9 +404,17 @@ public class SkapaKundorder extends javax.swing.JFrame {
                             .addComponent(lblDekoration))
                         .addGap(11, 11, 11)
                         .addComponent(jLabel5)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 330, Short.MAX_VALUE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 330, Short.MAX_VALUE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED))
+                            .addGroup(layout.createSequentialGroup()
+                                .addGap(33, 33, 33)
+                                .addComponent(btnBifogaReferensBild)
+                                .addGap(18, 18, 18)
+                                .addComponent(lblBildStatus, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                         .addComponent(jLabel2)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(txtPrisExklMoms, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -445,8 +463,8 @@ public class SkapaKundorder extends javax.swing.JFrame {
         String totalPrisStr = txtPrisExklMoms.getText().replace(",", ".");
         double totalPrisInklMoms = Double.parseDouble(totalPrisStr) * 1.25;
  
-        String orderSql = "INSERT INTO Ordrar (KundID, OrderDatum, Status, ArSnabborder, FraktAdress, TotalPrisInclMoms) "
-                + "VALUES (" + kundID + ", '" + datum + "', 'Registrerad', " + arSnabborder + ", '" + fraktAdress + "', " + totalPrisInklMoms + ")";
+        String orderSql = "INSERT INTO Ordrar (KundID, OrderDatum, Status, ArSnabborder, FraktAdress, TotalPrisInclMoms, BildSokvag) "
+                + "VALUES (" + kundID + ", '" + datum + "', 'Registrerad', " + arSnabborder + ", '" + fraktAdress + "', " + totalPrisInklMoms + ", '" + valdBildSokvag + "')";
         idb.insert(orderSql);
  
       
@@ -483,6 +501,11 @@ public class SkapaKundorder extends javax.swing.JFrame {
         model.setRowCount(0);
         totaltPris = 0;
         txtPrisExklMoms.setText("0.00");
+        
+        valdBildSokvag = ""; 
+lblBildStatus.setIcon(null);
+lblBildStatus.setText("");
+lblBildStatus.repaint();
         
  
     } catch (InfException ex) {
@@ -615,8 +638,7 @@ public class SkapaKundorder extends javax.swing.JFrame {
             if (!dekorationer.isEmpty()) {
                 dekorationer += ", ";
             }
-            dekorationer += "Egen text: '" + egenText + "'";
-        }
+            dekorationer += "Egen text: " + egenText;        }
         
         if (antalTimmar > 0) {
             if (!dekorationer.isEmpty()) {
@@ -680,6 +702,30 @@ public class SkapaKundorder extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_txtUppskattadTidActionPerformed
 
+    private void btnBifogaReferensBildActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBifogaReferensBildActionPerformed
+javax.swing.JFileChooser fc = new javax.swing.JFileChooser();
+    int resultat = fc.showOpenDialog(this);
+    
+    if (resultat == javax.swing.JFileChooser.APPROVE_OPTION) {
+        java.io.File fil = fc.getSelectedFile();
+        valdBildSokvag = fil.getAbsolutePath(); 
+
+        // 1. Skapa en ImageIcon från filen
+        javax.swing.ImageIcon originalIkon = new javax.swing.ImageIcon(valdBildSokvag);
+        
+        // 2. Skala om bilden så den passar i din label (t.ex. 150x150 pixlar)
+        java.awt.Image bild = originalIkon.getImage(); 
+        java.awt.Image skaladBild = bild.getScaledInstance(150, 150, java.awt.Image.SCALE_SMOOTH);
+        
+        // 3. Skapa en ny ikon av den skalade bilden och sätt på labeln
+        javax.swing.ImageIcon färdigIkon = new javax.swing.ImageIcon(skaladBild);
+        lblBildStatus.setIcon(färdigIkon);
+        
+        // Valfritt: Ta bort texten om du bara vill se bilden
+        lblBildStatus.setText(""); 
+    }      // TODO add your handling code here:
+    }//GEN-LAST:event_btnBifogaReferensBildActionPerformed
+    
     //public static void main(String args[]) {
     // java.awt.EventQueue.invokeLater(new Runnable() {S
     //  public void run() {
@@ -690,6 +736,7 @@ public class SkapaKundorder extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAdderaDekoration;
+    private javax.swing.JButton btnBifogaReferensBild;
     private javax.swing.JButton btnLaggTillIOrder;
     private javax.swing.JButton btnPaborjaOrder;
     private javax.swing.JButton btnTillbaka;
@@ -707,6 +754,7 @@ public class SkapaKundorder extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JTable jTable1;
     private javax.swing.JLabel lblAntalDekoration;
+    private javax.swing.JLabel lblBildStatus;
     private javax.swing.JLabel lblDatum;
     private javax.swing.JLabel lblDekoration;
     private javax.swing.JLabel lblEgenText;
