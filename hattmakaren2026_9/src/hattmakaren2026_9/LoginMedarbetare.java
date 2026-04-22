@@ -20,8 +20,8 @@ public class LoginMedarbetare extends javax.swing.JFrame {
     this.idb = idb;
     this.setLocationRelativeTo(null);
     initComponents();
-    txtEmail.setText("");
-    jpfLosenord.setText("");
+    txtEmail.setText("otto.dahlman@hattmakarna.se");
+    jpfLosenord.setText("Hatt_123");
     this.setExtendedState(javax.swing.JFrame.MAXIMIZED_BOTH);
     lblFelmeddelande.setVisible(false);
 
@@ -37,7 +37,6 @@ public class LoginMedarbetare extends javax.swing.JFrame {
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
-        java.awt.GridBagConstraints gridBagConstraints;
 
         jPanel1 = new javax.swing.JPanel();
         lblEpost = new javax.swing.JLabel();
@@ -56,6 +55,7 @@ public class LoginMedarbetare extends javax.swing.JFrame {
         lblEpost.setText("Epost");
         jPanel1.add(lblEpost);
 
+        txtEmail.setText("otto.dahlman@hattmakarna.se");
         txtEmail.addActionListener(this::txtEmailActionPerformed);
         jPanel1.add(txtEmail);
 
@@ -63,7 +63,7 @@ public class LoginMedarbetare extends javax.swing.JFrame {
         lblLosenord.setText("Lösenord");
         jPanel1.add(lblLosenord);
 
-        jpfLosenord.setText("jPasswordField1");
+        jpfLosenord.setText("Hatt_123");
         jpfLosenord.addActionListener(this::jpfLosenordActionPerformed);
         jPanel1.add(jpfLosenord);
 
@@ -74,12 +74,7 @@ public class LoginMedarbetare extends javax.swing.JFrame {
         lblFelmeddelande.setText("Felaktigt lösenord eller Epost");
         jPanel1.add(lblFelmeddelande);
 
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 0;
-        gridBagConstraints.ipadx = 26;
-        gridBagConstraints.insets = new java.awt.Insets(105, 158, 84, 184);
-        getContentPane().add(jPanel1, gridBagConstraints);
+        getContentPane().add(jPanel1, new java.awt.GridBagConstraints());
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
