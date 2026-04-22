@@ -259,6 +259,7 @@ public class SkapaKundorder extends javax.swing.JFrame {
         btnBifogaReferensBild.setText("Bifoga Referensbild ");
         btnBifogaReferensBild.addActionListener(this::btnBifogaReferensBildActionPerformed);
 
+        txtInloggadEmail.setEditable(false);
         txtInloggadEmail.addActionListener(this::txtInloggadEmailActionPerformed);
 
         lblInloggadAnstalld.setText("Inloggad anställd");

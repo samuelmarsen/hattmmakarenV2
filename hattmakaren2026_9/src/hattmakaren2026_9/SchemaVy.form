@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 
-<Form version="1.3" maxVersion="1.9" type="org.netbeans.modules.form.forminfo.JFrameFormInfo">
+<Form version="1.5" maxVersion="1.9" type="org.netbeans.modules.form.forminfo.JFrameFormInfo">
   <Properties>
     <Property name="defaultCloseOperation" type="int" value="3"/>
   </Properties>
@@ -25,19 +25,18 @@
       <Group type="103" groupAlignment="0" attributes="0">
           <Group type="102" attributes="0">
               <EmptySpace pref="494" max="32767" attributes="0"/>
-              <Group type="103" groupAlignment="0" attributes="0">
-                  <Component id="jScrollPane1" alignment="0" min="-2" pref="1264" max="-2" attributes="0"/>
-                  <Group type="102" alignment="0" attributes="0">
+              <Group type="103" groupAlignment="0" max="-2" attributes="0">
+                  <Component id="jScrollPane1" min="-2" pref="1264" max="-2" attributes="0"/>
+                  <Group type="102" attributes="0">
                       <Component id="btnVisaSchema" min="-2" pref="217" max="-2" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
                       <Component id="btnPlaneraPass" min="-2" pref="198" max="-2" attributes="0"/>
+                      <EmptySpace max="32767" attributes="0"/>
+                      <Component id="btnRedigeraPass" min="-2" pref="208" max="-2" attributes="0"/>
                   </Group>
               </Group>
               <EmptySpace type="unrelated" max="-2" attributes="0"/>
-              <Group type="103" groupAlignment="0" attributes="0">
-                  <Component id="btnRedigeraPass" min="-2" pref="208" max="-2" attributes="0"/>
-                  <Component id="btnTillbakaKnapp" min="-2" pref="208" max="-2" attributes="0"/>
-              </Group>
+              <Component id="btnTillbakaKnapp" min="-2" pref="208" max="-2" attributes="0"/>
               <EmptySpace min="-2" pref="12" max="-2" attributes="0"/>
           </Group>
       </Group>
@@ -45,18 +44,25 @@
     <DimensionLayout dim="1">
       <Group type="103" groupAlignment="0" attributes="0">
           <Group type="102" alignment="0" attributes="0">
-              <EmptySpace min="-2" pref="26" max="-2" attributes="0"/>
-              <Group type="103" groupAlignment="3" attributes="0">
-                  <Component id="btnVisaSchema" alignment="3" min="-2" pref="49" max="-2" attributes="0"/>
-                  <Component id="btnPlaneraPass" alignment="3" min="-2" pref="46" max="-2" attributes="0"/>
-                  <Component id="btnRedigeraPass" alignment="3" min="-2" pref="53" max="-2" attributes="0"/>
+              <Group type="103" groupAlignment="0" attributes="0">
+                  <Group type="102" attributes="0">
+                      <EmptySpace min="-2" pref="28" max="-2" attributes="0"/>
+                      <Group type="103" groupAlignment="3" attributes="0">
+                          <Component id="btnVisaSchema" alignment="3" min="-2" pref="49" max="-2" attributes="0"/>
+                          <Component id="btnPlaneraPass" alignment="3" min="-2" pref="46" max="-2" attributes="0"/>
+                      </Group>
+                  </Group>
+                  <Group type="102" alignment="1" attributes="0">
+                      <EmptySpace max="-2" attributes="0"/>
+                      <Group type="103" groupAlignment="3" attributes="0">
+                          <Component id="btnTillbakaKnapp" alignment="3" min="-2" pref="56" max="-2" attributes="0"/>
+                          <Component id="btnRedigeraPass" alignment="3" min="-2" pref="53" max="-2" attributes="0"/>
+                      </Group>
+                  </Group>
               </Group>
-              <EmptySpace min="-2" pref="13" max="-2" attributes="0"/>
-              <Group type="103" groupAlignment="1" attributes="0">
-                  <Component id="jScrollPane1" min="-2" pref="744" max="-2" attributes="0"/>
-                  <Component id="btnTillbakaKnapp" min="-2" pref="56" max="-2" attributes="0"/>
-              </Group>
-              <EmptySpace pref="244" max="32767" attributes="0"/>
+              <EmptySpace min="-2" pref="12" max="-2" attributes="0"/>
+              <Component id="jScrollPane1" min="-2" pref="744" max="-2" attributes="0"/>
+              <EmptySpace pref="247" max="32767" attributes="0"/>
           </Group>
       </Group>
     </DimensionLayout>
