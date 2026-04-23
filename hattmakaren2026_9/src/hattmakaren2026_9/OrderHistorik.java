@@ -124,47 +124,73 @@ public class OrderHistorik extends javax.swing.JFrame {
     }//GEN-LAST:event_cmbKunderActionPerformed
 
     private void btnVisaHistorikActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnVisaHistorikActionPerformed
-        // TODO add your handling code here:
-        txtHistorikText.setText("");
+                                                     
+    txtHistorikText.setText("");
 
-        String valtNamn = (String) cmbKunder.getSelectedItem();
-        if (valtNamn == null || valtNamn.isEmpty()) {
-            return;
-        }
-        try {
-            String fraga = "SELECT Ordrar.OrderDatum, Ordrar.TotalPrisInclMoms "
-                    + "FROM Ordrar "
-                    + "JOIN Kunder ON Kunder.KundID = Ordrar.KundID "
-                    + "WHERE Kunder.Namn = '" + valtNamn + "'";
+    String valtNamn = (String) cmbKunder.getSelectedItem();
+    if (valtNamn == null || valtNamn.isEmpty()) {
+        return;
+    }
+    
+    try {
+        
+        String fraga = "SELECT Ordrar.OrderID, Ordrar.OrderDatum, Ordrar.TotalPrisInclMoms, "
+        + "Hattmodeller.ModellNamn, Orderrader.Anpassningstext, Hattmodeller.Farg " 
+        + "FROM Ordrar "
+        + "JOIN Kunder ON Kunder.KundID = Ordrar.KundID "
+        + "JOIN Orderrader ON Ordrar.OrderID = Orderrader.OrderID "
+        + "JOIN Hattmodeller ON Orderrader.ModellID = Hattmodeller.ModellID "
+        + "WHERE Kunder.Namn = '" + valtNamn + "' "
+        + "ORDER BY Ordrar.OrderDatum DESC";
 
-            ArrayList<HashMap<String, String>> rader = idb.fetchRows(fraga);
+        ArrayList<HashMap<String, String>> rader = idb.fetchRows(fraga);
 
-            if (rader != null && !rader.isEmpty()) {
-                txtHistorikText.append("Orderhistorik för: " + valtNamn + "\n");
-                txtHistorikText.append("-------------------------------\n");
+        if (rader != null && !rader.isEmpty()) {
+            txtHistorikText.append("ORDERHISTORIK FÖR: " + valtNamn.toUpperCase() + "\n");
+            txtHistorikText.append("==========================================\n");
 
-                for (HashMap<String, String> rad : rader) {
-                    String datum = rad.get("OrderDatum");
-                    // String status = rad.get("Status");
-                    String pris = rad.get("TotalPrisInclMoms");
+            String nuvarandeOrderId = "";
 
-                    if (pris == null) {
-                        pris = "0.00";
+            for (HashMap<String, String> rad : rader) {
+                String orderId = rad.get("OrderID");
+                
+          
+                if (!orderId.equals(nuvarandeOrderId)) {
+                    if (!nuvarandeOrderId.equals("")) {
+                        txtHistorikText.append("------------------------------------------\n");
                     }
-
-                    txtHistorikText.append("Datum: " + datum + "\n");
-                    // txtHistorikText.append("Status: " + status + "\n");
-                    txtHistorikText.append("Pris: " + pris + "kr inkl.moms\n");
-                    txtHistorikText.append("---------------------------\n");
-
+                    txtHistorikText.append("ORDER #" + orderId + " | Datum: " + rad.get("OrderDatum") + "\n");
+                    txtHistorikText.append("Totalpris: " + (rad.get("TotalPrisInclMoms") != null ? rad.get("TotalPrisInclMoms") : "0.00") + " kr inkl. moms\n");
+                    txtHistorikText.append("Artiklar:\n");
+                    nuvarandeOrderId = orderId;
                 }
-            } else {
-                txtHistorikText.setText("Kunden " + valtNamn + "har inga registrerade ordrar.");
-               } 
-        } catch(InfException e){
-                   System.out.println("Databasfel: " + e.getMessage());
-                   javax.swing.JOptionPane.showMessageDialog(this, "Kunde inte hämta historik.");
-                   }
+
+            
+                String hattNamn = rad.get("ModellNamn");
+                String dekoration = rad.get("TextDekoration");
+                String farg = rad.get("Farg");
+
+                txtHistorikText.append("  > " + hattNamn);
+                
+         
+                if (farg != null && !farg.isEmpty()) {
+                    txtHistorikText.append(" (Färg: " + farg + ")");
+                }
+                if (dekoration != null && !dekoration.isEmpty() && !dekoration.equalsIgnoreCase("null")) {
+                    txtHistorikText.append("\n    Dekoration: " + dekoration);
+                }
+                txtHistorikText.append("\n");
+            }
+            txtHistorikText.append("==========================================\n");
+            
+        } else {
+            txtHistorikText.setText("Kunden " + valtNamn + " har inga registrerade ordrar.");
+        } 
+    } catch(InfException e){
+        System.out.println("Databasfel: " + e.getMessage());
+        javax.swing.JOptionPane.showMessageDialog(this, "Kunde inte hämta historik.");
+    }
+
         
 
     }//GEN-LAST:event_btnVisaHistorikActionPerformed
