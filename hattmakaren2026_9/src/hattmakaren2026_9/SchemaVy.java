@@ -163,11 +163,11 @@ public class SchemaVy extends javax.swing.JFrame {
 try {
         ArrayList<String> anstallda = idb.fetchColumn("SELECT Namn FROM Anstallda");
         ArrayList<String> ordrar = idb.fetchColumn("SELECT OrderID FROM Ordrar");
-        ordrar.add(0, "Inget (Allmänt arbete)"); // Möjliggör pass utan order
+        ordrar.add(0, "Inget (Allmänt arbete)");
 
         JComboBox<String> cbPersonal = new JComboBox<>(anstallda.toArray(new String[0]));
         JComboBox<String> cbOrder = new JComboBox<>(ordrar.toArray(new String[0]));
-        JTextField txtDatum = new JTextField("2026-04-13"); // Förifyll gärna
+        JTextField txtDatum = new JTextField("2026-04-13");
         JTextField txtTimmar = new JTextField("8");
         JTextField txtAktivitet = new JTextField("Beskrivning...");
 
@@ -182,27 +182,39 @@ try {
         int svar = JOptionPane.showConfirmDialog(this, formular, "Planera nytt arbetspass", JOptionPane.OK_CANCEL_OPTION);
 
         if (svar == JOptionPane.OK_OPTION) {
-            // Hämta AnstalldID baserat på det valda namnet
+            
+            // --- VALIDERING BÖRJAR HÄR ---
+            if (Validering.arTom(txtDatum, "Datum saknas!") || 
+                Validering.arTom(txtTimmar, "Timmar saknas!") || 
+                Validering.arTom(txtAktivitet, "Beskrivning saknas!")) {
+                btnPlaneraPassActionPerformed(evt); // Öppna igen om tomt
+                return;
+            }
+
+            if (!Validering.arGiltigtDatum(txtDatum)) {
+                btnPlaneraPassActionPerformed(evt); // Öppna igen om fel datum
+                return;
+            }
+
+            // Här validerar vi att det bara är siffror (decimal för att tillåta t.ex. 7.5h)
+            if (!Validering.arDecimal(txtTimmar) || !Validering.arPositivtTal(txtTimmar)) {
+                btnPlaneraPassActionPerformed(evt); // Öppna igen om fel timmar
+                return;
+            }
+            // --- VALIDERING SLUT ---
+
             String valtNamn = cbPersonal.getSelectedItem().toString();
             String anstID = idb.fetchSingle("SELECT AnstalldID FROM Anstallda WHERE Namn = '" + valtNamn + "'");
-            
-            // Hantera OrderID (blir NULL om man valde "Inget")
             String valtOrderID = cbOrder.getSelectedItem().toString();
             String orderValue = valtOrderID.contains("Inget") ? "NULL" : valtOrderID;
 
-            // 4. Skicka in i databasen
             String sql = "INSERT INTO Arbetspass (AnstalldID, OrderID, Datum, Timmar, Aktivitet) VALUES ("
                     + anstID + ", " + orderValue + ", '" + txtDatum.getText() + "', " 
-                    + txtTimmar.getText() + ", '" + txtAktivitet.getText() + "')";
+                    + txtTimmar.getText().replace(',', '.') + ", '" + txtAktivitet.getText() + "')";
 
             idb.insert(sql);
-            
-            // 5. UPPDATERA SCHEMAT DIREKT
-            // Här anropar vi din befintliga metod med de datum som är aktiva just nu
-            // (Tips: Du kan hämta dessa från dina datum-fält eller rullistan)
             fyllSchemaTabell("2026-04-13", "2026-04-17"); 
-            
-            JOptionPane.showMessageDialog(this, "Passet har sparats och schemat är uppdaterat!");
+            JOptionPane.showMessageDialog(this, "Passet har sparats!");
         }
     } catch (Exception e) {
         JOptionPane.showMessageDialog(this, "Kunde inte spara passet: " + e.getMessage());
@@ -254,11 +266,24 @@ int valdRad = jtSchema.getSelectedRow();
             int handling = JOptionPane.showOptionDialog(this, editForm, "Hantera pass",
                     JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE, null, alternativ, alternativ[0]);
 
-            if (handling == JOptionPane.YES_OPTION) { // SPARA
-                idb.update("UPDATE Arbetspass SET Aktivitet='" + txtNyAktivitet.getText() + "', Datum='" + txtNyttDatum.getText() + "', Timmar=" + txtNyaTimmar.getText() + " WHERE PassID=" + passID);
-            } else if (handling == JOptionPane.NO_OPTION) { // TA BORT
-                idb.delete("DELETE FROM Arbetspass WHERE PassID = " + passID);
-            }
+            if (handling == JOptionPane.YES_OPTION) { // KNAPPEN "SPARA"
+    
+    // VALIDERING
+    if (Validering.arTom(txtNyttDatum, "Datum saknas!") || !Validering.arGiltigtDatum(txtNyttDatum)) return;
+    if (!Validering.arDecimal(txtNyaTimmar) || !Validering.arPositivtTal(txtNyaTimmar)) return;
+    if (Validering.arTom(txtNyAktivitet, "Aktivitet saknas!")) return;
+
+    // Om validering går igenom, kör update
+    String updateSql = "UPDATE Arbetspass SET " +
+                       "Aktivitet='" + txtNyAktivitet.getText().replace("'", "''") + "', " +
+                       "Datum='" + txtNyttDatum.getText() + "', " +
+                       "Timmar=" + txtNyaTimmar.getText().replace(',', '.') + " " +
+                       "WHERE PassID=" + passID;
+    
+    idb.update(updateSql);
+    fyllSchemaTabell("2026-04-13", "2026-04-17");
+    JOptionPane.showMessageDialog(this, "Passet har uppdaterats!");
+}
         }
     } catch (Exception e) {
         JOptionPane.showMessageDialog(this, "Fel: " + e.getMessage());
