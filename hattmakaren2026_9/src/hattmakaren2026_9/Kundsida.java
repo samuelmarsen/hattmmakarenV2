@@ -319,6 +319,7 @@ public class Kundsida extends javax.swing.JFrame {
     }//GEN-LAST:event_TXTregNykundActionPerformed
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+// 1. Tvinga tabellen att spara pågående redigering i cellen
     if (TBLkund.isEditing()) {
         TBLkund.getCellEditor().stopCellEditing();
     }
@@ -326,14 +327,60 @@ public class Kundsida extends javax.swing.JFrame {
     DefaultTableModel model = (DefaultTableModel) TBLkund.getModel();
 
     try {
+        // Loopa igenom alla rader i tabellen
         for (int row = 0; row < model.getRowCount(); row++) {
 
+            // Hämta värden från tabellens kolumner
             String kundID = model.getValueAt(row, 0).toString();
             String namn = model.getValueAt(row, 1).toString();
             String epost = model.getValueAt(row, 2).toString();
             String telefon = model.getValueAt(row, 3).toString();
             String adress = model.getValueAt(row, 4).toString();
 
+            // Skapa temporära fält för att kunna använda din Valideringsklass
+            JTextField tempNamn = new JTextField(namn);
+            JTextField tempEpost = new JTextField(epost);
+            JTextField tempTelefon = new JTextField(telefon);
+            JTextField tempAdress = new JTextField(adress);
+
+            // --- VALIDERINGSKONTROLLER ---
+
+            // A. Kontrollera att obligatoriska fält inte är tomma
+            if (Validering.arTom(tempNamn, "Namn saknas på rad " + (row + 1))) {
+                TBLkund.setRowSelectionInterval(row, row);
+                return;
+            }
+            if (Validering.arTom(tempEpost, "E-post saknas på rad " + (row + 1))) {
+                TBLkund.setRowSelectionInterval(row, row);
+                return;
+            }
+            if (Validering.arTom(tempAdress, "Adress saknas på rad " + (row + 1))) {
+                TBLkund.setRowSelectionInterval(row, row);
+                return;
+            }
+
+            // B. Kontrollera att namnet innehåller både för- och efternamn (endast bokstäver + mellanslag)
+            if (!Validering.harForOchEfternamn(tempNamn)) {
+                TBLkund.setRowSelectionInterval(row, row);
+                return;
+            }
+
+            // C. Kontrollera e-postens format (@ och punkt)
+            if (!Validering.isEpostGiltig(tempEpost)) {
+                TBLkund.setRowSelectionInterval(row, row);
+                return;
+            }
+
+            // D. Kontrollera telefonnummer (endast om fältet inte är tomt)
+            if (!telefon.trim().isEmpty()) {
+                if (!Validering.arGiltigtTelefonnummer(tempTelefon)) {
+                    TBLkund.setRowSelectionInterval(row, row);
+                    return;
+                }
+            }
+
+            // --- SQL UPPDATERING ---
+            // Om raden passerat alla kontroller ovan, körs SQL-frågan
             String sql = "UPDATE Kunder SET " +
                          "Namn = '" + namn + "', " +
                          "Epost = '" + epost + "', " +
@@ -344,11 +391,12 @@ public class Kundsida extends javax.swing.JFrame {
             idb.update(sql);
         }
 
-        JOptionPane.showMessageDialog(this, "Ändringar sparades!");
+        // Meddelande när hela loopen är klar utan avbrott
+        JOptionPane.showMessageDialog(this, "Alla ändringar har validerats och sparats i databasen!");
 
     } catch (InfException e) {
         JOptionPane.showMessageDialog(this,
-            "Fel vid sparning:\n" + e.getMessage(),
+            "Ett fel uppstod i databasen:\n" + e.getMessage(),
             "Databasfel",
             JOptionPane.ERROR_MESSAGE);
         e.printStackTrace();
