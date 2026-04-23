@@ -41,14 +41,14 @@
                   </Group>
                   <Group type="102" attributes="0">
                       <EmptySpace max="-2" attributes="0"/>
-                      <Group type="103" groupAlignment="1" max="-2" attributes="0">
-                          <Component id="jLabel4" max="32767" attributes="0"/>
-                          <Component id="jLabel3" pref="70" max="32767" attributes="0"/>
-                      </Group>
-                      <EmptySpace max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                          <Component id="txtFranDatum" pref="85" max="32767" attributes="0"/>
-                          <Component id="txtTillDatum" max="32767" attributes="0"/>
+                          <Component id="jLabel4" pref="76" max="32767" attributes="0"/>
+                          <Component id="jLabel3" max="32767" attributes="0"/>
+                      </Group>
+                      <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                      <Group type="103" groupAlignment="0" max="-2" attributes="0">
+                          <Component id="dcTill" pref="150" max="32767" attributes="0"/>
+                          <Component id="dcFran" max="32767" attributes="0"/>
                       </Group>
                   </Group>
                   <Group type="102" alignment="0" attributes="0">
@@ -57,11 +57,11 @@
                   </Group>
                   <Group type="102" alignment="0" attributes="0">
                       <EmptySpace max="-2" attributes="0"/>
-                      <Component id="jLabel5" min="-2" pref="175" max="-2" attributes="0"/>
+                      <Component id="btnTillbakaKnapp" min="-2" max="-2" attributes="0"/>
                   </Group>
                   <Group type="102" alignment="0" attributes="0">
                       <EmptySpace max="-2" attributes="0"/>
-                      <Component id="btnTillbakaKnapp" min="-2" max="-2" attributes="0"/>
+                      <Component id="jLabel5" min="-2" max="-2" attributes="0"/>
                   </Group>
               </Group>
               <EmptySpace pref="683" max="32767" attributes="0"/>
@@ -74,16 +74,16 @@
               <EmptySpace min="-2" pref="9" max="-2" attributes="0"/>
               <Component id="jLabel5" min="-2" max="-2" attributes="0"/>
               <EmptySpace max="-2" attributes="0"/>
-              <Group type="103" groupAlignment="3" attributes="0">
-                  <Component id="txtFranDatum" alignment="3" min="-2" max="-2" attributes="0"/>
-                  <Component id="jLabel3" alignment="3" min="-2" max="-2" attributes="0"/>
+              <Group type="103" groupAlignment="0" attributes="0">
+                  <Component id="jLabel3" min="-2" max="-2" attributes="0"/>
+                  <Component id="dcFran" min="-2" max="-2" attributes="0"/>
               </Group>
-              <EmptySpace type="unrelated" max="-2" attributes="0"/>
-              <Group type="103" groupAlignment="3" attributes="0">
-                  <Component id="txtTillDatum" alignment="3" min="-2" max="-2" attributes="0"/>
-                  <Component id="jLabel4" alignment="3" min="-2" max="-2" attributes="0"/>
+              <EmptySpace max="-2" attributes="0"/>
+              <Group type="103" groupAlignment="0" attributes="0">
+                  <Component id="jLabel4" min="-2" max="-2" attributes="0"/>
+                  <Component id="dcTill" min="-2" max="-2" attributes="0"/>
               </Group>
-              <EmptySpace min="-2" pref="4" max="-2" attributes="0"/>
+              <EmptySpace max="-2" attributes="0"/>
               <Component id="btnSokDatum" min="-2" max="-2" attributes="0"/>
               <EmptySpace max="-2" attributes="0"/>
               <Component id="jLabel1" min="-2" max="-2" attributes="0"/>
@@ -100,7 +100,7 @@
               </Group>
               <EmptySpace max="-2" attributes="0"/>
               <Component id="btnSkapaPdf" min="-2" max="-2" attributes="0"/>
-              <EmptySpace pref="473" max="32767" attributes="0"/>
+              <EmptySpace pref="477" max="32767" attributes="0"/>
               <Component id="btnTillbakaKnapp" min="-2" max="-2" attributes="0"/>
               <EmptySpace min="-2" pref="21" max="-2" attributes="0"/>
           </Group>
@@ -186,16 +186,6 @@
         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnSokDatumActionPerformed"/>
       </Events>
     </Component>
-    <Component class="javax.swing.JTextField" name="txtFranDatum">
-      <Events>
-        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="txtFranDatumActionPerformed"/>
-      </Events>
-    </Component>
-    <Component class="javax.swing.JTextField" name="txtTillDatum">
-      <Events>
-        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="txtTillDatumActionPerformed"/>
-      </Events>
-    </Component>
     <Container class="javax.swing.JScrollPane" name="jScrollPane3">
       <AuxValues>
         <AuxValue name="autoScrollPane" type="java.lang.Boolean" value="true"/>
@@ -214,7 +204,7 @@
     </Container>
     <Component class="javax.swing.JLabel" name="jLabel5">
       <Properties>
-        <Property name="text" type="java.lang.String" value="Format:             YYYY-MM-DD"/>
+        <Property name="text" type="java.lang.String" value="V&#xe4;lj datumintervall f&#xf6;r att se materialbehov"/>
       </Properties>
     </Component>
     <Component class="javax.swing.JButton" name="btnTillbakaKnapp">
@@ -224,6 +214,10 @@
       <Events>
         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnTillbakaKnappActionPerformed"/>
       </Events>
+    </Component>
+    <Component class="com.toedter.calendar.JDateChooser" name="dcFran">
+    </Component>
+    <Component class="com.toedter.calendar.JDateChooser" name="dcTill">
     </Component>
   </SubComponents>
 </Form>

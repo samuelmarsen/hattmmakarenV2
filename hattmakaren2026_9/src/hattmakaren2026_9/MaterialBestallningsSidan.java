@@ -59,12 +59,12 @@ this.idb = idb;
         jLabel3 = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
         btnSokDatum = new javax.swing.JButton();
-        txtFranDatum = new javax.swing.JTextField();
-        txtTillDatum = new javax.swing.JTextField();
         jScrollPane3 = new javax.swing.JScrollPane();
         txtLogg = new javax.swing.JTextArea();
         jLabel5 = new javax.swing.JLabel();
         btnTillbakaKnapp = new javax.swing.JButton();
+        dcFran = new com.toedter.calendar.JDateChooser();
+        dcTill = new com.toedter.calendar.JDateChooser();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -108,16 +108,12 @@ this.idb = idb;
         btnSokDatum.setText("Sök");
         btnSokDatum.addActionListener(this::btnSokDatumActionPerformed);
 
-        txtFranDatum.addActionListener(this::txtFranDatumActionPerformed);
-
-        txtTillDatum.addActionListener(this::txtTillDatumActionPerformed);
-
         txtLogg.setEditable(false);
         txtLogg.setColumns(20);
         txtLogg.setRows(5);
         jScrollPane3.setViewportView(txtLogg);
 
-        jLabel5.setText("Format:             YYYY-MM-DD");
+        jLabel5.setText("Välj datumintervall för att se materialbehov");
 
         btnTillbakaKnapp.setText("Tillbaka");
         btnTillbakaKnapp.addActionListener(this::btnTillbakaKnappActionPerformed);
@@ -141,22 +137,22 @@ this.idb = idb;
                         .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 330, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(layout.createSequentialGroup()
                         .addContainerGap()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                            .addComponent(jLabel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(jLabel3, javax.swing.GroupLayout.DEFAULT_SIZE, 70, Short.MAX_VALUE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(txtFranDatum, javax.swing.GroupLayout.DEFAULT_SIZE, 85, Short.MAX_VALUE)
-                            .addComponent(txtTillDatum)))
+                            .addComponent(jLabel4, javax.swing.GroupLayout.DEFAULT_SIZE, 76, Short.MAX_VALUE)
+                            .addComponent(jLabel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(dcTill, javax.swing.GroupLayout.DEFAULT_SIZE, 150, Short.MAX_VALUE)
+                            .addComponent(dcFran, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                     .addGroup(layout.createSequentialGroup()
                         .addContainerGap()
                         .addComponent(btnSokDatum, javax.swing.GroupLayout.PREFERRED_SIZE, 64, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(layout.createSequentialGroup()
                         .addContainerGap()
-                        .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 175, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(btnTillbakaKnapp))
                     .addGroup(layout.createSequentialGroup()
                         .addContainerGap()
-                        .addComponent(btnTillbakaKnapp)))
+                        .addComponent(jLabel5)))
                 .addContainerGap(683, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
@@ -165,14 +161,14 @@ this.idb = idb;
                 .addGap(9, 9, 9)
                 .addComponent(jLabel5)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(txtFranDatum, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel3))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(txtTillDatum, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel4))
-                .addGap(4, 4, 4)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel3)
+                    .addComponent(dcFran, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel4)
+                    .addComponent(dcTill, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(btnSokDatum)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jLabel1)
@@ -187,7 +183,7 @@ this.idb = idb;
                     .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 392, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(btnSkapaPdf)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 473, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 477, Short.MAX_VALUE)
                 .addComponent(btnTillbakaKnapp)
                 .addGap(21, 21, 21))
         );
@@ -279,19 +275,30 @@ materialModel = new DefaultTableModel(
     }
     private void uppdateraTabell() {
     try {
-        String fran = txtFranDatum.getText().trim();
-        String till = txtTillDatum.getText().trim();
+        java.text.SimpleDateFormat sdf = new java.text.SimpleDateFormat("yyyy-MM-dd");
+        
+        
+        String fran = "";
+        String till = "";
+        
+        if (dcFran.getDate() != null) {
+            fran = sdf.format(dcFran.getDate());
+        }
+        if (dcTill.getDate() != null) {
+            till = sdf.format(dcTill.getDate());
+        }
 
+        
         StringBuilder sql = new StringBuilder(
             "SELECT OrderID FROM Ordrar " +
             "WHERE Status IN ('Registrerad', 'Tillverkning', 'Under tillverkning') " +
             "AND MaterialBestallt = FALSE "
         );
 
-        if (!fran.isEmpty() && !fran.equals("xxxx-xx-xx")) {
+        if (!fran.isEmpty()) {
             sql.append("AND OrderDatum >= '").append(fran).append(" 00:00:00' ");
         }
-        if (!till.isEmpty() && !till.equals("xxxx-xx-xx")) {
+        if (!till.isEmpty()) {
             sql.append("AND OrderDatum <= '").append(till).append(" 23:59:59' ");
         }
 
@@ -410,17 +417,9 @@ materialModel = new DefaultTableModel(
         }
     }//GEN-LAST:event_btnSkapaPdfActionPerformed
 
-    private void txtTillDatumActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtTillDatumActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_txtTillDatumActionPerformed
-
     private void btnSokDatumActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSokDatumActionPerformed
-uppdateraTabell();
+    uppdateraTabell();
     }//GEN-LAST:event_btnSokDatumActionPerformed
-
-    private void txtFranDatumActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtFranDatumActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_txtFranDatumActionPerformed
 
     private void btnTillbakaKnappActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnTillbakaKnappActionPerformed
 this.dispose();    }//GEN-LAST:event_btnTillbakaKnappActionPerformed
@@ -429,6 +428,8 @@ this.dispose();    }//GEN-LAST:event_btnTillbakaKnappActionPerformed
     private javax.swing.JButton btnSkapaPdf;
     private javax.swing.JButton btnSokDatum;
     private javax.swing.JButton btnTillbakaKnapp;
+    private com.toedter.calendar.JDateChooser dcFran;
+    private com.toedter.calendar.JDateChooser dcTill;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
@@ -439,8 +440,6 @@ this.dispose();    }//GEN-LAST:event_btnTillbakaKnappActionPerformed
     private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JTable tblMaterial;
     private javax.swing.JTable tblMaterialLista;
-    private javax.swing.JTextField txtFranDatum;
     private javax.swing.JTextArea txtLogg;
-    private javax.swing.JTextField txtTillDatum;
     // End of variables declaration//GEN-END:variables
 }
