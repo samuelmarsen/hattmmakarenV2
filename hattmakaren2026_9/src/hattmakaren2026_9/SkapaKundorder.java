@@ -15,7 +15,7 @@ import oru.inf.InfDB;
 import oru.inf.InfException;
 import java.util.HashMap;
 import javax.swing.table.DefaultTableModel;
-
+import java.awt.Color;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 
@@ -41,15 +41,14 @@ public class SkapaKundorder extends javax.swing.JFrame {
         LocalDate dagensDatum = LocalDate.now();
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
         txtInloggadEmail.setText(InloggadEmail);
-    txtInloggadEmail.setEditable(false);
+        txtInloggadEmail.setEditable(false);
         txtDatum.setText(dagensDatum.format(formatter));
         txtDatum.setEditable(false);
-        
+
         fyllRulllistaMedKunder();
         fyllRullistaMedHattar();
         fyllAlternativ();
         fyllRullistaMedMaterial();
-        
 
     }
 
@@ -84,34 +83,34 @@ public class SkapaKundorder extends javax.swing.JFrame {
         }
 
     }
-    
+
     private void fyllRullistaMedMaterial() {
-    try {
-        cmbDekoration.removeAllItems();
-       
-        String fraga = "SELECT Namn FROM Material WHERE Kategori = 'Dekoration'";
-        
-        ArrayList<String> material = idb.fetchColumn(fraga);
-        
-        if (material != null) {
-            for (String namn : material) {
-                cmbDekoration.addItem(namn);
+        try {
+            cmbDekoration.removeAllItems();
+
+            String fraga = "SELECT Namn FROM Material WHERE Kategori = 'Dekoration'";
+
+            ArrayList<String> material = idb.fetchColumn(fraga);
+
+            if (material != null) {
+                for (String namn : material) {
+                    cmbDekoration.addItem(namn);
+                }
             }
+        } catch (InfException e) {
+            System.out.println("Fel vid hämtning av dekorationer: " + e.getMessage());
         }
-    } catch (InfException e) {
-        System.out.println("Fel vid hämtning av dekorationer: " + e.getMessage());
     }
-}
 
     private void fyllAlternativ() {
-        cmbFarg.addItem("Svart");
-        cmbFarg.addItem("Vit");
-        cmbFarg.addItem("Blå");
-        cmbFarg.addItem("Röd");
-        cmbFarg.addItem("Grön");
-        cmbFarg.addItem("Gul");
-        cmbFarg.addItem("Brun");
-        cmbFarg.addItem("Natur");
+        //cmbFarg.addItem("Svart");
+        //cmbFarg.addItem("Vit");
+        //cmbFarg.addItem("Blå");
+        //cmbFarg.addItem("Röd");
+        //cmbFarg.addItem("Grön");
+        //cmbFarg.addItem("Gul");
+        //cmbFarg.addItem("Brun");
+        //cmbFarg.addItem("Natur");
 
         cmbTyg.addItem("Ullfilt");
         cmbTyg.addItem("Kaninfilt");
@@ -152,7 +151,6 @@ public class SkapaKundorder extends javax.swing.JFrame {
         jLabel5 = new javax.swing.JLabel();
         txtDatum = new javax.swing.JTextField();
         lblDatum = new javax.swing.JLabel();
-        cmbFarg = new javax.swing.JComboBox<>();
         cmbTyg = new javax.swing.JComboBox<>();
         cmbStorlek = new javax.swing.JComboBox<>();
         lblVäljAntal = new javax.swing.JLabel();
@@ -175,6 +173,8 @@ public class SkapaKundorder extends javax.swing.JFrame {
         btnBifogaReferensBild = new javax.swing.JButton();
         txtInloggadEmail = new javax.swing.JTextField();
         lblInloggadAnstalld = new javax.swing.JLabel();
+        btnValjFarg = new javax.swing.JButton();
+        JpVisaFarg = new javax.swing.JPanel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -221,7 +221,7 @@ public class SkapaKundorder extends javax.swing.JFrame {
 
         lblDatum.setText("Datum");
 
-        cmbFarg.addActionListener(this::cmbFargActionPerformed);
+        cmbTyg.addActionListener(this::cmbTygActionPerformed);
 
         lblVäljAntal.setText("Välj antal");
 
@@ -263,6 +263,23 @@ public class SkapaKundorder extends javax.swing.JFrame {
         txtInloggadEmail.addActionListener(this::txtInloggadEmailActionPerformed);
 
         lblInloggadAnstalld.setText("Inloggad anställd");
+
+        btnValjFarg.setText("Välj färg");
+        btnValjFarg.addActionListener(this::btnValjFargActionPerformed);
+
+        JpVisaFarg.setBackground(new java.awt.Color(255, 255, 255));
+        JpVisaFarg.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+
+        javax.swing.GroupLayout JpVisaFargLayout = new javax.swing.GroupLayout(JpVisaFarg);
+        JpVisaFarg.setLayout(JpVisaFargLayout);
+        JpVisaFargLayout.setHorizontalGroup(
+            JpVisaFargLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 25, Short.MAX_VALUE)
+        );
+        JpVisaFargLayout.setVerticalGroup(
+            JpVisaFargLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 0, Short.MAX_VALUE)
+        );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -322,19 +339,22 @@ public class SkapaKundorder extends javax.swing.JFrame {
                                                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                                             .addComponent(cmbHatt, javax.swing.GroupLayout.PREFERRED_SIZE, 81, javax.swing.GroupLayout.PREFERRED_SIZE)
                                                             .addComponent(cmbDekoration, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                                        .addGap(30, 30, 30)
-                                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                                            .addComponent(cmbFarg, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                                            .addComponent(lblAntalDekoration, javax.swing.GroupLayout.PREFERRED_SIZE, 46, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                                        .addGap(18, 18, 18)
-                                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                                                             .addGroup(layout.createSequentialGroup()
-                                                                .addComponent(cmbTyg, javax.swing.GroupLayout.PREFERRED_SIZE, 98, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                                                .addGap(18, 18, 18)
-                                                                .addComponent(cmbStorlek, javax.swing.GroupLayout.PREFERRED_SIZE, 111, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                                            .addComponent(txtDekorationAntal, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                                                    .addComponent(txtEgenHattText, javax.swing.GroupLayout.PREFERRED_SIZE, 341, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                                    .addComponent(txtUppskattadTid, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                                                .addComponent(lblAntalDekoration, javax.swing.GroupLayout.PREFERRED_SIZE, 46, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                                .addGap(43, 43, 43)
+                                                                .addComponent(txtDekorationAntal, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                                            .addGroup(layout.createSequentialGroup()
+                                                                .addComponent(btnValjFarg)
+                                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                                                .addComponent(JpVisaFarg, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                                                .addComponent(cmbTyg, javax.swing.GroupLayout.PREFERRED_SIZE, 98, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                                        .addGap(26, 26, 26)
+                                                        .addComponent(cmbStorlek, javax.swing.GroupLayout.PREFERRED_SIZE, 111, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                                    .addComponent(txtUppskattadTid, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                    .addComponent(txtEgenHattText, javax.swing.GroupLayout.PREFERRED_SIZE, 341, javax.swing.GroupLayout.PREFERRED_SIZE))
                                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                                             .addGroup(layout.createSequentialGroup()
                                                 .addComponent(lblInloggadAnstalld, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -378,26 +398,25 @@ public class SkapaKundorder extends javax.swing.JFrame {
                                 .addGap(19, 19, 19)
                                 .addComponent(lblKundIdForOrder))
                             .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 7, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 16, Short.MAX_VALUE)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(txtKundId, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addGroup(layout.createSequentialGroup()
                                 .addGap(6, 6, 6)
                                 .addComponent(lblDatum))
-                            .addComponent(txtDatum, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(18, 18, 18))
+                            .addComponent(txtDatum, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                     .addGroup(layout.createSequentialGroup()
                         .addGap(8, 8, 8)
                         .addComponent(lblInloggadAnstalld)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(txtInloggadEmail, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                        .addGap(0, 0, Short.MAX_VALUE)))
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(cmbValjKund, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(txtFraktadress, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(layout.createSequentialGroup()
                         .addGap(6, 6, 6)
-                        .addComponent(lblFraktadress))
-                    .addComponent(txtFraktadress, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(lblFraktadress)))
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(lblEgenText)
@@ -408,14 +427,16 @@ public class SkapaKundorder extends javax.swing.JFrame {
                     .addComponent(lblUppskattadTid)
                     .addComponent(txtUppskattadTid, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(cmbHatt, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(lblHattmodell)
-                    .addComponent(txtAntalHattar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(cmbFarg, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(cmbTyg, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(cmbStorlek, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(chkSnabborder))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(JpVisaFarg, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(cmbHatt, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(lblHattmodell)
+                        .addComponent(txtAntalHattar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(cmbTyg, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(cmbStorlek, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(chkSnabborder)
+                        .addComponent(btnValjFarg)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
@@ -431,7 +452,7 @@ public class SkapaKundorder extends javax.swing.JFrame {
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(layout.createSequentialGroup()
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 330, Short.MAX_VALUE)
+                                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 338, Short.MAX_VALUE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED))
                             .addGroup(layout.createSequentialGroup()
                                 .addGap(33, 33, 33)
@@ -458,99 +479,85 @@ public class SkapaKundorder extends javax.swing.JFrame {
 
     private void btnPaborjaOrderActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPaborjaOrderActionPerformed
         try {
-        
-        String kundID = txtKundId.getText();
-        String fraktAdress = txtFraktadress.getText();
-        String datum = txtDatum.getText();
-        // Kontrollera att en kund är vald
-        if (kundID.isEmpty()) {
-            JOptionPane.showMessageDialog(this, "Välj en kund först!");
-            return;
-        }
- 
-        
-        int arSnabborder = 0;
-        DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
-        if (model.getRowCount() == 0) {
-            JOptionPane.showMessageDialog(this, "Ordern är tom. Lägg till hattar först!");
-            return;
-        }
- 
-        for (int i = 0; i < model.getRowCount(); i++) {
-            if (model.getValueAt(i, 5).toString().equals("Ja")) {
-                arSnabborder = 1;
-                break;
+
+            String kundID = txtKundId.getText();
+            String fraktAdress = txtFraktadress.getText();
+            String datum = txtDatum.getText();
+            // Kontrollera att en kund är vald
+            if (kundID.isEmpty()) {
+                JOptionPane.showMessageDialog(this, "Välj en kund först!");
+                return;
             }
-        }
- 
-        
-        String totalPrisStr = txtPrisExklMoms.getText().replace(",", ".");
-        double totalPrisInklMoms = Double.parseDouble(totalPrisStr) * 1.25;
- 
-        String orderSql = "INSERT INTO Ordrar (KundID, OrderDatum, Status, ArSnabborder, FraktAdress, TotalPrisInclMoms, BildSokvag) "
-                + "VALUES (" + kundID + ", '" + datum + "', 'Registrerad', " + arSnabborder + ", '" + fraktAdress + "', " + totalPrisInklMoms + ", '" + valdBildSokvag + "')";
-        idb.insert(orderSql);
- 
-      
-        String nyttOrderID = idb.fetchSingle("SELECT MAX(OrderID) FROM Ordrar");
- 
-        
-        for (int i = 0; i < model.getRowCount(); i++) {
-            String hattNamn = model.getValueAt(i, 0).toString();
-            String farg = model.getValueAt(i, 1).toString();
-            String tyg = model.getValueAt(i, 2).toString();
-            String storlek = model.getValueAt(i, 3).toString();
-            String antal = model.getValueAt(i, 4).toString();
-            
-            String dekoration = model.getValueAt(i, 6).toString();
-            
-            String komplettAnpassning = "Färg: " + farg + ", Tyg: " + tyg + ", Storlek: " + storlek;
-            if (!dekoration.isEmpty()) {
-                komplettAnpassning += " | EXTRA: " + dekoration;
+
+            int arSnabborder = 0;
+            DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
+            if (model.getRowCount() == 0) {
+                JOptionPane.showMessageDialog(this, "Ordern är tom. Lägg till hattar först!");
+                return;
             }
- 
-          
-            String modellID = idb.fetchSingle("SELECT ModellID FROM Hattmodeller WHERE ModellNamn = '" + hattNamn + "'");
-         
- 
-           
-            String radSql = "INSERT INTO Orderrader (OrderID, ModellID, Antal, Anpassningstext) "
-                    + "VALUES (" + nyttOrderID + ", " + modellID + ", " + antal + ", '" + komplettAnpassning + "')";
-            idb.insert(radSql);
+
+            for (int i = 0; i < model.getRowCount(); i++) {
+                if (model.getValueAt(i, 5).toString().equals("Ja")) {
+                    arSnabborder = 1;
+                    break;
+                }
+            }
+
+            String totalPrisStr = txtPrisExklMoms.getText().replace(",", ".");
+            double totalPrisInklMoms = Double.parseDouble(totalPrisStr) * 1.25;
+
+            String orderSql = "INSERT INTO Ordrar (KundID, OrderDatum, Status, ArSnabborder, FraktAdress, TotalPrisInclMoms, BildSokvag) "
+                    + "VALUES (" + kundID + ", '" + datum + "', 'Registrerad', " + arSnabborder + ", '" + fraktAdress + "', " + totalPrisInklMoms + ", '" + valdBildSokvag + "')";
+            idb.insert(orderSql);
+
+            String nyttOrderID = idb.fetchSingle("SELECT MAX(OrderID) FROM Ordrar");
+
+            for (int i = 0; i < model.getRowCount(); i++) {
+                String hattNamn = model.getValueAt(i, 0).toString();
+                String farg = model.getValueAt(i, 1).toString();
+                String tyg = model.getValueAt(i, 2).toString();
+                String storlek = model.getValueAt(i, 3).toString();
+                String antal = model.getValueAt(i, 4).toString();
+
+                String dekoration = model.getValueAt(i, 6).toString();
+
+                String komplettAnpassning = "Färg: " + farg + ", Tyg: " + tyg + ", Storlek: " + storlek;
+                if (!dekoration.isEmpty()) {
+                    komplettAnpassning += " | EXTRA: " + dekoration;
+                }
+
+                String modellID = idb.fetchSingle("SELECT ModellID FROM Hattmodeller WHERE ModellNamn = '" + hattNamn + "'");
+
+                String radSql = "INSERT INTO Orderrader (OrderID, ModellID, Antal, Anpassningstext) "
+                        + "VALUES (" + nyttOrderID + ", " + modellID + ", " + antal + ", '" + komplettAnpassning + "')";
+                idb.insert(radSql);
+            }
+
+            JOptionPane.showMessageDialog(this, "Order #" + nyttOrderID + " har registrerats!");
+
+            model.setRowCount(0);
+            totaltPris = 0;
+            txtPrisExklMoms.setText("0.00");
+
+            valdBildSokvag = "";
+            lblBildStatus.setIcon(null);
+            lblBildStatus.setText("");
+            lblBildStatus.repaint();
+
+        } catch (InfException ex) {
+            JOptionPane.showMessageDialog(this, "Databastillgång misslyckades: " + ex.getMessage());
+        } catch (Exception ex) {
+            JOptionPane.showMessageDialog(this, "Ett fel uppstod: " + ex.getMessage());
         }
- 
-        
-        JOptionPane.showMessageDialog(this, "Order #" + nyttOrderID + " har registrerats!");
-        
-        model.setRowCount(0);
-        totaltPris = 0;
-        txtPrisExklMoms.setText("0.00");
-        
-        valdBildSokvag = ""; 
-lblBildStatus.setIcon(null);
-lblBildStatus.setText("");
-lblBildStatus.repaint();
-        
- 
-    } catch (InfException ex) {
-        JOptionPane.showMessageDialog(this, "Databastillgång misslyckades: " + ex.getMessage());
-    } catch (Exception ex) {
-        JOptionPane.showMessageDialog(this, "Ett fel uppstod: " + ex.getMessage());
-    }
     }//GEN-LAST:event_btnPaborjaOrderActionPerformed
 
     private void txtKundIdActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtKundIdActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_txtKundIdActionPerformed
 
-    private void cmbFargActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmbFargActionPerformed
-        // TODO
-    }//GEN-LAST:event_cmbFargActionPerformed
-
     private void cmbHattActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmbHattActionPerformed
         String valtNamn = (String) cmbHatt.getSelectedItem();
 
-        
         if (valtNamn == null || valtNamn.isEmpty()) {
             return;
         }
@@ -560,30 +567,53 @@ lblBildStatus.repaint();
             java.util.HashMap<String, String> rad = idb.fetchRow(fraga);
 
             if (rad != null) {
-                
+
                 String f = rad.get("Farg");
                 String t = rad.get("Tyg");
                 String s = rad.get("Storlek");
+
+                if ("Svart".equals(f)) {
+                    JpVisaFarg.setBackground(Color.BLACK);
+                }
+
+                if ("Vit".equals(f)) {
+                    JpVisaFarg.setBackground(Color.WHITE);
+                }
+
+                if ("Natur".equals(f)) {
+                    JpVisaFarg.setBackground(Color.GREEN);
+                }
+
+                if ("Brun".equals(f)) {
+                    java.awt.Color Brun = new java.awt.Color(139, 69, 19);
+
+                    JpVisaFarg.setBackground(Brun);
+                }
+
+                if ("Blå".equals(f)) {
+                        JpVisaFarg.setBackground(Color.BLUE);
+                }
+
+                if ("Grå".equals(f)) {
+                            JpVisaFarg.setBackground(Color.GRAY);
+                }
+                    
+                
 
                 String p = rad.get("PrisExklMoms");
                 if (p != null) {
                     styckPrisHatt = Double.parseDouble(p);
                 }
 
-                
                 javax.swing.SwingUtilities.invokeLater(() -> {
-                   
-                    cmbFarg.setSelectedItem(f != null ? f : "Saknas");
 
-                    
+                    //7cmbFarg.setSelectedItem(f != null ? f : "Saknas");
                     cmbTyg.setSelectedItem(t != null ? t : "Saknas");
 
-                   
                     cmbStorlek.setSelectedItem(s != null ? s : "Saknas");
 
-                  
-                    cmbFarg.revalidate();
-                    cmbFarg.repaint();
+                    //cmbFarg.revalidate();
+                    //cmbFarg.repaint();
                     cmbTyg.revalidate();
                     cmbTyg.repaint();
                     cmbStorlek.revalidate();
@@ -631,39 +661,38 @@ lblBildStatus.repaint();
         int antal = antalStr.isEmpty() ? 1 : Integer.parseInt(antalStr);
         String hattModell = (String) cmbHatt.getSelectedItem();
         String tyg = (String) cmbTyg.getSelectedItem();
-        String farg = (String) cmbFarg.getSelectedItem();
+        //String farg = (String) cmbFarg.getSelectedItem();
         String storlek = (String) cmbStorlek.getSelectedItem();
-        
-        double timpris = 50.0; 
+
+        double timpris = 50.0;
         String tidStr = txtUppskattadTid.getText().trim().replace(",", ".");
         double antalTimmar = tidStr.isEmpty() ? 0.0 : Double.parseDouble(tidStr);
         double arbetskostnad = antalTimmar * timpris;
-        
+
         double extraTextPris = 0.0;
         String egenText = txtEgenHattText.getText().trim();
         if (!egenText.isEmpty()) {
             extraTextPris = 150.0;
         }
-        
+
         double radPris = (styckPrisHatt + extraKostnadMaterial + extraTextPris + arbetskostnad) * antal;
 
         if (chkSnabborder.isSelected()) {
-        radPris *= 1.2;
+            radPris *= 1.2;
         }
         totaltPris += radPris;
-        
 
-        
         txtPrisExklMoms.setText(String.format("%.2f", totaltPris));
-        
+
         String dekorationer = txtAreaSpecial.getText().replace("\n", ", ").trim();
-        
+
         if (!egenText.isEmpty()) {
             if (!dekorationer.isEmpty()) {
                 dekorationer += ", ";
             }
-            dekorationer += "Egen text: " + egenText;        }
-        
+            dekorationer += "Egen text: " + egenText;
+        }
+
         if (antalTimmar > 0) {
             if (!dekorationer.isEmpty()) {
                 dekorationer += ", ";
@@ -671,17 +700,15 @@ lblBildStatus.repaint();
             dekorationer += "Arbetstid: " + antalTimmar + "h";
         }
 
-
         if (dekorationer.endsWith(",")) {
-        dekorationer = dekorationer.substring(0, dekorationer.length() - 1);
+            dekorationer = dekorationer.substring(0, dekorationer.length() - 1);
         }
 
-        
         javax.swing.table.DefaultTableModel model = (javax.swing.table.DefaultTableModel) jTable1.getModel();
 
-        
-        model.addRow(new Object[]{hattModell, farg, tyg, storlek, antal, snabborderText, dekorationer});
-        
+        model.addRow(new Object[]{hattModell, tyg, storlek, antal, snabborderText, dekorationer});
+        //Farg efter tyg
+
         extraKostnadMaterial = 0.0;
         txtAreaSpecial.setText("");
         txtEgenHattText.setText("");
@@ -695,7 +722,7 @@ lblBildStatus.repaint();
     }//GEN-LAST:event_txtPrisExklMomsActionPerformed
 
     private void chkSnabborderActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_chkSnabborderActionPerformed
-        
+
     }//GEN-LAST:event_chkSnabborderActionPerformed
 
     private void btnTillbakaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnTillbakaActionPerformed
@@ -703,23 +730,23 @@ lblBildStatus.repaint();
     }//GEN-LAST:event_btnTillbakaActionPerformed
 
     private void btnAdderaDekorationActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAdderaDekorationActionPerformed
-    try {
-        String valtMat = cmbDekoration.getSelectedItem().toString();
-        int antal = Integer.parseInt(txtDekorationAntal.getText().trim());
+        try {
+            String valtMat = cmbDekoration.getSelectedItem().toString();
+            int antal = Integer.parseInt(txtDekorationAntal.getText().trim());
 
-        // Hämta priset för materialet från databasen
-        String prisStr = idb.fetchSingle("SELECT EnhetsPris FROM Material WHERE Namn = '" + valtMat + "'");
-        double styckPris = Double.parseDouble(prisStr);
+            // Hämta priset för materialet från databasen
+            String prisStr = idb.fetchSingle("SELECT EnhetsPris FROM Material WHERE Namn = '" + valtMat + "'");
+            double styckPris = Double.parseDouble(prisStr);
 
-        // Addera till den temporära potten
-        extraKostnadMaterial += (styckPris * antal);
+            // Addera till den temporära potten
+            extraKostnadMaterial += (styckPris * antal);
 
-        // Visa i loggen för Otto
-        txtAreaSpecial.append(antal + "x " + valtMat + "\n");
-        txtDekorationAntal.setText(""); 
-    } catch (Exception e) {
-        JOptionPane.showMessageDialog(this, "Vänligen ange antal i siffror.");
-    }        // TODO add your handling code here:
+            // Visa i loggen för Otto
+            txtAreaSpecial.append(antal + "x " + valtMat + "\n");
+            txtDekorationAntal.setText("");
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, "Vänligen ange antal i siffror.");
+        }        // TODO add your handling code here:
     }//GEN-LAST:event_btnAdderaDekorationActionPerformed
 
     private void txtUppskattadTidActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtUppskattadTidActionPerformed
@@ -727,33 +754,46 @@ lblBildStatus.repaint();
     }//GEN-LAST:event_txtUppskattadTidActionPerformed
 
     private void btnBifogaReferensBildActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBifogaReferensBildActionPerformed
-javax.swing.JFileChooser fc = new javax.swing.JFileChooser();
-    int resultat = fc.showOpenDialog(this);
-    
-    if (resultat == javax.swing.JFileChooser.APPROVE_OPTION) {
-        java.io.File fil = fc.getSelectedFile();
-        valdBildSokvag = fil.getAbsolutePath(); 
+        javax.swing.JFileChooser fc = new javax.swing.JFileChooser();
+        int resultat = fc.showOpenDialog(this);
 
-        // 1. Skapa en ImageIcon från filen
-        javax.swing.ImageIcon originalIkon = new javax.swing.ImageIcon(valdBildSokvag);
-        
-        // 2. Skala om bilden så den passar i din label (t.ex. 150x150 pixlar)
-        java.awt.Image bild = originalIkon.getImage(); 
-        java.awt.Image skaladBild = bild.getScaledInstance(150, 150, java.awt.Image.SCALE_SMOOTH);
-        
-        // 3. Skapa en ny ikon av den skalade bilden och sätt på labeln
-        javax.swing.ImageIcon färdigIkon = new javax.swing.ImageIcon(skaladBild);
-        lblBildStatus.setIcon(färdigIkon);
-        
-        // Valfritt: Ta bort texten om du bara vill se bilden
-        lblBildStatus.setText(""); 
-    }      // TODO add your handling code here:
+        if (resultat == javax.swing.JFileChooser.APPROVE_OPTION) {
+            java.io.File fil = fc.getSelectedFile();
+            valdBildSokvag = fil.getAbsolutePath();
+
+            // 1. Skapa en ImageIcon från filen
+            javax.swing.ImageIcon originalIkon = new javax.swing.ImageIcon(valdBildSokvag);
+
+            // 2. Skala om bilden så den passar i din label (t.ex. 150x150 pixlar)
+            java.awt.Image bild = originalIkon.getImage();
+            java.awt.Image skaladBild = bild.getScaledInstance(150, 150, java.awt.Image.SCALE_SMOOTH);
+
+            // 3. Skapa en ny ikon av den skalade bilden och sätt på labeln
+            javax.swing.ImageIcon färdigIkon = new javax.swing.ImageIcon(skaladBild);
+            lblBildStatus.setIcon(färdigIkon);
+
+            // Valfritt: Ta bort texten om du bara vill se bilden
+            lblBildStatus.setText("");
+        }      // TODO add your handling code here:
     }//GEN-LAST:event_btnBifogaReferensBildActionPerformed
 
     private void txtInloggadEmailActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtInloggadEmailActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_txtInloggadEmailActionPerformed
-    
+
+    private void btnValjFargActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnValjFargActionPerformed
+        Color valdFarg = javax.swing.JColorChooser.showDialog(this, "Välj färg på hatten", Color.WHITE);
+        if (valdFarg != null) {
+            JpVisaFarg.setBackground(valdFarg);
+            String hex = String.format("#%02x%02x%02x", valdFarg.getRed(), valdFarg.getGreen(), valdFarg.getBlue());
+            System.out.println("Sparad färg: " + hex);
+        }
+    }//GEN-LAST:event_btnValjFargActionPerformed
+
+    private void cmbTygActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmbTygActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_cmbTygActionPerformed
+
     //public static void main(String args[]) {
     // java.awt.EventQueue.invokeLater(new Runnable() {S
     //  public void run() {
@@ -763,14 +803,15 @@ javax.swing.JFileChooser fc = new javax.swing.JFileChooser();
     //}
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JPanel JpVisaFarg;
     private javax.swing.JButton btnAdderaDekoration;
     private javax.swing.JButton btnBifogaReferensBild;
     private javax.swing.JButton btnLaggTillIOrder;
     private javax.swing.JButton btnPaborjaOrder;
     private javax.swing.JButton btnTillbaka;
+    private javax.swing.JButton btnValjFarg;
     private javax.swing.JCheckBox chkSnabborder;
     private javax.swing.JComboBox<String> cmbDekoration;
-    private javax.swing.JComboBox<String> cmbFarg;
     private javax.swing.JComboBox<String> cmbHatt;
     private javax.swing.JComboBox<String> cmbStorlek;
     private javax.swing.JComboBox<String> cmbTyg;
