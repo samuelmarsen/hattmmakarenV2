@@ -19,6 +19,8 @@ import org.jfree.chart.JFreeChart;
 import org.jfree.data.category.DefaultCategoryDataset;
 import javax.swing.JPanel;
 import java.awt.BorderLayout;
+import javax.swing.JFileChooser;
+import java.io.File;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -412,6 +414,55 @@ public class StatistikDetaljer extends javax.swing.JFrame {
         repaint();
     }
     
+    private JTable getValdTabell() {
+
+       int index = main.getSelectedIndex();
+
+       if (index == 0) return TBar;
+       if (index == 1) return TBkvartal;
+       if (index == 2) return TBmanad;
+       if (index == 3) return TBmodell;
+       if (index == 4) return TBkund;
+
+    return null;
+   }
+    
+    private void exporteraTillXML(JTable table, String filnamn) {
+
+        try (java.io.PrintWriter writer = new java.io.PrintWriter(filnamn, "UTF-8")) {
+
+            writer.println("<?xml version=\"1.0\" encoding=\"UTF-8\"?>");
+            writer.println("<data>");
+
+            DefaultTableModel model = (DefaultTableModel) table.getModel();
+
+            for (int i = 0; i < model.getRowCount(); i++) {
+
+                writer.println("    <row>");
+
+                for (int j = 0; j < model.getColumnCount(); j++) {
+
+                    String kolumnNamn = model.getColumnName(j);
+                    Object value = model.getValueAt(i, j);
+
+                    writer.println("        <" + kolumnNamn + ">" +
+                                   value +
+                                   "</" + kolumnNamn + ">");
+                }
+
+                writer.println("    </row>");
+            }
+
+            writer.println("</data>");
+
+            JOptionPane.showMessageDialog(this, "Export klar!");
+
+        } catch (Exception e) {
+
+            JOptionPane.showMessageDialog(this, "Fel vid export:\n" + e.getMessage());
+        }
+    }
+    
     
 
     /**
@@ -441,6 +492,7 @@ public class StatistikDetaljer extends javax.swing.JFrame {
         jScrollPane3 = new javax.swing.JScrollPane();
         TBkund = new javax.swing.JTable();
         jButton2 = new javax.swing.JButton();
+        BTNxlmfil = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -642,6 +694,9 @@ public class StatistikDetaljer extends javax.swing.JFrame {
         jButton2.setText("Byt läge");
         jButton2.addActionListener(this::jButton2ActionPerformed);
 
+        BTNxlmfil.setText("Hämta XLM");
+        BTNxlmfil.addActionListener(this::BTNxlmfilActionPerformed);
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -652,6 +707,8 @@ public class StatistikDetaljer extends javax.swing.JFrame {
                     .addComponent(main)
                     .addGroup(layout.createSequentialGroup()
                         .addGap(0, 0, Short.MAX_VALUE)
+                        .addComponent(BTNxlmfil)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jButton1)))
@@ -663,7 +720,8 @@ public class StatistikDetaljer extends javax.swing.JFrame {
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jButton1)
-                    .addComponent(jButton2))
+                    .addComponent(jButton2)
+                    .addComponent(BTNxlmfil))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(main)
                 .addContainerGap())
@@ -683,9 +741,23 @@ public class StatistikDetaljer extends javax.swing.JFrame {
 
     }//GEN-LAST:event_jButton2ActionPerformed
 
+    private void BTNxlmfilActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BTNxlmfilActionPerformed
+    JFileChooser chooser = new JFileChooser();
+
+    if (chooser.showSaveDialog(this) == JFileChooser.APPROVE_OPTION) {
+
+        File fil = chooser.getSelectedFile();
+
+        exporteraTillXML(getValdTabell(), fil.getAbsolutePath());
+
+    }
+
+    }//GEN-LAST:event_BTNxlmfilActionPerformed
+
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton BTNxlmfil;
     private javax.swing.JPanel JPar;
     private javax.swing.JPanel JPkund;
     private javax.swing.JPanel JPkvartal;
