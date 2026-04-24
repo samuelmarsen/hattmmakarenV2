@@ -41,7 +41,7 @@
                           <Component id="btnTillbaka" min="-2" max="-2" attributes="0"/>
                           <Component id="txtPrisExklMoms" alignment="0" min="-2" pref="107" max="-2" attributes="0"/>
                       </Group>
-                      <EmptySpace min="0" pref="847" max="32767" attributes="0"/>
+                      <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
                   </Group>
               </Group>
               <EmptySpace max="-2" attributes="0"/>
@@ -77,79 +77,89 @@
                           </Group>
                           <Group type="102" attributes="0">
                               <Group type="103" groupAlignment="0" attributes="0">
-                                  <Group type="102" attributes="0">
-                                      <Group type="103" groupAlignment="1" attributes="0">
-                                          <Group type="102" attributes="0">
-                                              <Group type="103" groupAlignment="0" attributes="0">
-                                                  <Component id="lblHattmodell" min="-2" pref="139" max="-2" attributes="0"/>
-                                                  <Component id="lblDekoration" min="-2" max="-2" attributes="0"/>
-                                              </Group>
-                                              <EmptySpace type="separate" max="-2" attributes="0"/>
-                                              <Group type="103" groupAlignment="0" attributes="0">
-                                                  <Group type="102" attributes="0">
-                                                      <Group type="103" groupAlignment="0" attributes="0">
-                                                          <Component id="cmbHatt" alignment="0" min="-2" pref="81" max="-2" attributes="0"/>
-                                                          <Component id="cmbDekoration" alignment="0" min="-2" max="-2" attributes="0"/>
-                                                      </Group>
-                                                      <EmptySpace type="unrelated" max="-2" attributes="0"/>
-                                                      <Group type="103" groupAlignment="1" attributes="0">
-                                                          <Group type="102" attributes="0">
-                                                              <Component id="lblAntalDekoration" min="-2" pref="46" max="-2" attributes="0"/>
-                                                              <EmptySpace min="-2" pref="43" max="-2" attributes="0"/>
-                                                              <Component id="txtDekorationAntal" min="-2" pref="90" max="-2" attributes="0"/>
-                                                          </Group>
-                                                          <Group type="102" alignment="1" attributes="0">
-                                                              <Component id="btnValjFarg" min="-2" max="-2" attributes="0"/>
-                                                              <EmptySpace max="-2" attributes="0"/>
-                                                              <Component id="JpVisaFarg" min="-2" max="-2" attributes="0"/>
-                                                              <EmptySpace type="unrelated" max="-2" attributes="0"/>
-                                                              <Component id="cmbTyg" min="-2" pref="98" max="-2" attributes="0"/>
-                                                          </Group>
-                                                      </Group>
-                                                      <EmptySpace min="-2" pref="26" max="-2" attributes="0"/>
-                                                      <Component id="cmbStorlek" min="-2" pref="111" max="-2" attributes="0"/>
+                                  <Group type="103" groupAlignment="1" attributes="0">
+                                      <Group type="102" attributes="0">
+                                          <Group type="103" groupAlignment="0" attributes="0">
+                                              <Component id="lblHattmodell" min="-2" pref="139" max="-2" attributes="0"/>
+                                              <Component id="lblDekoration" min="-2" max="-2" attributes="0"/>
+                                          </Group>
+                                          <EmptySpace type="separate" max="-2" attributes="0"/>
+                                          <Group type="103" groupAlignment="0" attributes="0">
+                                              <Group type="102" attributes="0">
+                                                  <Group type="103" groupAlignment="0" attributes="0">
+                                                      <Component id="cmbHatt" alignment="0" min="-2" pref="81" max="-2" attributes="0"/>
+                                                      <Component id="cmbDekoration" alignment="0" min="-2" max="-2" attributes="0"/>
                                                   </Group>
-                                                  <Component id="txtUppskattadTid" alignment="0" min="-2" max="-2" attributes="0"/>
-                                                  <Component id="txtEgenHattText" alignment="0" min="-2" pref="341" max="-2" attributes="0"/>
+                                                  <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                                                  <Group type="103" groupAlignment="1" attributes="0">
+                                                      <Group type="102" attributes="0">
+                                                          <Component id="lblAntalDekoration" min="-2" pref="46" max="-2" attributes="0"/>
+                                                          <EmptySpace min="-2" pref="43" max="-2" attributes="0"/>
+                                                          <Component id="txtDekorationAntal" min="-2" pref="90" max="-2" attributes="0"/>
+                                                      </Group>
+                                                      <Group type="102" alignment="1" attributes="0">
+                                                          <Component id="btnValjFarg" min="-2" max="-2" attributes="0"/>
+                                                          <EmptySpace max="-2" attributes="0"/>
+                                                          <Component id="JpVisaFarg" min="-2" max="-2" attributes="0"/>
+                                                          <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                                                          <Component id="cmbTyg" min="-2" pref="98" max="-2" attributes="0"/>
+                                                      </Group>
+                                                  </Group>
+                                                  <EmptySpace min="-2" pref="26" max="-2" attributes="0"/>
+                                                  <Component id="cmbStorlek" min="-2" pref="111" max="-2" attributes="0"/>
                                               </Group>
-                                              <EmptySpace max="32767" attributes="0"/>
+                                              <Component id="txtUppskattadTid" alignment="0" min="-2" max="-2" attributes="0"/>
+                                              <Component id="txtEgenHattText" alignment="0" min="-2" pref="341" max="-2" attributes="0"/>
                                           </Group>
-                                          <Group type="102" attributes="0">
-                                              <Component id="lblInloggadAnstalld" max="32767" attributes="0"/>
-                                              <EmptySpace min="-2" pref="205" max="-2" attributes="0"/>
-                                              <Component id="jLabel1" min="-2" pref="136" max="-2" attributes="0"/>
-                                              <EmptySpace min="-2" pref="136" max="-2" attributes="0"/>
-                                          </Group>
+                                          <EmptySpace max="32767" attributes="0"/>
                                       </Group>
-                                      <Component id="btnAdderaDekoration" min="-2" max="-2" attributes="0"/>
+                                      <Group type="102" attributes="0">
+                                          <Component id="lblInloggadAnstalld" max="32767" attributes="0"/>
+                                          <EmptySpace min="-2" pref="205" max="-2" attributes="0"/>
+                                          <Component id="jLabel1" min="-2" pref="136" max="-2" attributes="0"/>
+                                          <EmptySpace min="-2" pref="136" max="-2" attributes="0"/>
+                                      </Group>
                                   </Group>
-                                  <Component id="lblUppskattadTid" alignment="0" min="-2" max="-2" attributes="0"/>
+                                  <Group type="102" alignment="0" attributes="0">
+                                      <Component id="lblUppskattadTid" min="-2" max="-2" attributes="0"/>
+                                      <EmptySpace min="-2" pref="512" max="-2" attributes="0"/>
+                                  </Group>
                               </Group>
-                              <Group type="103" groupAlignment="1" attributes="0">
-                                  <Group type="102" alignment="1" attributes="0">
-                                      <EmptySpace max="32767" attributes="0"/>
-                                      <Component id="txtDatum" min="-2" pref="118" max="-2" attributes="0"/>
-                                      <EmptySpace min="-2" pref="87" max="-2" attributes="0"/>
-                                      <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                                          <Component id="lblKundIdForOrder" max="32767" attributes="0"/>
-                                          <Component id="txtKundId" min="-2" pref="102" max="-2" attributes="0"/>
+                              <Group type="103" groupAlignment="0" attributes="0">
+                                  <Group type="102" attributes="0">
+                                      <Component id="btnAdderaDekoration" min="-2" max="-2" attributes="0"/>
+                                      <Group type="103" groupAlignment="1" attributes="0">
+                                          <Group type="102" alignment="1" attributes="0">
+                                              <EmptySpace max="32767" attributes="0"/>
+                                              <Component id="txtDatum" min="-2" pref="118" max="-2" attributes="0"/>
+                                              <EmptySpace min="-2" pref="87" max="-2" attributes="0"/>
+                                              <Group type="103" groupAlignment="0" max="-2" attributes="0">
+                                                  <Component id="lblKundIdForOrder" max="32767" attributes="0"/>
+                                                  <Component id="txtKundId" min="-2" pref="102" max="-2" attributes="0"/>
+                                              </Group>
+                                          </Group>
+                                          <Group type="102" alignment="1" attributes="0">
+                                              <EmptySpace min="-2" pref="29" max="-2" attributes="0"/>
+                                              <Component id="jScrollPane2" min="-2" pref="129" max="-2" attributes="0"/>
+                                              <EmptySpace type="unrelated" max="32767" attributes="0"/>
+                                              <Group type="103" groupAlignment="0" attributes="0">
+                                                  <Component id="btnTaBortOrderrad" alignment="0" min="-2" max="-2" attributes="0"/>
+                                                  <Component id="btnLaggTillIOrder" alignment="0" min="-2" max="-2" attributes="0"/>
+                                              </Group>
+                                              <EmptySpace min="-2" pref="56" max="-2" attributes="0"/>
+                                          </Group>
                                       </Group>
                                   </Group>
-                                  <Group type="102" alignment="1" attributes="0">
-                                      <EmptySpace min="-2" pref="29" max="-2" attributes="0"/>
-                                      <Component id="jScrollPane2" min="-2" pref="129" max="-2" attributes="0"/>
-                                      <EmptySpace max="32767" attributes="0"/>
+                                  <Group type="102" attributes="0">
                                       <Group type="103" groupAlignment="0" attributes="0">
-                                          <Component id="btnLaggTillIOrder" alignment="0" min="-2" max="-2" attributes="0"/>
+                                          <Component id="lblVäljAntal" min="-2" pref="71" max="-2" attributes="0"/>
                                           <Group type="102" alignment="0" attributes="0">
-                                              <Group type="103" groupAlignment="1" max="-2" attributes="0">
-                                                  <Component id="lblVäljAntal" alignment="0" max="32767" attributes="0"/>
-                                                  <Component id="txtAntalHattar" alignment="0" pref="71" max="32767" attributes="0"/>
-                                              </Group>
-                                              <EmptySpace type="separate" max="-2" attributes="0"/>
+                                              <Component id="txtAntalHattar" min="-2" pref="71" max="-2" attributes="0"/>
+                                              <EmptySpace max="-2" attributes="0"/>
                                               <Component id="chkSnabborder" min="-2" max="-2" attributes="0"/>
                                           </Group>
                                       </Group>
+                                      <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
                                   </Group>
                               </Group>
                           </Group>
@@ -237,20 +247,22 @@
                           <Component id="lblAntalDekoration" alignment="3" min="-2" max="-2" attributes="0"/>
                           <Component id="lblDekoration" alignment="3" min="-2" max="-2" attributes="0"/>
                       </Group>
-                      <EmptySpace min="-2" pref="11" max="-2" attributes="0"/>
-                      <Component id="jLabel5" min="-2" max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="0" attributes="0">
-                          <Group type="102" attributes="0">
-                              <EmptySpace type="unrelated" min="-2" max="-2" attributes="0"/>
-                              <Component id="jScrollPane1" pref="338" max="32767" attributes="0"/>
-                              <EmptySpace type="unrelated" min="-2" max="-2" attributes="0"/>
-                          </Group>
                           <Group type="102" alignment="0" attributes="0">
+                              <EmptySpace min="-2" pref="11" max="-2" attributes="0"/>
+                              <Component id="jLabel5" min="-2" max="-2" attributes="0"/>
                               <EmptySpace min="-2" pref="33" max="-2" attributes="0"/>
                               <Component id="btnBifogaReferensBild" min="-2" max="-2" attributes="0"/>
                               <EmptySpace type="separate" max="-2" attributes="0"/>
                               <Component id="lblBildStatus" min="-2" pref="150" max="-2" attributes="0"/>
                               <EmptySpace max="32767" attributes="0"/>
+                          </Group>
+                          <Group type="102" alignment="0" attributes="0">
+                              <EmptySpace max="-2" attributes="0"/>
+                              <Component id="btnTaBortOrderrad" min="-2" max="-2" attributes="0"/>
+                              <EmptySpace min="-2" pref="11" max="-2" attributes="0"/>
+                              <Component id="jScrollPane1" pref="338" max="32767" attributes="0"/>
+                              <EmptySpace type="unrelated" min="-2" max="-2" attributes="0"/>
                           </Group>
                       </Group>
                       <Component id="jLabel2" min="-2" max="-2" attributes="0"/>
@@ -625,5 +637,13 @@
         </DimensionLayout>
       </Layout>
     </Container>
+    <Component class="javax.swing.JButton" name="btnTaBortOrderrad">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="Ta bort orderrad"/>
+      </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnTaBortOrderradActionPerformed"/>
+      </Events>
+    </Component>
   </SubComponents>
 </Form>

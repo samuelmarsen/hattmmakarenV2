@@ -161,7 +161,55 @@ jTable1.getColumnModel().getColumn(1).setCellRenderer(new javax.swing.table.Defa
         cmbStorlek.addItem("XL");
 
     }
+     
+    private void uppdateraTotalPris() {
+        DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
+        totaltPris = 0.0; 
 
+        
+        for (int i = 0; i < model.getRowCount(); i++) {
+            try {
+                String hattModell = model.getValueAt(i, 0).toString();
+                int antal = Integer.parseInt(model.getValueAt(i, 4).toString());
+                String snabborder = model.getValueAt(i, 5).toString();
+                String dekorationer = model.getValueAt(i, 6).toString();
+
+                
+                String prisStr = idb.fetchSingle("SELECT PrisExklMoms FROM Hattmodeller WHERE ModellNamn = '" + hattModell + "'");
+                double basPris = Double.parseDouble(prisStr);
+                
+                double radPris = basPris;
+
+                
+                if (dekorationer.contains("Egen text:")) {
+                    radPris += 150.0;
+                }
+                
+                
+                if (dekorationer.contains("Arbetstid:")) {
+                    
+                    String tidDel = dekorationer.substring(dekorationer.indexOf("Arbetstid:") + 11);
+                    double timmar = Double.parseDouble(tidDel.substring(0, tidDel.indexOf("h")));
+                    radPris += (timmar * 50.0);
+                }
+
+                
+                radPris *= antal;
+
+                if (snabborder.equals("Ja")) {
+                    radPris *= 1.2;
+                }
+
+                totaltPris += radPris;
+
+            } catch (Exception e) {
+                System.out.println("Kunde inte räkna om rad " + i + ": " + e.getMessage());
+            }
+        }
+
+       
+        txtPrisExklMoms.setText(String.format("%.2f", totaltPris));
+    }
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -211,6 +259,7 @@ jTable1.getColumnModel().getColumn(1).setCellRenderer(new javax.swing.table.Defa
         lblInloggadAnstalld = new javax.swing.JLabel();
         btnValjFarg = new javax.swing.JButton();
         JpVisaFarg = new javax.swing.JPanel();
+        btnTaBortOrderrad = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -317,6 +366,9 @@ jTable1.getColumnModel().getColumn(1).setCellRenderer(new javax.swing.table.Defa
             .addGap(0, 0, Short.MAX_VALUE)
         );
 
+        btnTaBortOrderrad.setText("Ta bort orderrad");
+        btnTaBortOrderrad.addActionListener(this::btnTaBortOrderradActionPerformed);
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -336,7 +388,7 @@ jTable1.getColumnModel().getColumn(1).setCellRenderer(new javax.swing.table.Defa
                             .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 99, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(btnTillbaka)
                             .addComponent(txtPrisExklMoms, javax.swing.GroupLayout.PREFERRED_SIZE, 107, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(0, 847, Short.MAX_VALUE)))
+                        .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
@@ -363,62 +415,69 @@ jTable1.getColumnModel().getColumn(1).setCellRenderer(new javax.swing.table.Defa
                                         .addGap(120, 120, 120))))
                             .addGroup(layout.createSequentialGroup()
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                        .addGroup(layout.createSequentialGroup()
+                                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                                .addComponent(lblHattmodell, javax.swing.GroupLayout.PREFERRED_SIZE, 139, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                .addComponent(lblDekoration))
+                                            .addGap(18, 18, 18)
+                                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                                .addGroup(layout.createSequentialGroup()
+                                                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                                        .addComponent(cmbHatt, javax.swing.GroupLayout.PREFERRED_SIZE, 81, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                        .addComponent(cmbDekoration, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                                        .addGroup(layout.createSequentialGroup()
+                                                            .addComponent(lblAntalDekoration, javax.swing.GroupLayout.PREFERRED_SIZE, 46, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                            .addGap(43, 43, 43)
+                                                            .addComponent(txtDekorationAntal, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                                        .addGroup(layout.createSequentialGroup()
+                                                            .addComponent(btnValjFarg)
+                                                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                                            .addComponent(JpVisaFarg, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                                            .addComponent(cmbTyg, javax.swing.GroupLayout.PREFERRED_SIZE, 98, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                                    .addGap(26, 26, 26)
+                                                    .addComponent(cmbStorlek, javax.swing.GroupLayout.PREFERRED_SIZE, 111, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                                .addComponent(txtUppskattadTid, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                .addComponent(txtEgenHattText, javax.swing.GroupLayout.PREFERRED_SIZE, 341, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                                        .addGroup(layout.createSequentialGroup()
+                                            .addComponent(lblInloggadAnstalld, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                            .addGap(205, 205, 205)
+                                            .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 136, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                            .addGap(136, 136, 136)))
                                     .addGroup(layout.createSequentialGroup()
+                                        .addComponent(lblUppskattadTid)
+                                        .addGap(512, 512, 512)))
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addComponent(btnAdderaDekoration)
                                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                                             .addGroup(layout.createSequentialGroup()
-                                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                                    .addComponent(lblHattmodell, javax.swing.GroupLayout.PREFERRED_SIZE, 139, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                                    .addComponent(lblDekoration))
-                                                .addGap(18, 18, 18)
-                                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                                    .addGroup(layout.createSequentialGroup()
-                                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                                            .addComponent(cmbHatt, javax.swing.GroupLayout.PREFERRED_SIZE, 81, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                                            .addComponent(cmbDekoration, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                                            .addGroup(layout.createSequentialGroup()
-                                                                .addComponent(lblAntalDekoration, javax.swing.GroupLayout.PREFERRED_SIZE, 46, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                                                .addGap(43, 43, 43)
-                                                                .addComponent(txtDekorationAntal, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                                            .addGroup(layout.createSequentialGroup()
-                                                                .addComponent(btnValjFarg)
-                                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                                                .addComponent(JpVisaFarg, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                                                .addComponent(cmbTyg, javax.swing.GroupLayout.PREFERRED_SIZE, 98, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                                                        .addGap(26, 26, 26)
-                                                        .addComponent(cmbStorlek, javax.swing.GroupLayout.PREFERRED_SIZE, 111, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                                    .addComponent(txtUppskattadTid, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                                    .addComponent(txtEgenHattText, javax.swing.GroupLayout.PREFERRED_SIZE, 341, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                                .addComponent(txtDatum, javax.swing.GroupLayout.PREFERRED_SIZE, 118, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                .addGap(87, 87, 87)
+                                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                                    .addComponent(lblKundIdForOrder, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                                    .addComponent(txtKundId, javax.swing.GroupLayout.PREFERRED_SIZE, 102, javax.swing.GroupLayout.PREFERRED_SIZE)))
                                             .addGroup(layout.createSequentialGroup()
-                                                .addComponent(lblInloggadAnstalld, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                                .addGap(205, 205, 205)
-                                                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 136, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                                .addGap(136, 136, 136)))
-                                        .addComponent(btnAdderaDekoration))
-                                    .addComponent(lblUppskattadTid))
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                                .addGap(29, 29, 29)
+                                                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 129, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                                    .addComponent(btnTaBortOrderrad)
+                                                    .addComponent(btnLaggTillIOrder))
+                                                .addGap(56, 56, 56))))
                                     .addGroup(layout.createSequentialGroup()
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                        .addComponent(txtDatum, javax.swing.GroupLayout.PREFERRED_SIZE, 118, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addGap(87, 87, 87)
-                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                            .addComponent(lblKundIdForOrder, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                            .addComponent(txtKundId, javax.swing.GroupLayout.PREFERRED_SIZE, 102, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                                    .addGroup(layout.createSequentialGroup()
-                                        .addGap(29, 29, 29)
-                                        .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 129, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                            .addComponent(btnLaggTillIOrder)
+                                            .addComponent(lblVäljAntal, javax.swing.GroupLayout.PREFERRED_SIZE, 71, javax.swing.GroupLayout.PREFERRED_SIZE)
                                             .addGroup(layout.createSequentialGroup()
-                                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                                                    .addComponent(lblVäljAntal, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                                    .addComponent(txtAntalHattar, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 71, Short.MAX_VALUE))
-                                                .addGap(18, 18, 18)
-                                                .addComponent(chkSnabborder))))))
+                                                .addComponent(txtAntalHattar, javax.swing.GroupLayout.PREFERRED_SIZE, 71, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                                .addComponent(chkSnabborder)))
+                                        .addGap(0, 0, Short.MAX_VALUE))))
                             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                                 .addGap(0, 0, Short.MAX_VALUE)
                                 .addComponent(btnPaborjaOrder)))
@@ -483,19 +542,21 @@ jTable1.getColumnModel().getColumn(1).setCellRenderer(new javax.swing.table.Defa
                             .addComponent(btnAdderaDekoration)
                             .addComponent(lblAntalDekoration)
                             .addComponent(lblDekoration))
-                        .addGap(11, 11, 11)
-                        .addComponent(jLabel5)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(layout.createSequentialGroup()
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 338, Short.MAX_VALUE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED))
-                            .addGroup(layout.createSequentialGroup()
+                                .addGap(11, 11, 11)
+                                .addComponent(jLabel5)
                                 .addGap(33, 33, 33)
                                 .addComponent(btnBifogaReferensBild)
                                 .addGap(18, 18, 18)
                                 .addComponent(lblBildStatus, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                            .addGroup(layout.createSequentialGroup()
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(btnTaBortOrderrad)
+                                .addGap(11, 11, 11)
+                                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 338, Short.MAX_VALUE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)))
                         .addComponent(jLabel2)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(txtPrisExklMoms, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -603,6 +664,7 @@ jTable1.getColumnModel().getColumn(1).setCellRenderer(new javax.swing.table.Defa
         JOptionPane.showMessageDialog(this, "Order #" + nyttOrderID + " har registrerats!");
         model.setRowCount(0);
         txtPrisExklMoms.setText("0.00");
+        totaltPris = 0.0;
         lblBildStatus.setIcon(null);
 
     } catch (InfException ex) {
@@ -861,6 +923,30 @@ jTable1.getColumnModel().getColumn(1).setCellRenderer(new javax.swing.table.Defa
         // TODO add your handling code here:
     }//GEN-LAST:event_cmbTygActionPerformed
 
+    private void btnTaBortOrderradActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnTaBortOrderradActionPerformed
+    DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
+    
+    // Kontrollera om en rad är markerad
+    int markeradRad = jTable1.getSelectedRow();
+    
+    if (markeradRad != -1) {
+        // Valfritt: Bekräftelsefråga
+        int svar = JOptionPane.showConfirmDialog(this, "Vill du ta bort den valda hatten från ordern?", "Ta bort", JOptionPane.YES_NO_OPTION);
+        
+        if (svar == JOptionPane.YES_OPTION) {
+            // Ta bort raden från modellen
+            model.removeRow(markeradRad);
+            
+            // HÄR MÅSTE DU UPPDATERA PRISET
+            uppdateraTotalPris(); 
+            
+            JOptionPane.showMessageDialog(this, "Hatten har tagits bort.");
+        }
+    } else {
+        JOptionPane.showMessageDialog(this, "Markera först den hatt i listan som du vill ta bort.");
+    }        // TODO add your handling code here:
+    }//GEN-LAST:event_btnTaBortOrderradActionPerformed
+
     //public static void main(String args[]) {
     // java.awt.EventQueue.invokeLater(new Runnable() {S
     //  public void run() {
@@ -875,6 +961,7 @@ jTable1.getColumnModel().getColumn(1).setCellRenderer(new javax.swing.table.Defa
     private javax.swing.JButton btnBifogaReferensBild;
     private javax.swing.JButton btnLaggTillIOrder;
     private javax.swing.JButton btnPaborjaOrder;
+    private javax.swing.JButton btnTaBortOrderrad;
     private javax.swing.JButton btnTillbaka;
     private javax.swing.JButton btnValjFarg;
     private javax.swing.JCheckBox chkSnabborder;
