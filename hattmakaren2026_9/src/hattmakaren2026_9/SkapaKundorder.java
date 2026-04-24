@@ -49,6 +49,42 @@ public class SkapaKundorder extends javax.swing.JFrame {
         fyllRullistaMedHattar();
         fyllAlternativ();
         fyllRullistaMedMaterial();
+        
+        // Vi sätter en "Color Renderer" på kolumn index 1 (Färg-kolumnen)
+jTable1.getColumnModel().getColumn(1).setCellRenderer(new javax.swing.table.DefaultTableCellRenderer() {
+    @Override
+    public java.awt.Component getTableCellRendererComponent(javax.swing.JTable table, Object value, 
+            boolean isSelected, boolean hasFocus, int row, int column) {
+        
+        java.awt.Component c = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
+        
+        if (value != null && value.toString().startsWith("#")) {
+            try {
+                java.awt.Color farg = java.awt.Color.decode(value.toString());
+                c.setBackground(farg);
+                
+                setText(""); 
+                
+                setToolTipText(value.toString()); 
+            } catch (Exception e) {
+                
+                c.setBackground(table.getBackground());
+            }
+        } else {
+            
+            c.setBackground(table.getBackground());
+        }
+ 
+        
+        if (isSelected) {
+            setBorder(javax.swing.BorderFactory.createLineBorder(java.awt.Color.WHITE, 2));
+        } else {
+            setBorder(null);
+        }
+ 
+        return c;
+    }
+});
 
     }
 
@@ -528,8 +564,9 @@ public class SkapaKundorder extends javax.swing.JFrame {
 
                 String modellID = idb.fetchSingle("SELECT ModellID FROM Hattmodeller WHERE ModellNamn = '" + hattNamn + "'");
 
-                String radSql = "INSERT INTO Orderrader (OrderID, ModellID, Antal, Anpassningstext) "
-                        + "VALUES (" + nyttOrderID + ", " + modellID + ", " + antal + ", '" + komplettAnpassning + "')";
+                String radSql = "INSERT INTO Orderrader (OrderID, ModellID, Antal, Anpassningstext, Farg, Tyg, Storlek) "
+                  + "VALUES (" + nyttOrderID + ", " + modellID + ", " + antal + ", '" + komplettAnpassning + "', '" 
+                  + farg + "', '" + tyg + "', '" + storlek + "')";
                 idb.insert(radSql);
             }
 
@@ -663,6 +700,10 @@ public class SkapaKundorder extends javax.swing.JFrame {
         String tyg = (String) cmbTyg.getSelectedItem();
         //String farg = (String) cmbFarg.getSelectedItem();
         String storlek = (String) cmbStorlek.getSelectedItem();
+        java.awt.Color aktuellFarg = JpVisaFarg.getBackground();
+        String hexFarg = String.format("#%02x%02x%02x", aktuellFarg.getRed(), aktuellFarg.getGreen(), aktuellFarg.getBlue());
+        System.out.println("Sparad färg: " + hexFarg);
+        
 
         double timpris = 50.0;
         String tidStr = txtUppskattadTid.getText().trim().replace(",", ".");
@@ -706,7 +747,7 @@ public class SkapaKundorder extends javax.swing.JFrame {
 
         javax.swing.table.DefaultTableModel model = (javax.swing.table.DefaultTableModel) jTable1.getModel();
 
-        model.addRow(new Object[]{hattModell, tyg, storlek, antal, snabborderText, dekorationer});
+        model.addRow(new Object[]{hattModell, hexFarg, tyg, storlek, antal, snabborderText, dekorationer});
         //Farg efter tyg
 
         extraKostnadMaterial = 0.0;

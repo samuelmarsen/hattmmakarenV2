@@ -136,7 +136,7 @@ public class AktuellaOrdrar extends javax.swing.JFrame {
             // -----------------------------------------------
 
             // --- Koden nedan (för att fylla textrutan till höger) är oförändrad ---
-            String sqlRader =  "SELECT H.ModellNamn, H.Farg, H.Tyg, H.Storlek, O.Antal " + 
+            String sqlRader =  "SELECT H.ModellNamn, O.Farg, O.Tyg, O.Storlek, O.Antal " + 
                                "FROM Orderrader O " + "JOIN Hattmodeller H ON O.ModellID = H.ModellID " +                      
                                "WHERE O.OrderID = " + orderID;
             ArrayList<HashMap<String, String>> rader = idb.fetchRows(sqlRader);
