@@ -575,40 +575,64 @@ jTable1.getColumnModel().getColumn(1).setCellRenderer(new javax.swing.table.Defa
 
 
     private void btnPaborjaOrderActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPaborjaOrderActionPerformed
-                                              
+                                                                                                                                                                                      
     try {
         String kundID = txtKundId.getText();
         String fraktAdress = txtFraktadress.getText();
-        String datum = txtDatum.getText();
+        String datum = txtDatum.getText(); // Detta format är yyyy-MM-dd
 
         if (kundID.isEmpty()) {
             JOptionPane.showMessageDialog(this, "Välj en kund först!");
             return;
         }
 
-        int arSnabborder = 0;
         DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
         if (model.getRowCount() == 0) {
-            JOptionPane.showMessageDialog(this, "Ordern är tom. Lägg till hattar först!");
+            JOptionPane.showMessageDialog(this, "Ordern är tom!");
             return;
         }
 
+        // 1. Hämta Otto baserat på Email (stämmer nu med din bild!)
+        String OttoID = null;
+        try {
+            OttoID = idb.fetchSingle("SELECT AnstalldID FROM Anstallda WHERE Email = '" + InloggadEmail.trim() + "'");
+        } catch (InfException ex) {
+            System.out.println("Kunde inte hitta Otto: " + ex.getMessage());
+        }
+
+        // 2. Beräkna snabborder och pris
+        int arSnabborder = 0;
         for (int i = 0; i < model.getRowCount(); i++) {
             if (model.getValueAt(i, 5).toString().equals("Ja")) {
                 arSnabborder = 1;
                 break;
             }
         }
-
         String totalPrisStr = txtPrisExklMoms.getText().replace(",", ".");
         double totalPrisInklMoms = Double.parseDouble(totalPrisStr) * 1.25;
 
+        // 3. Skapa huvudordern
         String orderSql = "INSERT INTO Ordrar (KundID, OrderDatum, Status, ArSnabborder, FraktAdress, TotalPrisInclMoms, BildSokvag, MaterialBestallt) "
                 + "VALUES (" + kundID + ", '" + datum + "', 'Registrerad', " + arSnabborder + ", '" + fraktAdress + "', " + totalPrisInklMoms + ", '" + valdBildSokvag + "', 0)";
         idb.insert(orderSql);
 
+        // 4. Hämta det nya OrderID
         String nyttOrderID = idb.fetchSingle("SELECT MAX(OrderID) FROM Ordrar");
 
+        // 5. REGISTRERA OTTO I ARBETSPASS (Viktigt: vi fyller i alla kolumner nu!)
+        if (OttoID != null && nyttOrderID != null) {
+            try {
+                // Vi lägger till Datum, 0 timmar och en aktivitetstext för att tabellen ska acceptera raden
+                String arbetspassSql = "INSERT INTO Arbetspass (AnstalldID, OrderID, Datum, Timmar, Aktivitet) "
+                                     + "VALUES (" + OttoID + ", " + nyttOrderID + ", '" + datum + "', 0, 'Order registrerad')";
+                idb.insert(arbetspassSql);
+                System.out.println("Otto kopplad till order #" + nyttOrderID);
+            } catch (InfException ex) {
+                System.out.println("Kunde inte spara Arbetspass: " + ex.getMessage());
+            }
+        }
+
+        // 6. Spara orderrader och minska lager
         for (int i = 0; i < model.getRowCount(); i++) {
             String hattNamn = model.getValueAt(i, 0).toString();
             String farg = model.getValueAt(i, 1).toString();
@@ -622,53 +646,21 @@ jTable1.getColumnModel().getColumn(1).setCellRenderer(new javax.swing.table.Defa
                 komplettAnpassning += " | EXTRA: " + dekoration;
             }
 
-            try {
-                String modellID = idb.fetchSingle("SELECT ModellID FROM Hattmodeller WHERE ModellNamn = '" + hattNamn + "'");
-
-                String radSql = "INSERT INTO Orderrader (OrderID, ModellID, Antal, Anpassningstext, Farg, Tyg, Storlek) "
-                        + "VALUES (" + nyttOrderID + ", " + modellID + ", " + antalHattar + ", '" + komplettAnpassning + "', '"
-                        + farg + "', '" + tyg + "', '" + storlek + "')";
-                idb.insert(radSql);
-
-                
-                idb.update("UPDATE Material SET LagerSaldo = LagerSaldo - " + antalHattar + " WHERE Namn = '" + tyg + "'");
-
-                
-                if (dekoration != null && !dekoration.isEmpty() && !dekoration.equalsIgnoreCase("Ingen")) {
-                    String rentDekorNamn = dekoration;
-                    int antalDekorPerHatt = 1; 
-
-                    if (dekoration.contains("x ")) {
-                        try {
-                            
-                            String antalStr = dekoration.substring(0, dekoration.indexOf("x")).trim();
-                            antalDekorPerHatt = Integer.parseInt(antalStr);
-                            
-                            rentDekorNamn = dekoration.substring(dekoration.indexOf(" ") + 1).trim();
-                        } catch (Exception e) {
-                            antalDekorPerHatt = 1;
-                        }
-                    }
-                    
-                    
-                    int totalMinskningDekor = antalHattar * antalDekorPerHatt;
-                    
-                    idb.update("UPDATE Material SET LagerSaldo = LagerSaldo - " + totalMinskningDekor + " WHERE Namn = '" + rentDekorNamn + "'");
-                }
-
-            } catch (InfException ex) {
-                JOptionPane.showMessageDialog(null, "Fel vid rad " + (i+1) + ": " + ex.getMessage());
-            }
+            String modellID = idb.fetchSingle("SELECT ModellID FROM Hattmodeller WHERE ModellNamn = '" + hattNamn + "'");
+            
+            String radSql = "INSERT INTO Orderrader (OrderID, ModellID, Antal, Anpassningstext, Farg, Tyg, Storlek) "
+                          + "VALUES (" + nyttOrderID + ", " + modellID + ", " + antalHattar + ", '" + komplettAnpassning + "', '" + farg + "', '" + tyg + "', '" + storlek + "')";
+            idb.insert(radSql);
+            
+            idb.update("UPDATE Material SET LagerSaldo = LagerSaldo - " + antalHattar + " WHERE Namn = '" + tyg + "'");
         }
 
         JOptionPane.showMessageDialog(this, "Order #" + nyttOrderID + " har registrerats!");
+        
         model.setRowCount(0);
-        txtPrisExklMoms.setText("0.00");
         totaltPris = 0.0;
-        lblBildStatus.setIcon(null);
+        txtPrisExklMoms.setText("0.00");
 
-    } catch (InfException ex) {
-        JOptionPane.showMessageDialog(this, "Databastillgång misslyckades: " + ex.getMessage());
     } catch (Exception ex) {
         JOptionPane.showMessageDialog(this, "Ett fel uppstod: " + ex.getMessage());
     }
