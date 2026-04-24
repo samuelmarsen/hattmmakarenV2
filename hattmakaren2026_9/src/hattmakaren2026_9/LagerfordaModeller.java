@@ -190,39 +190,30 @@ public class LagerfordaModeller extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnOkaLagerActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnOkaLagerActionPerformed
-    try {
-    String modellIDText = tftModellID.getText().trim();
-    String antalText = tftAntal.getText().trim();
-    // TODO add your han
-    if (modellIDText.isEmpty() || antalText.isEmpty()) {
-        JOptionPane.showMessageDialog(this, "Fyll i både ModellID och antal!");
-        return;
-    }
-    
-    int modellID = Integer.parseInt(modellIDText);
-    int antal = Integer.parseInt(antalText);
-    
-    if (antal <= 0) {
-        JOptionPane.showMessageDialog(this, "Antalet måste vara större än 0");
-        return;
-    }
-    
-    String sql = "UPDATE Hattmodeller "
-            + "SET Lagersaldo = Lagersaldo + " + antal + " "
-            + "WHERE ModellID = " + modellID; 
-    
-    idb.update(sql);
-    JOptionPane.showMessageDialog(this, "Lagersaldot har uppdaterats");
-    
-    fyllTabell();
+// 1. Validera att fälten inte är tomma
+    if (Validering.arTom(tftModellID, "Välj en modell i tabellen först!")) return;
+    if (Validering.arTom(tftAntal, "Ange antal som ska läggas till.")) return;
 
-    tftModellID.setText("");
-    tftAntal.setText("");
-    
-    } catch (NumberFormatException ex) {
-        JOptionPane.showMessageDialog(this, "ModellID och antal måste vara siffror.");
+    // 2. Validera att Antal är ett heltal och är ett positivt tal
+    if (!Validering.arHeltal(tftAntal)) return;
+    if (!Validering.arPositivtTal(tftAntal)) return;
+
+    try {
+        int modellID = Integer.parseInt(tftModellID.getText());
+        int antal = Integer.parseInt(tftAntal.getText());
+
+        String sql = "UPDATE Hattmodeller "
+                + "SET Lagersaldo = Lagersaldo + " + antal + " "
+                + "WHERE ModellID = " + modellID; 
+
+        idb.update(sql);
+        JOptionPane.showMessageDialog(this, "Lagersaldot har ökats med " + antal);
+
+        fyllTabell();
+        tftAntal.setText("");
+
     } catch (InfException ex) {
-         JOptionPane.showMessageDialog(this, "Fel vid uppdatering: " + ex.getMessage());
+        JOptionPane.showMessageDialog(this, "Fel vid uppdatering: " + ex.getMessage());
     }
     
     }//GEN-LAST:event_btnOkaLagerActionPerformed
@@ -242,46 +233,37 @@ public class LagerfordaModeller extends javax.swing.JFrame {
     }//GEN-LAST:event_jtHattmodellerMouseClicked
 
     private void btnMinskaLagerActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMinskaLagerActionPerformed
-    try {
-    String modellIDText = tftModellID.getText().trim();
-    String antalText = tftAntal.getText().trim();
-    // TODO add your han
-    if (modellIDText.isEmpty() || antalText.isEmpty()) {
-        JOptionPane.showMessageDialog(this, "Fyll i både ModellID och antal!");
-        return;
-    }
-    
-    int modellID = Integer.parseInt(modellIDText);
-    int antal = Integer.parseInt(antalText);
-    
-    if (antal <= 0) {
-        JOptionPane.showMessageDialog(this, "Antalet måste vara större än 0");
-        return;
-    }
-    
-    String nuvarandeSaldoStr = idb.fetchSingle("SELECT Lagersaldo FROM Hattmodeller WHERE ModellID = " + modellID);
-    int nuvarandeSaldo = Integer.parseInt(nuvarandeSaldoStr);
+// 1. Validera fält
+    if (Validering.arTom(tftModellID, "Välj en modell i tabellen först!")) return;
+    if (Validering.arTom(tftAntal, "Ange antal som ska dras bort.")) return;
 
-    if (nuvarandeSaldo - antal < 0) {
-    JOptionPane.showMessageDialog(this, "Fel: Kan inte minska mer än vad som finns i lager! (Finns: " + nuvarandeSaldo + ")");
-    return;
-    }
-    
-    String sql = "UPDATE Hattmodeller "
-                + "SET Lagersaldo = Lagersaldo - " + antal + " "
-                + "WHERE ModellID = " + modellID; 
+    // 2. Validera format
+    if (!Validering.arHeltal(tftAntal)) return;
+    if (!Validering.arPositivtTal(tftAntal)) return;
+
+    try {
+        int modellID = Integer.parseInt(tftModellID.getText());
+        int antal = Integer.parseInt(tftAntal.getText());
+
+        // Hämta nuvarande saldo för att kontrollera att det inte blir minus
+        String nuvarandeSaldoStr = idb.fetchSingle("SELECT Lagersaldo FROM Hattmodeller WHERE ModellID = " + modellID);
+        int nuvarandeSaldo = Integer.parseInt(nuvarandeSaldoStr);
+
+        if (nuvarandeSaldo - antal < 0) {
+            JOptionPane.showMessageDialog(this, "Fel: Kan inte minska mer än vad som finns i lager! (I lager: " + nuvarandeSaldo + ")");
+            return;
+        }
+
+        String sql = "UPDATE Hattmodeller "
+                    + "SET Lagersaldo = Lagersaldo - " + antal + " "
+                    + "WHERE ModellID = " + modellID; 
 
         idb.update(sql);
-        
-    JOptionPane.showMessageDialog(this, "Lagersaldot har minskats!");
-    
-    fyllTabell();
-    
-    tftModellID.setText("");
-    tftAntal.setText("");
-    
-    } catch (NumberFormatException ex) {
-        JOptionPane.showMessageDialog(this, "Antal måste vara en siffra.");
+        JOptionPane.showMessageDialog(this, "Lagersaldot har minskats!");
+
+        fyllTabell();
+        tftAntal.setText("");
+
     } catch (InfException ex) {
         JOptionPane.showMessageDialog(this, "Fel vid uppdatering: " + ex.getMessage());
     }

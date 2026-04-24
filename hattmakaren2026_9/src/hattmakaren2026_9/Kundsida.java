@@ -30,7 +30,7 @@ public class Kundsida extends javax.swing.JFrame {
         initComponents();
         setExtendedState(javax.swing.JFrame.MAXIMIZED_BOTH);
         this.idb = idb;
-        visaAllaKunder(); // ← istället för visaAllaKunder() 
+        visaAllaKunder();  
         this.setExtendedState(javax.swing.JFrame.MAXIMIZED_BOTH);
         
 }
@@ -44,7 +44,7 @@ public class Kundsida extends javax.swing.JFrame {
         
             ArrayList<HashMap<String, String>> resultat = idb.fetchRows(sql);
 
-            // Kolla om det kom tillbaka några resultat
+            
             if (resultat == null || resultat.isEmpty()) {
                 JOptionPane.showMessageDialog(this,
                     "Det finns inga kunder i databasen",
@@ -53,7 +53,7 @@ public class Kundsida extends javax.swing.JFrame {
                 return;
             }
 
-            // Lägg till raderna i tabellen
+            
             for (HashMap<String, String> rad : resultat) {
                 Object[] row = {
                     rad.get("KundID"),
@@ -77,17 +77,17 @@ public class Kundsida extends javax.swing.JFrame {
     
     public void sokKunder(String sokText) {
     
-        // Rensa tabellen
+        
         ((DefaultTableModel) TBLkund.getModel()).setRowCount(0);
 
-        // Om sökfältet är tomt → visa alla kunder istället
+        
         if (sokText == null || sokText.trim().isEmpty()) {
             visaAllaKunder();
             return;
         }
 
         try {
-            // Använd LIKE direkt i SQL-strängen (InfDB gillar detta bättre)
+            
             String sql = "SELECT KundID, Namn, Epost, Telefon, Adress " +
                          "FROM Kunder " +
                          "WHERE KundID LIKE '%" + sokText.trim() + "%' " +
@@ -96,11 +96,11 @@ public class Kundsida extends javax.swing.JFrame {
                          "OR Telefon LIKE '%" + sokText.trim() + "%' " +
                          "OR Adress LIKE '%" + sokText.trim() + "%'";
 
-            // Här skickar vi INGEN extra parameter
+            
             ArrayList<HashMap<String, String>> resultat = idb.fetchRows(sql);
 
 
-            // Fyll tabellen med resultaten
+            
             for (HashMap<String, String> rad : resultat) {
                 Object[] row = {
                     rad.get("KundID"),
@@ -320,21 +320,66 @@ public class Kundsida extends javax.swing.JFrame {
     }//GEN-LAST:event_TXTregNykundActionPerformed
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-    if (TBLkund.isEditing()) {
+        if (TBLkund.isEditing()) {
         TBLkund.getCellEditor().stopCellEditing();
     }
 
     DefaultTableModel model = (DefaultTableModel) TBLkund.getModel();
 
     try {
+        
         for (int row = 0; row < model.getRowCount(); row++) {
 
+            
             String kundID = model.getValueAt(row, 0).toString();
             String namn = model.getValueAt(row, 1).toString();
             String epost = model.getValueAt(row, 2).toString();
             String telefon = model.getValueAt(row, 3).toString();
             String adress = model.getValueAt(row, 4).toString();
 
+            
+            JTextField tempNamn = new JTextField(namn);
+            JTextField tempEpost = new JTextField(epost);
+            JTextField tempTelefon = new JTextField(telefon);
+            JTextField tempAdress = new JTextField(adress);
+
+            
+
+            // A. Kontrollera att obligatoriska fält inte är tomma
+            if (Validering.arTom(tempNamn, "Namn saknas på rad " + (row + 1))) {
+                TBLkund.setRowSelectionInterval(row, row);
+                return;
+            }
+            if (Validering.arTom(tempEpost, "E-post saknas på rad " + (row + 1))) {
+                TBLkund.setRowSelectionInterval(row, row);
+                return;
+            }
+            if (Validering.arTom(tempAdress, "Adress saknas på rad " + (row + 1))) {
+                TBLkund.setRowSelectionInterval(row, row);
+                return;
+            }
+
+            // B. Kontrollera att namnet innehåller både för- och efternamn (endast bokstäver + mellanslag)
+            if (!Validering.harForOchEfternamn(tempNamn)) {
+                TBLkund.setRowSelectionInterval(row, row);
+                return;
+            }
+
+            // C. Kontrollera e-postens format (@ och punkt)
+            if (!Validering.isEpostGiltig(tempEpost)) {
+                TBLkund.setRowSelectionInterval(row, row);
+                return;
+            }
+
+            // D. Kontrollera telefonnummer (endast om fältet inte är tomt)
+            if (!telefon.trim().isEmpty()) {
+                if (!Validering.arGiltigtTelefonnummer(tempTelefon)) {
+                    TBLkund.setRowSelectionInterval(row, row);
+                    return;
+                }
+            }
+
+            
             String sql = "UPDATE Kunder SET " +
                          "Namn = '" + namn + "', " +
                          "Epost = '" + epost + "', " +
@@ -345,11 +390,12 @@ public class Kundsida extends javax.swing.JFrame {
             idb.update(sql);
         }
 
-        JOptionPane.showMessageDialog(this, "Ändringar sparades!");
+        
+        JOptionPane.showMessageDialog(this, "Alla ändringar har validerats och sparats i databasen!");
 
     } catch (InfException e) {
         JOptionPane.showMessageDialog(this,
-            "Fel vid sparning:\n" + e.getMessage(),
+            "Ett fel uppstod i databasen:\n" + e.getMessage(),
             "Databasfel",
             JOptionPane.ERROR_MESSAGE);
         e.printStackTrace();
@@ -389,7 +435,7 @@ public class Kundsida extends javax.swing.JFrame {
         }
 
         String sql = "DELETE FROM Kunder WHERE KundID = " + kundID;
-        idb.delete(sql);   // om delete inte funkar, använd idb.update(sql);
+        idb.delete(sql);   
 
         JOptionPane.showMessageDialog(this, "Kunden togs bort.");
         visaAllaKunder();

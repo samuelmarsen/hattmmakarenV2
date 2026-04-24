@@ -28,6 +28,19 @@ public class AktuellaOrdrar extends javax.swing.JFrame {
     public AktuellaOrdrar(InfDB idb) {
         this.idb = idb;
         initComponents();
+        
+        // --- NY KOD: Fyll rullistorna med rätt alternativ ---
+        cmbStatus.removeAllItems(); // Rensar bort "Item 1", "Item 2" osv.
+        cmbStatus.addItem("Registrerad");
+        cmbStatus.addItem("Tillverkning");
+        cmbStatus.addItem("Under tillverkning");
+        cmbStatus.addItem("Klar");
+        cmbStatus.addItem("Skickad");
+
+        cmbSnabborder.removeAllItems();
+        cmbSnabborder.addItem("Nej");
+        cmbSnabborder.addItem("Ja");
+        
         this.setExtendedState(javax.swing.JFrame.MAXIMIZED_BOTH);
         
         fyllOrderTabell();
@@ -54,91 +67,120 @@ public class AktuellaOrdrar extends javax.swing.JFrame {
             model.setRowCount(0);
             
             if(allaOrdrar != null) {
+                // Loopen måste börja HÄR, så att vi går igenom en rad i taget
                 for(HashMap<String, String> rad : allaOrdrar) {
-                model.addRow(new Object[]{
-                    rad.get("OrderID"),
-                    rad.get("KundID"),
-                    rad.get("OrderDatum"),
-                    rad.get("Status"),
-                    rad.get("ArSnabborder"),
-                    rad.get("FraktAdress"),
-                    rad.get("TotalPrisInclMoms")
-                });
+                    
+                    // 1. Hämta värdet för den aktuella raden
+                    String snabbVarde = rad.get("ArSnabborder");
+            
+                    // 2. Skapa en textvariabel som översätter värdet
+                    String snabbText = "Nej"; 
+                    if (snabbVarde != null && (snabbVarde.equals("1") || snabbVarde.equalsIgnoreCase("true"))) {
+                        snabbText = "Ja";
+                    }
+                    
+                    // 3. Lägg till raden i tabellen
+                    model.addRow(new Object[]{
+                        rad.get("OrderID"),
+                        rad.get("KundID"),
+                        rad.get("OrderDatum"),
+                        rad.get("Status"),
+                        snabbText, // <-- Här skickar vi in "Ja" eller "Nej"
+                        rad.get("FraktAdress"),
+                        rad.get("TotalPrisInclMoms")
+                    });
+                }
             }
-            }
-        }catch(InfException ex) {
+        } catch(InfException ex) {
             JOptionPane.showMessageDialog(null, "Kunde inte hämta ordrar: "+ ex.getMessage());
         }
         
-        
-jtAktuellaOrdrar.setAutoResizeMode(javax.swing.JTable.AUTO_RESIZE_ALL_COLUMNS);
-
-
-
-jtAktuellaOrdrar.getColumnModel().getColumn(0).setPreferredWidth(100);  
-jtAktuellaOrdrar.getColumnModel().getColumn(1).setPreferredWidth(100);  
-jtAktuellaOrdrar.getColumnModel().getColumn(2).setPreferredWidth(250); 
-jtAktuellaOrdrar.getColumnModel().getColumn(3).setPreferredWidth(200);
-jtAktuellaOrdrar.getColumnModel().getColumn(4).setPreferredWidth(150);  
-jtAktuellaOrdrar.getColumnModel().getColumn(5).setPreferredWidth(300); 
-jtAktuellaOrdrar.getColumnModel().getColumn(6).setPreferredWidth(150); 
+        // --- Denna del ska bara finnas EN gång i slutet av metoden ---
+        jtAktuellaOrdrar.setAutoResizeMode(javax.swing.JTable.AUTO_RESIZE_ALL_COLUMNS);
+        jtAktuellaOrdrar.getColumnModel().getColumn(0).setPreferredWidth(100);  
+        jtAktuellaOrdrar.getColumnModel().getColumn(1).setPreferredWidth(100);  
+        jtAktuellaOrdrar.getColumnModel().getColumn(2).setPreferredWidth(250); 
+        jtAktuellaOrdrar.getColumnModel().getColumn(3).setPreferredWidth(200);
+        jtAktuellaOrdrar.getColumnModel().getColumn(4).setPreferredWidth(150);  
+        jtAktuellaOrdrar.getColumnModel().getColumn(5).setPreferredWidth(300); 
+        jtAktuellaOrdrar.getColumnModel().getColumn(6).setPreferredWidth(150);
     }
-    
     private void visaOrderInnehall() {
-    int valdRad = jtAktuellaOrdrar.getSelectedRow();
+        int valdRad = jtAktuellaOrdrar.getSelectedRow();
 
-    if (valdRad == -1) {
-        return;
-    }
-
-    try {
-        // Hämta OrderID från första kolumnen i tabellen
-        String orderID = jtAktuellaOrdrar.getValueAt(valdRad, 0).toString();
-
-        String sql =  "SELECT H.ModellNamn, H.Farg, H.Tyg, H.Storlek, O.Antal " + 
-                "FROM Orderrader O " + "JOIN Hattmodeller H ON O.ModellID = H.ModellID " +                      
-                "WHERE O.OrderID = " + orderID;
- 
-
-        ArrayList<HashMap<String, String>> rader = idb.fetchRows(sql);
-
-        if (rader == null || rader.isEmpty()) {
-            JOptionPane.showMessageDialog(this,
-                    "Den valda ordern innehåller inga orderrader.",
-                    "Orderinnehåll",
-                    JOptionPane.INFORMATION_MESSAGE);
+        if (valdRad == -1) {
             return;
         }
 
-        // Skapa kolumner för popup-tabellen
-        String[] kolumner = {"Modell", "Färg", "Tyg", "Storlek", "Antal"};
-        DefaultTableModel model = new DefaultTableModel(kolumner, 0);
+        try {
+            // Hämta OrderID
+            String orderID = jtAktuellaOrdrar.getValueAt(valdRad, 0).toString();
 
-        for (HashMap<String, String> rad : rader) {
-            model.addRow(new Object[]{
-                rad.get("ModellNamn"),
-                rad.get("Farg"),
-                rad.get("Tyg"),
-                rad.get("Storlek"),
-                rad.get("Antal")
-            
-            });
+            // --- FYLL DE FASTA FÄLTEN FÖR REDIGERING ---
+            txtAdress.setText(String.valueOf(jtAktuellaOrdrar.getValueAt(valdRad, 5)));
+            txtTotalPris.setText(String.valueOf(jtAktuellaOrdrar.getValueAt(valdRad, 6)));
+
+            // Fyll rullgardinslistorna (ComboBox)
+            cmbStatus.setSelectedItem(String.valueOf(jtAktuellaOrdrar.getValueAt(valdRad, 3)));
+            cmbSnabborder.setSelectedItem(String.valueOf(jtAktuellaOrdrar.getValueAt(valdRad, 4)));
+
+            // Fyll Datum-väljaren
+            try {
+                String datumStr = String.valueOf(jtAktuellaOrdrar.getValueAt(valdRad, 2));
+                // JDateChooser vill ha ett riktigt Date-objekt, inte en sträng
+                java.util.Date date = new java.text.SimpleDateFormat("yyyy-MM-dd").parse(datumStr);
+                jDOrderdatum.setDate(date); 
+            } catch (Exception e) {
+                System.out.println("Kunde inte tolka datumet.");
+            }
+            // -----------------------------------------------
+
+            // --- Koden nedan (för att fylla textrutan till höger) är oförändrad ---
+            String sqlRader =  "SELECT H.ModellNamn, O.Farg, O.Tyg, O.Storlek, O.Antal " + 
+                               "FROM Orderrader O " + "JOIN Hattmodeller H ON O.ModellID = H.ModellID " +                      
+                               "WHERE O.OrderID = " + orderID;
+            ArrayList<HashMap<String, String>> rader = idb.fetchRows(sqlRader);
+
+            String sqlMedarbetare = "SELECT DISTINCT a.Namn " +
+                                    "FROM Arbetspass ap " +
+                                    "JOIN Anstallda a ON ap.AnstalldID = a.AnstalldID " +
+                                    "WHERE ap.OrderID = " + orderID;
+            ArrayList<HashMap<String, String>> medarbetare = idb.fetchRows(sqlMedarbetare);
+
+            StringBuilder sb = new StringBuilder();
+            sb.append("ORDERDETALJER FÖR ORDER ").append(orderID).append("\n");
+            sb.append("=====================================\n\n");
+
+            if (rader != null && !rader.isEmpty()) {
+                for (HashMap<String, String> rad : rader) {
+                    sb.append("Modell: ").append(rad.get("ModellNamn")).append("\n");
+                    sb.append("Färg: ").append(rad.get("Farg")).append("\n");
+                    sb.append("Tyg: ").append(rad.get("Tyg")).append("\n");
+                    sb.append("Storlek: ").append(rad.get("Storlek")).append("\n");
+                    sb.append("Antal: ").append(rad.get("Antal")).append(" st\n");
+                    sb.append("-------------------------------------\n");
+                }
+            } else {
+                sb.append("Inga orderrader finns registrerade.\n\n");
+            }
+
+            sb.append("\nMEDARBETARE SOM ARBETAT PÅ ORDERN:\n");
+            if (medarbetare != null && !medarbetare.isEmpty()) {
+                for (HashMap<String, String> person : medarbetare) {
+                    sb.append("- ").append(person.get("Namn")).append("\n");
+                    sb.append("=====================================\n");
+                }
+            } else {
+                sb.append("Ingen medarbetare har loggat arbetspass på denna order ännu.\n");
+            }
+
+            txtOrderDetaljer.setText(sb.toString());
+            txtOrderDetaljer.setCaretPosition(0);
+
+        } catch (InfException ex) {
+            JOptionPane.showMessageDialog(this, "Fel vid hämtning av orderinnehåll: " + ex.getMessage());
         }
-
-        JTable innehallsTabell = new JTable(model);
-        JScrollPane scrollPane = new JScrollPane(innehallsTabell);
-        scrollPane.setPreferredSize(new java.awt.Dimension(700, 200));
-
-        JOptionPane.showMessageDialog(this,
-                scrollPane,
-                "Innehåll i order " + orderID,
-                JOptionPane.INFORMATION_MESSAGE);
-
-    } catch (InfException ex) {
-        JOptionPane.showMessageDialog(this,
-                "Fel vid hämtning av orderinnehåll: " + ex.getMessage());
     }
-}
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -150,22 +192,26 @@ jtAktuellaOrdrar.getColumnModel().getColumn(6).setPreferredWidth(150);
     private void initComponents() {
         java.awt.GridBagConstraints gridBagConstraints;
 
-        btnTillbaka = new javax.swing.JButton();
-        btnRedigeraOrder = new javax.swing.JButton();
         jPanel1 = new javax.swing.JPanel();
         jScrollPane2 = new javax.swing.JScrollPane();
         jtAktuellaOrdrar = new javax.swing.JTable();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        txtOrderDetaljer = new javax.swing.JTextArea();
+        txtTotalPris = new javax.swing.JTextField();
+        jDOrderdatum = new com.toedter.calendar.JDateChooser();
+        cmbStatus = new javax.swing.JComboBox<>();
+        cmbSnabborder = new javax.swing.JComboBox<>();
+        txtAdress = new javax.swing.JTextField();
+        btnSpara = new javax.swing.JButton();
+        jLabel1 = new javax.swing.JLabel();
+        jLabel2 = new javax.swing.JLabel();
+        jLabel3 = new javax.swing.JLabel();
+        jLabel4 = new javax.swing.JLabel();
+        jLabel5 = new javax.swing.JLabel();
+        btnTillbaka = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         getContentPane().setLayout(new java.awt.GridBagLayout());
-
-        btnTillbaka.setText("Tillbaka");
-        btnTillbaka.addActionListener(this::btnTillbakaActionPerformed);
-        getContentPane().add(btnTillbaka, new java.awt.GridBagConstraints());
-
-        btnRedigeraOrder.setText("Redigera Order");
-        btnRedigeraOrder.addActionListener(this::btnRedigeraOrderActionPerformed);
-        getContentPane().add(btnRedigeraOrder, new java.awt.GridBagConstraints());
 
         jtAktuellaOrdrar.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -180,20 +226,101 @@ jtAktuellaOrdrar.getColumnModel().getColumn(6).setPreferredWidth(150);
         ));
         jScrollPane2.setViewportView(jtAktuellaOrdrar);
 
+        txtOrderDetaljer.setEditable(false);
+        txtOrderDetaljer.setColumns(20);
+        txtOrderDetaljer.setRows(5);
+        jScrollPane1.setViewportView(txtOrderDetaljer);
+
+        cmbStatus.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+
+        cmbSnabborder.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+
+        txtAdress.addActionListener(this::txtAdressActionPerformed);
+
+        btnSpara.setText("Spara");
+        btnSpara.addActionListener(this::btnSparaActionPerformed);
+
+        jLabel1.setText("Datum:");
+
+        jLabel2.setText("Status:");
+
+        jLabel3.setText("Är snabborder:");
+
+        jLabel4.setText("Fraktadress:");
+
+        jLabel5.setText("Total pris ink moms:");
+
+        btnTillbaka.setText("Tillbaka");
+        btnTillbaka.addActionListener(this::btnTillbakaActionPerformed);
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(55, 55, 55)
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 883, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(218, Short.MAX_VALUE))
+                .addContainerGap()
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 819, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, 78, Short.MAX_VALUE)
+                                .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                            .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 95, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 87, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel5))
+                        .addGap(71, 71, 71)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(cmbStatus, javax.swing.GroupLayout.PREFERRED_SIZE, 223, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jDOrderdatum, javax.swing.GroupLayout.PREFERRED_SIZE, 124, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(cmbSnabborder, javax.swing.GroupLayout.PREFERRED_SIZE, 223, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(txtAdress, javax.swing.GroupLayout.PREFERRED_SIZE, 223, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(txtTotalPris, javax.swing.GroupLayout.PREFERRED_SIZE, 223, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 436, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap())
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(btnSpara)
+                    .addComponent(btnTillbaka))
+                .addGap(0, 1813, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 467, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 51, Short.MAX_VALUE))
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel1Layout.createSequentialGroup()
+                        .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 257, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 49, Short.MAX_VALUE)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jDOrderdatum, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel1, javax.swing.GroupLayout.Alignment.TRAILING))
+                        .addGap(18, 18, 18)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                            .addComponent(cmbStatus, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                            .addComponent(jLabel2, javax.swing.GroupLayout.Alignment.TRAILING))
+                                        .addGap(18, 18, 18)
+                                        .addComponent(cmbSnabborder, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                    .addComponent(jLabel3, javax.swing.GroupLayout.Alignment.TRAILING))
+                                .addGap(18, 18, 18)
+                                .addComponent(txtAdress, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(jLabel4, javax.swing.GroupLayout.Alignment.TRAILING))
+                        .addGap(18, 18, 18)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(txtTotalPris, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel5)))
+                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel1Layout.createSequentialGroup()
+                        .addContainerGap()
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 467, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addGap(24, 24, 24)
+                .addComponent(btnSpara)
+                .addGap(152, 152, 152)
+                .addComponent(btnTillbaka)
+                .addGap(341, 341, 341))
         );
 
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -213,60 +340,62 @@ jtAktuellaOrdrar.getColumnModel().getColumn(6).setPreferredWidth(150);
     this.dispose();        // TODO add your handling code here:
     }//GEN-LAST:event_btnTillbakaActionPerformed
 
-    private void btnRedigeraOrderActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRedigeraOrderActionPerformed
-int radIndex = jtAktuellaOrdrar.getSelectedRow();
+    private void btnSparaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSparaActionPerformed
+                                      
+        int radIndex = jtAktuellaOrdrar.getSelectedRow();
     
-    if (radIndex == -1) {
-        JOptionPane.showMessageDialog(this, "Vänligen välj en order i tabellen först!");
-        return;
-    }
+        if (radIndex == -1) {
+            JOptionPane.showMessageDialog(this, "Vänligen välj en order i tabellen att redigera!");
+            return;
+        }
 
-    try {
-        // Hämta nuvarande värden
-        String orderID = String.valueOf(jtAktuellaOrdrar.getValueAt(radIndex, 0));
-        
-        //Skapa textfält för alla värden och fyll dem med nuvarande data
-        javax.swing.JTextField txtDatum = new javax.swing.JTextField(String.valueOf(jtAktuellaOrdrar.getValueAt(radIndex, 2)));
-        javax.swing.JTextField txtStatus = new javax.swing.JTextField(String.valueOf(jtAktuellaOrdrar.getValueAt(radIndex, 3)));
-        javax.swing.JTextField txtSnabb = new javax.swing.JTextField(String.valueOf(jtAktuellaOrdrar.getValueAt(radIndex, 4)));
-        javax.swing.JTextField txtAdress = new javax.swing.JTextField(String.valueOf(jtAktuellaOrdrar.getValueAt(radIndex, 5)));
-        javax.swing.JTextField txtPris = new javax.swing.JTextField(String.valueOf(jtAktuellaOrdrar.getValueAt(radIndex, 6)));
+        try {
+            // Hämta OrderID från den valda raden
+            String orderID = String.valueOf(jtAktuellaOrdrar.getValueAt(radIndex, 0));
+            
+            // 1. Läs av värden från dina fasta komponenter
+            String inmatadAdress = txtAdress.getText();
+            String inmatatPris = txtTotalPris.getText();
+            String inmatadStatus = cmbStatus.getSelectedItem().toString();
+            String inmatadSnabb = cmbSnabborder.getSelectedItem().toString();
 
-        // Designa panelen som ska visas i rutan
-        Object[] message = {
-            "OrderDatum (YYYY-MM-DD HH:MM:SS):", txtDatum,
-            "Status:", txtStatus,
-            "Snabborder (1/0):", txtSnabb,
-            "FraktAdress:", txtAdress,
-            "TotalPris inkl moms:", txtPris
-        };
+            // Översätt texten "Ja"/"Nej" tillbaka till databasens "1" eller "0"
+            String snabbDBVarde = "0"; 
+            if (inmatadSnabb.equalsIgnoreCase("Ja")) {
+                snabbDBVarde = "1";
+            }
+            
+            // Läs av och formatera datumet från JDateChooser
+            java.text.SimpleDateFormat sdf = new java.text.SimpleDateFormat("yyyy-MM-dd");
+            String inmatatDatum = sdf.format(jDOrderdatum.getDate());
 
-       
-        int option = JOptionPane.showConfirmDialog(this, message, "Redigera Order " + orderID, JOptionPane.OK_CANCEL_OPTION);
-
-        if (option == JOptionPane.OK_OPTION) {
-            // 5. Bygg SQL-frågan med de nya värdena från fälten
+            // 2. Skicka värdena till databasen
             String sql = "UPDATE Ordrar SET "
-                       + "FraktAdress = '" + txtAdress.getText() + "', "
-                       + "Status = '" + txtStatus.getText() + "', "
-                       + "OrderDatum = '" + txtDatum.getText() + "', "
-                       + "ArSnabborder = " + txtSnabb.getText() + ", "
-                       + "TotalPrisInclMoms = " + txtPris.getText() + " "
+                       + "FraktAdress = '" + inmatadAdress + "', "
+                       + "Status = '" + inmatadStatus + "', "
+                       + "OrderDatum = '" + inmatatDatum + "', "
+                       + "ArSnabborder = " + snabbDBVarde + ", " 
+                       + "TotalPrisInclMoms = " + inmatatPris + " "
                        + "WHERE OrderID = " + orderID;
             
             idb.update(sql);
             
-            // Uppdatera och bekräfta
+            // 3. Uppdatera tabellen i bakgrunden och ge feedback
             fyllOrderTabell(); 
             JOptionPane.showMessageDialog(this, "Order " + orderID + " har uppdaterats!");
-        }
-        
-    } catch (InfException ex) {
-        JOptionPane.showMessageDialog(this, "Databastillgång misslyckades: " + ex.getMessage());
-    } catch (Exception ex) {
-        JOptionPane.showMessageDialog(this, "Ett fel uppstod: " + ex.getMessage());
-    }
-    }//GEN-LAST:event_btnRedigeraOrderActionPerformed
+            
+        } catch (InfException ex) {
+            JOptionPane.showMessageDialog(this, "Databastillgång misslyckades: " + ex.getMessage());
+        } catch (NullPointerException npe) {
+            JOptionPane.showMessageDialog(this, "Vänligen fyll i ett korrekt datum.");
+        } catch (Exception ex) {
+            JOptionPane.showMessageDialog(this, "Ett fel uppstod: " + ex.getMessage());
+        }      // TODO add your handling code here:
+    }//GEN-LAST:event_btnSparaActionPerformed
+
+    private void txtAdressActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtAdressActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtAdressActionPerformed
 
     /**
      * @param args the command line arguments
@@ -294,10 +423,22 @@ int radIndex = jtAktuellaOrdrar.getSelectedRow();
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton btnRedigeraOrder;
+    private javax.swing.JButton btnSpara;
     private javax.swing.JButton btnTillbaka;
+    private javax.swing.JComboBox<String> cmbSnabborder;
+    private javax.swing.JComboBox<String> cmbStatus;
+    private com.toedter.calendar.JDateChooser jDOrderdatum;
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel5;
     private javax.swing.JPanel jPanel1;
+    private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JTable jtAktuellaOrdrar;
+    private javax.swing.JTextField txtAdress;
+    private javax.swing.JTextArea txtOrderDetaljer;
+    private javax.swing.JTextField txtTotalPris;
     // End of variables declaration//GEN-END:variables
 }
