@@ -514,78 +514,104 @@ jTable1.getColumnModel().getColumn(1).setCellRenderer(new javax.swing.table.Defa
 
 
     private void btnPaborjaOrderActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPaborjaOrderActionPerformed
-        try {
+                                              
+    try {
+        String kundID = txtKundId.getText();
+        String fraktAdress = txtFraktadress.getText();
+        String datum = txtDatum.getText();
 
-            String kundID = txtKundId.getText();
-            String fraktAdress = txtFraktadress.getText();
-            String datum = txtDatum.getText();
-            // Kontrollera att en kund är vald
-            if (kundID.isEmpty()) {
-                JOptionPane.showMessageDialog(this, "Välj en kund först!");
-                return;
+        if (kundID.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Välj en kund först!");
+            return;
+        }
+
+        int arSnabborder = 0;
+        DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
+        if (model.getRowCount() == 0) {
+            JOptionPane.showMessageDialog(this, "Ordern är tom. Lägg till hattar först!");
+            return;
+        }
+
+        for (int i = 0; i < model.getRowCount(); i++) {
+            if (model.getValueAt(i, 5).toString().equals("Ja")) {
+                arSnabborder = 1;
+                break;
+            }
+        }
+
+        String totalPrisStr = txtPrisExklMoms.getText().replace(",", ".");
+        double totalPrisInklMoms = Double.parseDouble(totalPrisStr) * 1.25;
+
+        String orderSql = "INSERT INTO Ordrar (KundID, OrderDatum, Status, ArSnabborder, FraktAdress, TotalPrisInclMoms, BildSokvag, MaterialBestallt) "
+                + "VALUES (" + kundID + ", '" + datum + "', 'Registrerad', " + arSnabborder + ", '" + fraktAdress + "', " + totalPrisInklMoms + ", '" + valdBildSokvag + "', 0)";
+        idb.insert(orderSql);
+
+        String nyttOrderID = idb.fetchSingle("SELECT MAX(OrderID) FROM Ordrar");
+
+        for (int i = 0; i < model.getRowCount(); i++) {
+            String hattNamn = model.getValueAt(i, 0).toString();
+            String farg = model.getValueAt(i, 1).toString();
+            String tyg = model.getValueAt(i, 2).toString();
+            String storlek = model.getValueAt(i, 3).toString();
+            int antalHattar = Integer.parseInt(model.getValueAt(i, 4).toString());
+            String dekoration = model.getValueAt(i, 6).toString();
+
+            String komplettAnpassning = "Färg: " + farg + ", Tyg: " + tyg + ", Storlek: " + storlek;
+            if (!dekoration.isEmpty() && !dekoration.equalsIgnoreCase("Ingen")) {
+                komplettAnpassning += " | EXTRA: " + dekoration;
             }
 
-            int arSnabborder = 0;
-            DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
-            if (model.getRowCount() == 0) {
-                JOptionPane.showMessageDialog(this, "Ordern är tom. Lägg till hattar först!");
-                return;
-            }
-
-            for (int i = 0; i < model.getRowCount(); i++) {
-                if (model.getValueAt(i, 5).toString().equals("Ja")) {
-                    arSnabborder = 1;
-                    break;
-                }
-            }
-
-            String totalPrisStr = txtPrisExklMoms.getText().replace(",", ".");
-            double totalPrisInklMoms = Double.parseDouble(totalPrisStr) * 1.25;
-
-            String orderSql = "INSERT INTO Ordrar (KundID, OrderDatum, Status, ArSnabborder, FraktAdress, TotalPrisInclMoms, BildSokvag) "
-                    + "VALUES (" + kundID + ", '" + datum + "', 'Registrerad', " + arSnabborder + ", '" + fraktAdress + "', " + totalPrisInklMoms + ", '" + valdBildSokvag + "')";
-            idb.insert(orderSql);
-
-            String nyttOrderID = idb.fetchSingle("SELECT MAX(OrderID) FROM Ordrar");
-
-            for (int i = 0; i < model.getRowCount(); i++) {
-                String hattNamn = model.getValueAt(i, 0).toString();
-                String farg = model.getValueAt(i, 1).toString();
-                String tyg = model.getValueAt(i, 2).toString();
-                String storlek = model.getValueAt(i, 3).toString();
-                String antal = model.getValueAt(i, 4).toString();
-
-                String dekoration = model.getValueAt(i, 6).toString();
-
-                String komplettAnpassning = "Färg: " + farg + ", Tyg: " + tyg + ", Storlek: " + storlek;
-                if (!dekoration.isEmpty()) {
-                    komplettAnpassning += " | EXTRA: " + dekoration;
-                }
-
+            try {
                 String modellID = idb.fetchSingle("SELECT ModellID FROM Hattmodeller WHERE ModellNamn = '" + hattNamn + "'");
 
                 String radSql = "INSERT INTO Orderrader (OrderID, ModellID, Antal, Anpassningstext, Farg, Tyg, Storlek) "
-                  + "VALUES (" + nyttOrderID + ", " + modellID + ", " + antal + ", '" + komplettAnpassning + "', '" 
-                  + farg + "', '" + tyg + "', '" + storlek + "')";
+                        + "VALUES (" + nyttOrderID + ", " + modellID + ", " + antalHattar + ", '" + komplettAnpassning + "', '"
+                        + farg + "', '" + tyg + "', '" + storlek + "')";
                 idb.insert(radSql);
+
+                
+                idb.update("UPDATE Material SET LagerSaldo = LagerSaldo - " + antalHattar + " WHERE Namn = '" + tyg + "'");
+
+                
+                if (dekoration != null && !dekoration.isEmpty() && !dekoration.equalsIgnoreCase("Ingen")) {
+                    String rentDekorNamn = dekoration;
+                    int antalDekorPerHatt = 1; 
+
+                    if (dekoration.contains("x ")) {
+                        try {
+                            
+                            String antalStr = dekoration.substring(0, dekoration.indexOf("x")).trim();
+                            antalDekorPerHatt = Integer.parseInt(antalStr);
+                            
+                            rentDekorNamn = dekoration.substring(dekoration.indexOf(" ") + 1).trim();
+                        } catch (Exception e) {
+                            antalDekorPerHatt = 1;
+                        }
+                    }
+                    
+                    
+                    int totalMinskningDekor = antalHattar * antalDekorPerHatt;
+                    
+                    idb.update("UPDATE Material SET LagerSaldo = LagerSaldo - " + totalMinskningDekor + " WHERE Namn = '" + rentDekorNamn + "'");
+                }
+
+            } catch (InfException ex) {
+                JOptionPane.showMessageDialog(null, "Fel vid rad " + (i+1) + ": " + ex.getMessage());
             }
-
-            JOptionPane.showMessageDialog(this, "Order #" + nyttOrderID + " har registrerats!");
-
-            model.setRowCount(0);
-            totaltPris = 0;
-            txtPrisExklMoms.setText("0.00");
-
-            valdBildSokvag = "";
-            lblBildStatus.setIcon(null);
-            lblBildStatus.setText("");
-            lblBildStatus.repaint();
-
-        } catch (InfException ex) {
-            JOptionPane.showMessageDialog(this, "Databastillgång misslyckades: " + ex.getMessage());
-        } catch (Exception ex) {
-            JOptionPane.showMessageDialog(this, "Ett fel uppstod: " + ex.getMessage());
         }
+
+        JOptionPane.showMessageDialog(this, "Order #" + nyttOrderID + " har registrerats!");
+        model.setRowCount(0);
+        txtPrisExklMoms.setText("0.00");
+        lblBildStatus.setIcon(null);
+
+    } catch (InfException ex) {
+        JOptionPane.showMessageDialog(this, "Databastillgång misslyckades: " + ex.getMessage());
+    } catch (Exception ex) {
+        JOptionPane.showMessageDialog(this, "Ett fel uppstod: " + ex.getMessage());
+    }
+
+
     }//GEN-LAST:event_btnPaborjaOrderActionPerformed
 
     private void txtKundIdActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtKundIdActionPerformed
@@ -775,14 +801,14 @@ jTable1.getColumnModel().getColumn(1).setCellRenderer(new javax.swing.table.Defa
             String valtMat = cmbDekoration.getSelectedItem().toString();
             int antal = Integer.parseInt(txtDekorationAntal.getText().trim());
 
-            // Hämta priset för materialet från databasen
+            
             String prisStr = idb.fetchSingle("SELECT EnhetsPris FROM Material WHERE Namn = '" + valtMat + "'");
             double styckPris = Double.parseDouble(prisStr);
 
-            // Addera till den temporära potten
+            
             extraKostnadMaterial += (styckPris * antal);
 
-            // Visa i loggen för Otto
+            
             txtAreaSpecial.append(antal + "x " + valtMat + "\n");
             txtDekorationAntal.setText("");
         } catch (Exception e) {
@@ -802,18 +828,18 @@ jTable1.getColumnModel().getColumn(1).setCellRenderer(new javax.swing.table.Defa
             java.io.File fil = fc.getSelectedFile();
             valdBildSokvag = fil.getAbsolutePath();
 
-            // 1. Skapa en ImageIcon från filen
+            
             javax.swing.ImageIcon originalIkon = new javax.swing.ImageIcon(valdBildSokvag);
 
-            // 2. Skala om bilden så den passar i din label (t.ex. 150x150 pixlar)
+            
             java.awt.Image bild = originalIkon.getImage();
             java.awt.Image skaladBild = bild.getScaledInstance(150, 150, java.awt.Image.SCALE_SMOOTH);
 
-            // 3. Skapa en ny ikon av den skalade bilden och sätt på labeln
+            
             javax.swing.ImageIcon färdigIkon = new javax.swing.ImageIcon(skaladBild);
             lblBildStatus.setIcon(färdigIkon);
 
-            // Valfritt: Ta bort texten om du bara vill se bilden
+            
             lblBildStatus.setText("");
         }      // TODO add your handling code here:
     }//GEN-LAST:event_btnBifogaReferensBildActionPerformed
