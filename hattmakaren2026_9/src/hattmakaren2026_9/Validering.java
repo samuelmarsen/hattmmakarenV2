@@ -41,7 +41,7 @@ public class Validering {
             Double.parseDouble(text);
             return true;
         } catch (NumberFormatException e) {
-            JOptionPane.showMessageDialog(null, "Ogiltigt pris. Använd siffror (t.ex. 1200.50).");
+            JOptionPane.showMessageDialog(null, "Ogiltigt pris. Använd siffror.");
             return false;
         }
     }
@@ -120,4 +120,18 @@ public static boolean harForOchEfternamn(JTextField falt) {
     }
     return true;
 }
-}
+
+public static boolean arGiltigDecimal(JTextField falt) {
+String text = falt.getText().trim();
+    if (text.contains(",")) {
+        JOptionPane.showMessageDialog(null, "Använd punkt (.) istället för komma (,).");
+        return false; // VIKTIGT: Denna returnerar false till knappen
+    }
+    try {
+        Double.parseDouble(text);
+        return true; // OK!
+    } catch (NumberFormatException e) {
+        JOptionPane.showMessageDialog(null, "Ange siffror (t.ex. 10.5).");
+        return false; // Fel format!
+    }
+}}
