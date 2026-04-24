@@ -15,6 +15,7 @@ import java.awt.Component;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.JTextField;
+import com.toedter.calendar.JDateChooser;
 
 
 /**
@@ -31,10 +32,165 @@ public class SchemaVy extends javax.swing.JFrame {
     public SchemaVy(InfDB idb) {
         initComponents();
         this.idb = idb;
+        visaStartVecka();
+        fyllPlaneraComboboxar();
+        jDateChooser1.setDate(new java.util.Date());
         this.setExtendedState(javax.swing.JFrame.MAXIMIZED_BOTH);
         jtSchema.setDefaultRenderer(Object.class, new SchemaFargsattare());
     }
 
+    private void visaStartVecka() {
+    cbVecka.setSelectedIndex(0);
+}
+    private ArrayList<String> passIDLista = new ArrayList<>();
+    
+    private void fyllPlaneraComboboxar() {
+    try {
+        cmbValjAnstalld.removeAllItems();
+        cmbValjOrder.removeAllItems();
+
+        ArrayList<String> anstallda = idb.fetchColumn("SELECT Namn FROM Anstallda");
+        ArrayList<String> ordrar = idb.fetchColumn("SELECT OrderID FROM Ordrar");
+
+        if (anstallda != null) {
+            for (String namn : anstallda) {
+                cmbValjAnstalld.addItem(namn);
+            }
+        }
+
+        cmbValjOrder.addItem("Inget (Allmänt arbete)");
+
+        if (ordrar != null) {
+            for (String orderID : ordrar) {
+                cmbValjOrder.addItem(orderID);
+            }
+        }
+
+    } catch (InfException e) {
+        JOptionPane.showMessageDialog(this, "Kunde inte ladda listor: " + e.getMessage());
+    }
+}
+    
+    private void sparaPlaneratPass() {
+    try {
+        if (cmbValjAnstalld.getSelectedItem() == null) {
+            JOptionPane.showMessageDialog(this, "Välj en anställd!");
+            return;
+        }
+
+        if (cmbValjOrder.getSelectedItem() == null) {
+            JOptionPane.showMessageDialog(this, "Välj en order!");
+            return;
+        }
+
+        if (jDateChooser1.getDate() == null) {
+            JOptionPane.showMessageDialog(this, "Välj ett datum!");
+            return;
+        }
+
+        if (Validering.arTom(txtAntalTimmar, "Timmar saknas!") ||
+            Validering.arTom(txtBeskrivning, "Beskrivning saknas!")) {
+            return;
+        }
+
+        if (!Validering.arDecimal(txtAntalTimmar) || 
+            !Validering.arPositivtTal(txtAntalTimmar)) {
+            return;
+        }
+
+        String valtNamn = cmbValjAnstalld.getSelectedItem().toString();
+
+        String anstID = idb.fetchSingle(
+            "SELECT AnstalldID FROM Anstallda WHERE Namn = '" + valtNamn + "'"
+        );
+
+        String valtOrderID = cmbValjOrder.getSelectedItem().toString();
+        String orderValue = valtOrderID.contains("Inget") ? "NULL" : valtOrderID;
+
+        java.text.SimpleDateFormat sdf = new java.text.SimpleDateFormat("yyyy-MM-dd");
+        String datum = sdf.format(jDateChooser1.getDate());
+
+        String aktivitet = txtBeskrivning.getText().replace("'", "''");
+
+        String sql = "INSERT INTO Arbetspass (AnstalldID, OrderID, Datum, Timmar, Aktivitet) VALUES ("
+                + anstID + ", "
+                + orderValue + ", '"
+                + datum + "', "
+                + txtAntalTimmar.getText().replace(',', '.') + ", '"
+                + aktivitet + "')";
+
+        idb.insert(sql);
+
+        visaValdVecka();
+
+        JOptionPane.showMessageDialog(this, "Passet har sparats!");
+
+        txtAntalTimmar.setText("");
+        txtBeskrivning.setText("");
+
+    } catch (Exception e) {
+        JOptionPane.showMessageDialog(this, "Kunde inte spara passet: " + e.getMessage());
+    }
+}
+    
+    private void visaValdVecka() {
+    String valdVecka = cbVecka.getSelectedItem().toString();
+
+    String startDatum = "";
+    String slutDatum = "";
+
+    if (valdVecka.contains("Vecka 16")) {
+        startDatum = "2026-04-13";
+        slutDatum = "2026-04-17";
+    } else if (valdVecka.contains("Vecka 17")) {
+        startDatum = "2026-04-20";
+        slutDatum = "2026-04-24";
+    }
+
+    fyllSchemaTabell(startDatum, slutDatum);
+}
+    
+    private void fyllPassTabellForValdPerson() {
+    int valdRad = jtSchema.getSelectedRow();
+
+    if (valdRad == -1) {
+        return;
+    }
+
+    try {
+        String anstalldNamn = jtSchema.getValueAt(valdRad, 0).toString();
+
+        String anstalldID = idb.fetchSingle(
+            "SELECT AnstalldID FROM Anstallda WHERE Namn = '" + anstalldNamn + "'"
+        );
+
+        String sql = "SELECT PassID, Datum, Aktivitet, Timmar FROM Arbetspass "
+                   + "WHERE AnstalldID = " + anstalldID + " "
+                   + "ORDER BY Datum";
+
+        ArrayList<HashMap<String, String>> passLista = idb.fetchRows(sql);
+
+        DefaultTableModel model = (DefaultTableModel) jtPassLista.getModel();
+            model.setRowCount(0);
+            passIDLista.clear();
+
+    if (passLista != null) {
+        for (HashMap<String, String> pass : passLista) {
+         passIDLista.add(pass.get("PassID"));
+
+        model.addRow(new Object[]{
+             pass.get("Datum"),
+             pass.get("Aktivitet"),
+             pass.get("Timmar")
+        });
+    }
+}
+    } catch (Exception e) {
+        JOptionPane.showMessageDialog(this, "Kunde inte hämta pass: " + e.getMessage());
+    }
+}
+    
+   
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -46,10 +202,31 @@ public class SchemaVy extends javax.swing.JFrame {
 
         jScrollPane1 = new javax.swing.JScrollPane();
         jtSchema = new javax.swing.JTable();
-        btnVisaSchema = new javax.swing.JButton();
-        btnPlaneraPass = new javax.swing.JButton();
         btnTillbakaKnapp = new javax.swing.JButton();
-        btnRedigeraPass = new javax.swing.JButton();
+        cbVecka = new javax.swing.JComboBox<>();
+        lblVisaSchema = new javax.swing.JLabel();
+        txtAntalTimmar = new javax.swing.JTextField();
+        txtBeskrivning = new javax.swing.JTextField();
+        jDateChooser1 = new com.toedter.calendar.JDateChooser();
+        cmbValjOrder = new javax.swing.JComboBox<>();
+        cmbValjAnstalld = new javax.swing.JComboBox<>();
+        lblPlaneraPass = new javax.swing.JLabel();
+        lblDatum = new javax.swing.JLabel();
+        lblAntalTimmar = new javax.swing.JLabel();
+        jLabel1 = new javax.swing.JLabel();
+        lblVäljOrder = new javax.swing.JLabel();
+        lblAnstalldForPass = new javax.swing.JLabel();
+        btnSparaPass = new javax.swing.JButton();
+        jScrollPane2 = new javax.swing.JScrollPane();
+        jtPassLista = new javax.swing.JTable();
+        txtBeskrivningAktivitet = new javax.swing.JTextField();
+        txtTimmar = new javax.swing.JTextField();
+        jdDatumRedigera = new com.toedter.calendar.JDateChooser();
+        lblBeskrivningRedigera = new javax.swing.JLabel();
+        lblDatumRedigera = new javax.swing.JLabel();
+        lblTimmarRedigera = new javax.swing.JLabel();
+        btnTaBort = new javax.swing.JButton();
+        btnSparaRedigera = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -75,220 +252,317 @@ public class SchemaVy extends javax.swing.JFrame {
         jtSchema.setRowSelectionAllowed(false);
         jtSchema.setShowGrid(true);
         jtSchema.setSurrendersFocusOnKeystroke(true);
+        jtSchema.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jtSchemaMouseClicked(evt);
+            }
+        });
         jScrollPane1.setViewportView(jtSchema);
 
-        btnVisaSchema.setText("Visa schema...");
-        btnVisaSchema.addActionListener(this::btnVisaSchemaActionPerformed);
-
-        btnPlaneraPass.setText("Planera pass....");
-        btnPlaneraPass.addActionListener(this::btnPlaneraPassActionPerformed);
-
-        btnTillbakaKnapp.setText("Tillbaka......");
+        btnTillbakaKnapp.setText("Tillbaka");
         btnTillbakaKnapp.addActionListener(this::btnTillbakaKnappActionPerformed);
 
-        btnRedigeraPass.setText("Redigera pass...");
-        btnRedigeraPass.addActionListener(this::btnRedigeraPassActionPerformed);
+        cbVecka.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Vecka 16 (2026-04-13 - 2026-04-17) ", "Vecka 17 (2026-04-20 - 2026-04-24)" }));
+        cbVecka.addActionListener(this::cbVeckaActionPerformed);
+
+        lblVisaSchema.setText("Visa schema");
+
+        txtBeskrivning.setText("Beskrivning...");
+
+        cmbValjOrder.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+
+        cmbValjAnstalld.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+
+        lblPlaneraPass.setFont(new java.awt.Font("Helvetica Neue", 1, 18)); // NOI18N
+        lblPlaneraPass.setText("Planera pass");
+
+        lblDatum.setText("Datum");
+
+        lblAntalTimmar.setText("Antal timmar");
+
+        jLabel1.setText("Vad ska göras?");
+
+        lblVäljOrder.setText("Välj order");
+
+        lblAnstalldForPass.setText("Anställd");
+
+        btnSparaPass.setText("Spara planerat pass");
+        btnSparaPass.addActionListener(this::btnSparaPassActionPerformed);
+
+        jtPassLista.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null},
+                {null, null, null},
+                {null, null, null},
+                {null, null, null}
+            },
+            new String [] {
+                "Datum", "Beskrivning", "Timmar"
+            }
+        ) {
+            boolean[] canEdit = new boolean [] {
+                false, false, false
+            };
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
+        jtPassLista.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jtPassListaMouseClicked(evt);
+            }
+        });
+        jScrollPane2.setViewportView(jtPassLista);
+
+        txtBeskrivningAktivitet.addActionListener(this::txtBeskrivningAktivitetActionPerformed);
+
+        txtTimmar.addActionListener(this::txtTimmarActionPerformed);
+
+        lblBeskrivningRedigera.setText("Beskrivning");
+
+        lblDatumRedigera.setText("Datum");
+
+        lblTimmarRedigera.setText("Timmar");
+
+        btnTaBort.setText("Ta bort");
+
+        btnSparaRedigera.setText("Spara");
+        btnSparaRedigera.addActionListener(this::btnSparaRedigeraActionPerformed);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addContainerGap(494, Short.MAX_VALUE)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 1264, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(39, 39, 39)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                            .addGap(0, 0, Short.MAX_VALUE)
+                            .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 1051, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGap(18, 18, 18))
+                        .addGroup(layout.createSequentialGroup()
+                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                .addGroup(layout.createSequentialGroup()
+                                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                        .addComponent(lblVäljOrder, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                        .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                        .addComponent(lblAntalTimmar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                                    .addGap(29, 29, 29))
+                                .addGroup(layout.createSequentialGroup()
+                                    .addComponent(lblDatum, javax.swing.GroupLayout.PREFERRED_SIZE, 59, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addGap(63, 63, 63)))
+                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                .addGroup(layout.createSequentialGroup()
+                                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                        .addComponent(txtAntalTimmar)
+                                        .addComponent(txtBeskrivning, javax.swing.GroupLayout.DEFAULT_SIZE, 282, Short.MAX_VALUE))
+                                    .addGap(0, 0, Short.MAX_VALUE))
+                                .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                        .addComponent(jDateChooser1, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                        .addComponent(cmbValjOrder, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                                    .addGap(665, 665, 665))))
+                        .addGroup(layout.createSequentialGroup()
+                            .addComponent(btnSparaPass)
+                            .addGap(459, 459, 459))
+                        .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                            .addGap(122, 122, 122)
+                            .addComponent(cmbValjAnstalld, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addGap(665, 665, 665)))
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(btnVisaSchema, javax.swing.GroupLayout.PREFERRED_SIZE, 217, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(btnPlaneraPass, javax.swing.GroupLayout.PREFERRED_SIZE, 198, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(btnRedigeraPass, javax.swing.GroupLayout.PREFERRED_SIZE, 208, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(btnTillbakaKnapp, javax.swing.GroupLayout.PREFERRED_SIZE, 208, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(12, 12, 12))
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(lblAnstalldForPass, javax.swing.GroupLayout.PREFERRED_SIZE, 83, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(btnTillbakaKnapp, javax.swing.GroupLayout.PREFERRED_SIZE, 108, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(lblPlaneraPass, javax.swing.GroupLayout.PREFERRED_SIZE, 337, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(cbVecka, javax.swing.GroupLayout.PREFERRED_SIZE, 205, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(lblVisaSchema, javax.swing.GroupLayout.PREFERRED_SIZE, 98, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(732, 732, 732)))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 387, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                        .addGroup(layout.createSequentialGroup()
+                            .addComponent(btnTaBort)
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(btnSparaRedigera))
+                        .addGroup(layout.createSequentialGroup()
+                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                .addComponent(lblBeskrivningRedigera)
+                                .addComponent(lblDatumRedigera)
+                                .addComponent(lblTimmarRedigera, javax.swing.GroupLayout.PREFERRED_SIZE, 63, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGap(31, 31, 31)
+                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                .addComponent(txtBeskrivningAktivitet)
+                                .addComponent(jdDatumRedigera, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(txtTimmar, javax.swing.GroupLayout.PREFERRED_SIZE, 170, javax.swing.GroupLayout.PREFERRED_SIZE)))))
+                .addGap(185, 185, 185))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addComponent(lblVisaSchema)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(cbVecka, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(28, 28, 28)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addGap(18, 18, 18)
+                                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 404, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                                .addGap(61, 61, 61)
+                                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 361, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(lblPlaneraPass)
+                        .addGap(26, 26, 26)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(btnVisaSchema, javax.swing.GroupLayout.PREFERRED_SIZE, 49, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(btnPlaneraPass, javax.swing.GroupLayout.PREFERRED_SIZE, 46, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addContainerGap()
+                            .addComponent(lblAnstalldForPass)
+                            .addComponent(cmbValjAnstalld, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(20, 20, 20)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(btnTillbakaKnapp, javax.swing.GroupLayout.PREFERRED_SIZE, 56, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(btnRedigeraPass, javax.swing.GroupLayout.PREFERRED_SIZE, 53, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                .addGap(12, 12, 12)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 744, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(247, Short.MAX_VALUE))
+                            .addComponent(cmbValjOrder, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(lblVäljOrder))
+                        .addGap(18, 18, 18)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(jDateChooser1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(lblDatum))
+                        .addGap(18, 18, 18)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(txtAntalTimmar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(lblAntalTimmar)))
+                    .addGroup(layout.createSequentialGroup()
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                    .addComponent(txtBeskrivningAktivitet, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(lblBeskrivningRedigera))
+                                .addGap(30, 30, 30)
+                                .addComponent(lblDatumRedigera))
+                            .addComponent(jdDatumRedigera, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(18, 18, 18)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(txtTimmar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(lblTimmarRedigera))
+                        .addGap(10, 10, 10)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(btnTaBort)
+                            .addComponent(btnSparaRedigera))))
+                .addGap(18, 18, 18)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(txtBeskrivning, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel1))
+                .addGap(18, 18, 18)
+                .addComponent(btnSparaPass)
+                .addGap(38, 38, 38)
+                .addComponent(btnTillbakaKnapp)
+                .addContainerGap(275, Short.MAX_VALUE))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void btnVisaSchemaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnVisaSchemaActionPerformed
-
-    String[] veckor = {
-        "Vecka 16 (2026-04-13 - 2026-04-17)",
-        "Vecka 17 (2026-04-20 - 2026-04-24)",
-    };
-
-    JComboBox<String> cbVeckor = new JComboBox<>(veckor);
-    int option = JOptionPane.showConfirmDialog(this, cbVeckor, "Välj vecka att visa", JOptionPane.OK_CANCEL_OPTION);
-
-    if (option == JOptionPane.OK_OPTION) {
-        String valdVecka = cbVeckor.getSelectedItem().toString();
-        
-        // 3. Plocka ut startdatumet från strängen (vi klipper ut det som står mellan parenteserna)
-        // Ett enkelt sätt är att använda substring eller bara en if-sats
-        String startDatum = "";
-        String slutDatum = "";
-        
-        if (valdVecka.contains("Vecka 16")) {
-            startDatum = "2026-04-13";
-            slutDatum = "2026-04-17";
-        } else if (valdVecka.contains("Vecka 17")) {
-            startDatum = "2026-04-20";
-            slutDatum = "2026-04-24";
-        } // ... och så vidare för de andra veckorna
-        fyllSchemaTabell(startDatum, slutDatum);
-    }
-
-    }//GEN-LAST:event_btnVisaSchemaActionPerformed
-
-    private void btnPlaneraPassActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPlaneraPassActionPerformed
-try {
-        ArrayList<String> anstallda = idb.fetchColumn("SELECT Namn FROM Anstallda");
-        ArrayList<String> ordrar = idb.fetchColumn("SELECT OrderID FROM Ordrar");
-        ordrar.add(0, "Inget (Allmänt arbete)");
-
-        JComboBox<String> cbPersonal = new JComboBox<>(anstallda.toArray(new String[0]));
-        JComboBox<String> cbOrder = new JComboBox<>(ordrar.toArray(new String[0]));
-        JTextField txtDatum = new JTextField("2026-04-13");
-        JTextField txtTimmar = new JTextField("8");
-        JTextField txtAktivitet = new JTextField("Beskrivning...");
-
-        Object[] formular = {
-            "Vem ska utföra arbetet?:", cbPersonal,
-            "Vilken order gäller det?:", cbOrder,
-            "Datum (ÅÅÅÅ-MM-DD):", txtDatum,
-            "Antal timmar:", txtTimmar,
-            "Vad ska göras?:", txtAktivitet
-        };
-
-        int svar = JOptionPane.showConfirmDialog(this, formular, "Planera nytt arbetspass", JOptionPane.OK_CANCEL_OPTION);
-
-        if (svar == JOptionPane.OK_OPTION) {
-            
-            // --- VALIDERING BÖRJAR HÄR ---
-            if (Validering.arTom(txtDatum, "Datum saknas!") || 
-                Validering.arTom(txtTimmar, "Timmar saknas!") || 
-                Validering.arTom(txtAktivitet, "Beskrivning saknas!")) {
-                btnPlaneraPassActionPerformed(evt); // Öppna igen om tomt
-                return;
-            }
-
-            if (!Validering.arGiltigtDatum(txtDatum)) {
-                btnPlaneraPassActionPerformed(evt); // Öppna igen om fel datum
-                return;
-            }
-
-            // Här validerar vi att det bara är siffror (decimal för att tillåta t.ex. 7.5h)
-            if (!Validering.arDecimal(txtTimmar) || !Validering.arPositivtTal(txtTimmar)) {
-                btnPlaneraPassActionPerformed(evt); // Öppna igen om fel timmar
-                return;
-            }
-            // --- VALIDERING SLUT ---
-
-            String valtNamn = cbPersonal.getSelectedItem().toString();
-            String anstID = idb.fetchSingle("SELECT AnstalldID FROM Anstallda WHERE Namn = '" + valtNamn + "'");
-            String valtOrderID = cbOrder.getSelectedItem().toString();
-            String orderValue = valtOrderID.contains("Inget") ? "NULL" : valtOrderID;
-
-            String sql = "INSERT INTO Arbetspass (AnstalldID, OrderID, Datum, Timmar, Aktivitet) VALUES ("
-                    + anstID + ", " + orderValue + ", '" + txtDatum.getText() + "', " 
-                    + txtTimmar.getText().replace(',', '.') + ", '" + txtAktivitet.getText() + "')";
-
-            idb.insert(sql);
-            fyllSchemaTabell("2026-04-13", "2026-04-17"); 
-            JOptionPane.showMessageDialog(this, "Passet har sparats!");
-        }
-    } catch (Exception e) {
-        JOptionPane.showMessageDialog(this, "Kunde inte spara passet: " + e.getMessage());
-    }
-
-    }//GEN-LAST:event_btnPlaneraPassActionPerformed
-
     private void btnTillbakaKnappActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnTillbakaKnappActionPerformed
         this.dispose();
     }//GEN-LAST:event_btnTillbakaKnappActionPerformed
 
-    private void btnRedigeraPassActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRedigeraPassActionPerformed
-int valdRad = jtSchema.getSelectedRow();
-    if (valdRad == -1) {
-        JOptionPane.showMessageDialog(this, "Markera en person i listan först!");
+    private void cbVeckaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbVeckaActionPerformed
+        visaValdVecka();     // TODO add your handling code here:
+    }//GEN-LAST:event_cbVeckaActionPerformed
+
+    private void btnSparaPassActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSparaPassActionPerformed
+    sparaPlaneratPass();        // TODO add your handling code here:
+    }//GEN-LAST:event_btnSparaPassActionPerformed
+
+    private void jtSchemaMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jtSchemaMouseClicked
+      fyllPassTabellForValdPerson();  // TODO add your handling code here:
+    }//GEN-LAST:event_jtSchemaMouseClicked
+
+    private void txtBeskrivningAktivitetActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtBeskrivningAktivitetActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtBeskrivningAktivitetActionPerformed
+
+    private void txtTimmarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtTimmarActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtTimmarActionPerformed
+
+    private void btnSparaRedigeraActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSparaRedigeraActionPerformed
+                                               
+    try {
+        int rad = jtPassLista.getSelectedRow();
+
+        if (rad == -1) {
+            JOptionPane.showMessageDialog(this, "Välj ett pass i tabellen först!");
+            return;
+        }
+
+        if (jdDatumRedigera.getDate() == null) {
+            JOptionPane.showMessageDialog(this, "Välj ett datum!");
+            return;
+        }
+
+        if (Validering.arTom(txtBeskrivningAktivitet, "Beskrivning saknas!") ||
+            Validering.arTom(txtTimmar, "Timmar saknas!")) {
+            return;
+        }
+
+        if (!Validering.arDecimal(txtTimmar) || 
+            !Validering.arPositivtTal(txtTimmar)) {
+            return;
+        }
+
+        String passID = passIDLista.get(rad);
+
+        java.text.SimpleDateFormat sdf = new java.text.SimpleDateFormat("yyyy-MM-dd");
+        String datum = sdf.format(jdDatumRedigera.getDate());
+
+        String aktivitet = txtBeskrivningAktivitet.getText().replace("'", "''");
+        String timmar = txtTimmar.getText().replace(',', '.');
+
+        String sql = "UPDATE Arbetspass SET "
+                + "Aktivitet='" + aktivitet + "', "
+                + "Datum='" + datum + "', "
+                + "Timmar=" + timmar + " "
+                + "WHERE PassID=" + passID;
+
+        idb.update(sql);
+
+        visaValdVecka();
+        fyllPassTabellForValdPerson();
+
+        JOptionPane.showMessageDialog(this, "Passet har uppdaterats!");
+
+    } catch (Exception e) {
+        JOptionPane.showMessageDialog(this, "Kunde inte uppdatera passet: " + e.getMessage());
+    }    // TODO add your handling code here:
+    }//GEN-LAST:event_btnSparaRedigeraActionPerformed
+
+    private void jtPassListaMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jtPassListaMouseClicked
+      int rad = jtPassLista.getSelectedRow();
+
+    if (rad == -1) {
         return;
     }
 
+    // TEXTFIELDS (detta är rätt som du gjort)
+    txtBeskrivningAktivitet.setText(jtPassLista.getValueAt(rad, 1).toString());
+    txtTimmar.setText(jtPassLista.getValueAt(rad, 2).toString());
+
+    // DATECHOOSER (måste konverteras)
     try {
-        String anstalldNamn = jtSchema.getValueAt(valdRad, 0).toString();
-        String anstalldID = idb.fetchSingle("SELECT AnstalldID FROM Anstallda WHERE Namn = '" + anstalldNamn + "'");
+        String datumStr = jtPassLista.getValueAt(rad, 0).toString();
 
-        String sql = "SELECT PassID, Datum, Aktivitet FROM Arbetspass WHERE AnstalldID = " + anstalldID;
-        ArrayList<HashMap<String, String>> passLista = idb.fetchRows(sql);
+        java.util.Date datum = new java.text.SimpleDateFormat("yyyy-MM-dd")
+                .parse(datumStr);
 
-        if (passLista == null || passLista.isEmpty()) {
-            JOptionPane.showMessageDialog(this, "Inga pass hittades för " + anstalldNamn);
-            return;
-        }
-        JComboBox<String> cbValjPass = new JComboBox<>();
-        for (HashMap<String, String> pass : passLista) {
-            cbValjPass.addItem(pass.get("PassID") + ": " + pass.get("Datum") + " - " + pass.get("Aktivitet"));
-        }
+        jdDatumRedigera.setDate(datum);
 
-        int val = JOptionPane.showConfirmDialog(this, cbValjPass, "Välj pass", JOptionPane.OK_CANCEL_OPTION);
-
-        if (val == JOptionPane.OK_OPTION) {
-            String passID = cbValjPass.getSelectedItem().toString().split(":")[0];
-            
-            HashMap<String, String> nuvarande = idb.fetchRow("SELECT * FROM Arbetspass WHERE PassID = " + passID);
-
-            JTextField txtNyAktivitet = new JTextField(nuvarande.get("Aktivitet"));
-            JTextField txtNyttDatum = new JTextField(nuvarande.get("Datum"));
-            JTextField txtNyaTimmar = new JTextField(nuvarande.get("Timmar"));
-
-            Object[] editForm = {"Aktivitet:", txtNyAktivitet, "Datum:", txtNyttDatum, "Timmar:", txtNyaTimmar};
-            Object[] alternativ = {"Spara", "TA BORT", "Avbryt"};
-            
-            int handling = JOptionPane.showOptionDialog(this, editForm, "Hantera pass",
-                    JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE, null, alternativ, alternativ[0]);
-
-            if (handling == JOptionPane.YES_OPTION) { // KNAPPEN "SPARA"
-    
-    // VALIDERING
-    if (Validering.arTom(txtNyttDatum, "Datum saknas!") || !Validering.arGiltigtDatum(txtNyttDatum)) return;
-    if (!Validering.arDecimal(txtNyaTimmar) || !Validering.arPositivtTal(txtNyaTimmar)) return;
-    if (Validering.arTom(txtNyAktivitet, "Aktivitet saknas!")) return;
-
-    // Om validering går igenom, kör update
-    String updateSql = "UPDATE Arbetspass SET " +
-                       "Aktivitet='" + txtNyAktivitet.getText().replace("'", "''") + "', " +
-                       "Datum='" + txtNyttDatum.getText() + "', " +
-                       "Timmar=" + txtNyaTimmar.getText().replace(',', '.') + " " +
-                       "WHERE PassID=" + passID;
-    
-    idb.update(updateSql);
-    fyllSchemaTabell("2026-04-13", "2026-04-17");
-    JOptionPane.showMessageDialog(this, "Passet har uppdaterats!");
-}
-        }
     } catch (Exception e) {
-        JOptionPane.showMessageDialog(this, "Fel: " + e.getMessage());
+        JOptionPane.showMessageDialog(this, "Fel vid datum");
     }
-    }//GEN-LAST:event_btnRedigeraPassActionPerformed
+   // TODO add your handling code here:
+    }//GEN-LAST:event_jtPassListaMouseClicked
 
     private void fyllSchemaTabell(String startDatum, String slutDatum) {
    try {
@@ -440,11 +714,32 @@ int valdRad = jtSchema.getSelectedRow();
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton btnPlaneraPass;
-    private javax.swing.JButton btnRedigeraPass;
+    private javax.swing.JButton btnSparaPass;
+    private javax.swing.JButton btnSparaRedigera;
+    private javax.swing.JButton btnTaBort;
     private javax.swing.JButton btnTillbakaKnapp;
-    private javax.swing.JButton btnVisaSchema;
+    private javax.swing.JComboBox<String> cbVecka;
+    private javax.swing.JComboBox<String> cmbValjAnstalld;
+    private javax.swing.JComboBox<String> cmbValjOrder;
+    private com.toedter.calendar.JDateChooser jDateChooser1;
+    private javax.swing.JLabel jLabel1;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JScrollPane jScrollPane2;
+    private com.toedter.calendar.JDateChooser jdDatumRedigera;
+    private javax.swing.JTable jtPassLista;
     private javax.swing.JTable jtSchema;
+    private javax.swing.JLabel lblAnstalldForPass;
+    private javax.swing.JLabel lblAntalTimmar;
+    private javax.swing.JLabel lblBeskrivningRedigera;
+    private javax.swing.JLabel lblDatum;
+    private javax.swing.JLabel lblDatumRedigera;
+    private javax.swing.JLabel lblPlaneraPass;
+    private javax.swing.JLabel lblTimmarRedigera;
+    private javax.swing.JLabel lblVisaSchema;
+    private javax.swing.JLabel lblVäljOrder;
+    private javax.swing.JTextField txtAntalTimmar;
+    private javax.swing.JTextField txtBeskrivning;
+    private javax.swing.JTextField txtBeskrivningAktivitet;
+    private javax.swing.JTextField txtTimmar;
     // End of variables declaration//GEN-END:variables
 }
