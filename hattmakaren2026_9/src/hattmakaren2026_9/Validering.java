@@ -121,17 +121,36 @@ public static boolean harForOchEfternamn(JTextField falt) {
     return true;
 }
 
-public static boolean arGiltigDecimal(JTextField falt) {
-String text = falt.getText().trim();
+
+public static boolean arGiltigBestallning(JTextField falt, String artikelNamn) {
+    String text = falt.getText().trim();
+
+    // 1. Kontrollera om användaren använt komma
     if (text.contains(",")) {
-        JOptionPane.showMessageDialog(null, "Använd punkt (.) istället för komma (,).");
-        return false; // VIKTIGT: Denna returnerar false till knappen
+        JOptionPane.showMessageDialog(null, 
+            "Fel i artikel: " + artikelNamn + "\nAnvänd punkt (.) istället för komma (,).", 
+            "Formatfel", JOptionPane.WARNING_MESSAGE);
+        return false;
     }
+
+    // 2. Kontrollera om det är siffror och inte bokstäver
     try {
-        Double.parseDouble(text);
-        return true; // OK!
+        double varde = Double.parseDouble(text);
+        
+        // 3. Kontrollera att det inte är ett negativt tal
+        if (varde < 0) {
+            JOptionPane.showMessageDialog(null, 
+                "Fel i artikel: " + artikelNamn + "\nAntalet kan inte vara negativt.", 
+                "Inmatningsfel", JOptionPane.ERROR_MESSAGE);
+            return false;
+        }
+        return true;
     } catch (NumberFormatException e) {
-        JOptionPane.showMessageDialog(null, "Ange siffror (t.ex. 10.5).");
-        return false; // Fel format!
+        JOptionPane.showMessageDialog(null, 
+            "Fel i artikel: " + artikelNamn + "\nAnge enbart siffror (bokstäver är inte tillåtna).", 
+            "Inmatningsfel", JOptionPane.ERROR_MESSAGE);
+        return false;
     }
-}}
+}
+
+}
