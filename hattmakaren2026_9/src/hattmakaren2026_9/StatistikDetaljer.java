@@ -493,6 +493,7 @@ public class StatistikDetaljer extends javax.swing.JFrame {
         TBkund = new javax.swing.JTable();
         jButton2 = new javax.swing.JButton();
         BTNxlmfil = new javax.swing.JButton();
+        BTNroterande = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -526,14 +527,14 @@ public class StatistikDetaljer extends javax.swing.JFrame {
             JParLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(JParLayout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 773, Short.MAX_VALUE)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 779, Short.MAX_VALUE)
                 .addContainerGap())
         );
         JParLayout.setVerticalGroup(
             JParLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(JParLayout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 494, Short.MAX_VALUE)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 465, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
@@ -558,14 +559,14 @@ public class StatistikDetaljer extends javax.swing.JFrame {
             JPkvartalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(JPkvartalLayout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(Scrollpane, javax.swing.GroupLayout.DEFAULT_SIZE, 773, Short.MAX_VALUE)
+                .addComponent(Scrollpane, javax.swing.GroupLayout.DEFAULT_SIZE, 779, Short.MAX_VALUE)
                 .addContainerGap())
         );
         JPkvartalLayout.setVerticalGroup(
             JPkvartalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(JPkvartalLayout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(Scrollpane, javax.swing.GroupLayout.DEFAULT_SIZE, 494, Short.MAX_VALUE)
+                .addComponent(Scrollpane, javax.swing.GroupLayout.DEFAULT_SIZE, 465, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
@@ -598,14 +599,14 @@ public class StatistikDetaljer extends javax.swing.JFrame {
             JPmanadLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(JPmanadLayout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(Scrollpane2, javax.swing.GroupLayout.DEFAULT_SIZE, 773, Short.MAX_VALUE)
+                .addComponent(Scrollpane2, javax.swing.GroupLayout.DEFAULT_SIZE, 779, Short.MAX_VALUE)
                 .addContainerGap())
         );
         JPmanadLayout.setVerticalGroup(
             JPmanadLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(JPmanadLayout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(Scrollpane2, javax.swing.GroupLayout.DEFAULT_SIZE, 494, Short.MAX_VALUE)
+                .addComponent(Scrollpane2, javax.swing.GroupLayout.DEFAULT_SIZE, 465, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
@@ -638,14 +639,14 @@ public class StatistikDetaljer extends javax.swing.JFrame {
             JPmodellLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(JPmodellLayout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 773, Short.MAX_VALUE)
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 779, Short.MAX_VALUE)
                 .addContainerGap())
         );
         JPmodellLayout.setVerticalGroup(
             JPmodellLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(JPmodellLayout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 494, Short.MAX_VALUE)
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 465, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
@@ -678,14 +679,14 @@ public class StatistikDetaljer extends javax.swing.JFrame {
             JPkundLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(JPkundLayout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 773, Short.MAX_VALUE)
+                .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 779, Short.MAX_VALUE)
                 .addContainerGap())
         );
         JPkundLayout.setVerticalGroup(
             JPkundLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(JPkundLayout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 494, Short.MAX_VALUE)
+                .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 465, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
@@ -697,21 +698,28 @@ public class StatistikDetaljer extends javax.swing.JFrame {
         BTNxlmfil.setText("Hämta XLM");
         BTNxlmfil.addActionListener(this::BTNxlmfilActionPerformed);
 
+        BTNroterande.setText("3d hatt");
+        BTNroterande.addActionListener(this::BTNroterandeActionPerformed);
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+            .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(main)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(0, 0, Short.MAX_VALUE)
-                        .addComponent(BTNxlmfil)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(main, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 791, Short.MAX_VALUE)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jButton1)))
+                        .addComponent(BTNxlmfil)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(BTNroterande)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(6, 6, 6)
+                        .addComponent(jButton1)
+                        .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -719,11 +727,13 @@ public class StatistikDetaljer extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jButton1)
                     .addComponent(jButton2)
-                    .addComponent(BTNxlmfil))
+                    .addComponent(BTNxlmfil)
+                    .addComponent(BTNroterande))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(main)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jButton1)
                 .addContainerGap())
         );
 
@@ -742,21 +752,27 @@ public class StatistikDetaljer extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton2ActionPerformed
 
     private void BTNxlmfilActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BTNxlmfilActionPerformed
-    JFileChooser chooser = new JFileChooser();
+        JFileChooser chooser = new JFileChooser();
 
-    if (chooser.showSaveDialog(this) == JFileChooser.APPROVE_OPTION) {
+        if (chooser.showSaveDialog(this) == JFileChooser.APPROVE_OPTION) {
 
-        File fil = chooser.getSelectedFile();
+            File fil = chooser.getSelectedFile();
 
-        exporteraTillXML(getValdTabell(), fil.getAbsolutePath());
+            exporteraTillXML(getValdTabell(), fil.getAbsolutePath());
 
-    }
+        }
 
     }//GEN-LAST:event_BTNxlmfilActionPerformed
+
+    private void BTNroterandeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BTNroterandeActionPerformed
+        RoterandeHatt rs = new RoterandeHatt();
+        rs.setVisible(true);
+    }//GEN-LAST:event_BTNroterandeActionPerformed
 
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton BTNroterande;
     private javax.swing.JButton BTNxlmfil;
     private javax.swing.JPanel JPar;
     private javax.swing.JPanel JPkund;
