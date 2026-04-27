@@ -100,6 +100,40 @@ public static boolean arGiltigtTelefonnummer(JTextField falt) {
     }
     return true;
 }
+public static boolean arGiltigBestallning(JTextField falt, String artikelNamn) {
+        String text = falt.getText().trim();
+
+        // 1. Kontrollera om användaren använt komma
+        if (text.contains(",")) {
+            JOptionPane.showMessageDialog(null, 
+                "Fel i artikel: " + artikelNamn + "\nAnvänd punkt (.) istället för komma (,).", 
+                "Formatfel", JOptionPane.WARNING_MESSAGE);
+            falt.requestFocus();
+            return false;
+        }
+
+        // 2. Kontrollera om det är siffror (fångar bokstäver)
+        try {
+            double varde = Double.parseDouble(text);
+            
+            // 3. Kontrollera negativt tal
+            if (varde < 0) {
+                JOptionPane.showMessageDialog(null, 
+                    "Fel i artikel: " + artikelNamn + "\nAntalet kan inte vara negativt.", 
+                    "Inmatningsfel", JOptionPane.ERROR_MESSAGE);
+                falt.requestFocus();
+                return false;
+            }
+            return true;
+        } catch (NumberFormatException e) {
+            JOptionPane.showMessageDialog(null, 
+                "Fel i artikel: " + artikelNamn + "\nAnge enbart siffror (bokstäver är inte tillåtna).", 
+                "Inmatningsfel", JOptionPane.ERROR_MESSAGE);
+            falt.requestFocus();
+            return false;
+        }
+    }
+
 
 // Kontrollerar att fältet innehåller minst två namn (för- och efternamn) separerade med mellanslag
 public static boolean harForOchEfternamn(JTextField falt) {

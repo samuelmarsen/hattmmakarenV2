@@ -226,7 +226,7 @@ try {
                 rad.get("MaterialID"),
                 rad.get("Namn"),
                 rad.get("LagerSaldo"),
-                0,
+                0.0,
                 statusCell
             });
         }
@@ -332,24 +332,43 @@ materialModel = new DefaultTableModel(
 }
     
     private void btnSkapaPdfActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSkapaPdfActionPerformed
-
-    if (tblMaterialLista.isEditing()) tblMaterialLista.getCellEditor().stopCellEditing();
+if (tblMaterialLista.isEditing()) tblMaterialLista.getCellEditor().stopCellEditing();
     if (tblMaterial.isEditing()) tblMaterial.getCellEditor().stopCellEditing();
 
-    // 2. Nollställ rutan för den nya beställningen
-    txtLogg.setText("BEKRÄFTELSE PÅ BESTÄLLNING\n");
-    txtLogg.append("==========================\n");
-    
-    String nuvarandeDatum = java.time.LocalDateTime.now().format(java.time.format.DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm"));
-    boolean harBestalltNagot = false;
-
     try {
+        // --- STEG 1: VALIDERING (Körs innan vi nollställer loggen) ---
+        // Kolla övre tabellen
+        for (int i = 0; i < materialModel.getRowCount(); i++) {
+            String vardeStr = materialModel.getValueAt(i, 4).toString().trim();
+            String namn = materialModel.getValueAt(i, 1).toString();
+            if (!vardeStr.equals("0") && !vardeStr.equals("0.0")) {
+                if (!Validering.arGiltigBestallning(new JTextField(vardeStr), namn)) return;
+            }
+        }
+        // Kolla nedre tabellen
+        for (int i = 0; i < lagerModel.getRowCount(); i++) {
+            String vardeStr = lagerModel.getValueAt(i, 3).toString().trim();
+            String namn = lagerModel.getValueAt(i, 1).toString();
+            if (!vardeStr.equals("0") && !vardeStr.equals("0.0")) {
+                if (!Validering.arGiltigBestallning(new JTextField(vardeStr), namn)) return;
+            }
+        }
+
+        // --- STEG 2: NOLLSTÄLL OCH FÖRBERED LOGG (Sker bara om valideringen gick bra) ---
+        txtLogg.setText(""); // Helt tomt först
+        txtLogg.setText("BEKRÄFTELSE PÅ BESTÄLLNING\n");
+        txtLogg.append("==========================\n");
+        
+        String nuvarandeDatum = java.time.LocalDateTime.now().format(java.time.format.DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm"));
+        boolean harBestalltNagot = false;
+
+        // --- STEG 3: UTFÖR OCH SKRIV UT ---
+        // Övre tabellen
         for (int i = 0; i < materialModel.getRowCount(); i++) {
             double antal = Double.parseDouble(materialModel.getValueAt(i, 4).toString());
             if (antal > 0) {
                 String orderID = materialModel.getValueAt(i, 0).toString();
                 String namn = materialModel.getValueAt(i, 1).toString();
-                
                 String matID = idb.fetchSingle("SELECT MaterialID FROM Material WHERE Namn = '" + namn + "'");
                 
                 idb.update("UPDATE Material SET Bestallt = TRUE, BestallningsDatum = '" + nuvarandeDatum + "' WHERE MaterialID = " + matID);
@@ -360,6 +379,7 @@ materialModel = new DefaultTableModel(
             }
         }
 
+        // Nedre tabellen
         for (int i = 0; i < lagerModel.getRowCount(); i++) {
             double antal = Double.parseDouble(lagerModel.getValueAt(i, 3).toString());
             if (antal > 0) {
@@ -379,7 +399,7 @@ materialModel = new DefaultTableModel(
             txtLogg.append("INFO: En textfil har skapats.\n");
             
             sparaOrderTillFil(txtLogg.getText());
-          
+            JOptionPane.showMessageDialog(this, "Beställning genomförd!");
             uppdateraTabell();
             laddaMaterialLista();
         } else {
@@ -387,7 +407,7 @@ materialModel = new DefaultTableModel(
         }
 
     } catch (Exception e) {
-        JOptionPane.showMessageDialog(this, "Fel vid samlingsbeställning: " + e.getMessage());
+        JOptionPane.showMessageDialog(this, "Fel: " + e.getMessage());
     }
     }
     private void sparaOrderTillFil(String innehall) {
