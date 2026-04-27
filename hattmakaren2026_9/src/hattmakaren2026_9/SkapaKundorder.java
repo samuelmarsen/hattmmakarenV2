@@ -49,42 +49,40 @@ public class SkapaKundorder extends javax.swing.JFrame {
         fyllRullistaMedHattar();
         fyllAlternativ();
         fyllRullistaMedMaterial();
-        
-        
-jTable1.getColumnModel().getColumn(1).setCellRenderer(new javax.swing.table.DefaultTableCellRenderer() {
-    @Override
-    public java.awt.Component getTableCellRendererComponent(javax.swing.JTable table, Object value, 
-            boolean isSelected, boolean hasFocus, int row, int column) {
-        
-        java.awt.Component c = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
-        
-        if (value != null && value.toString().startsWith("#")) {
-            try {
-                java.awt.Color farg = java.awt.Color.decode(value.toString());
-                c.setBackground(farg);
-                
-                setText(""); 
-                
-                setToolTipText(value.toString()); 
-            } catch (Exception e) {
-                
-                c.setBackground(table.getBackground());
+
+        jTable1.getColumnModel().getColumn(1).setCellRenderer(new javax.swing.table.DefaultTableCellRenderer() {
+            @Override
+            public java.awt.Component getTableCellRendererComponent(javax.swing.JTable table, Object value,
+                    boolean isSelected, boolean hasFocus, int row, int column) {
+
+                java.awt.Component c = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
+
+                if (value != null && value.toString().startsWith("#")) {
+                    try {
+                        java.awt.Color farg = java.awt.Color.decode(value.toString());
+                        c.setBackground(farg);
+
+                        setText("");
+
+                        setToolTipText(value.toString());
+                    } catch (Exception e) {
+
+                        c.setBackground(table.getBackground());
+                    }
+                } else {
+
+                    c.setBackground(table.getBackground());
+                }
+
+                if (isSelected) {
+                    setBorder(javax.swing.BorderFactory.createLineBorder(java.awt.Color.WHITE, 2));
+                } else {
+                    setBorder(null);
+                }
+
+                return c;
             }
-        } else {
-            
-            c.setBackground(table.getBackground());
-        }
- 
-        
-        if (isSelected) {
-            setBorder(javax.swing.BorderFactory.createLineBorder(java.awt.Color.WHITE, 2));
-        } else {
-            setBorder(null);
-        }
- 
-        return c;
-    }
-});
+        });
 
     }
 
@@ -161,12 +159,11 @@ jTable1.getColumnModel().getColumn(1).setCellRenderer(new javax.swing.table.Defa
         cmbStorlek.addItem("XL");
 
     }
-    
+
     private void uppdateraTotalPris() {
         DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
-        totaltPris = 0.0; 
+        totaltPris = 0.0;
 
-        
         for (int i = 0; i < model.getRowCount(); i++) {
             try {
                 String hattModell = model.getValueAt(i, 0).toString();
@@ -174,26 +171,22 @@ jTable1.getColumnModel().getColumn(1).setCellRenderer(new javax.swing.table.Defa
                 String snabborder = model.getValueAt(i, 5).toString();
                 String dekorationer = model.getValueAt(i, 6).toString();
 
-                
                 String prisStr = idb.fetchSingle("SELECT PrisExklMoms FROM Hattmodeller WHERE ModellNamn = '" + hattModell + "'");
                 double basPris = Double.parseDouble(prisStr);
-                
+
                 double radPris = basPris;
 
-                
                 if (dekorationer.contains("Egen text:")) {
                     radPris += 150.0;
                 }
-                
-                
+
                 if (dekorationer.contains("Arbetstid:")) {
-                    
+
                     String tidDel = dekorationer.substring(dekorationer.indexOf("Arbetstid:") + 11);
                     double timmar = Double.parseDouble(tidDel.substring(0, tidDel.indexOf("h")));
                     radPris += (timmar * 50.0);
                 }
 
-                
                 radPris *= antal;
 
                 if (snabborder.equals("Ja")) {
@@ -207,10 +200,8 @@ jTable1.getColumnModel().getColumn(1).setCellRenderer(new javax.swing.table.Defa
             }
         }
 
-       
         txtPrisExklMoms.setText(String.format("%.2f", totaltPris));
     }
-
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -586,6 +577,13 @@ jTable1.getColumnModel().getColumn(1).setCellRenderer(new javax.swing.table.Defa
                 return;
             }
 
+            String OttoID = null;
+            try {
+                OttoID = idb.fetchSingle("SELECT AnstalldID FROM Anstallda WHERE Email = '" + InloggadEmail.trim() + "'");
+            } catch (InfException ex) {
+                System.out.println("Kunde inte hitta Otto: " + ex.getMessage());
+            }
+
             int arSnabborder = 0;
             DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
             if (model.getRowCount() == 0) {
@@ -609,12 +607,25 @@ jTable1.getColumnModel().getColumn(1).setCellRenderer(new javax.swing.table.Defa
 
             String nyttOrderID = idb.fetchSingle("SELECT MAX(OrderID) FROM Ordrar");
 
+            // 5. REGISTRERA OTTO I ARBETSPASS (Viktigt: vi fyller i alla kolumner nu!)
+            if (OttoID != null && nyttOrderID != null) {
+                try {
+                    // Vi lägger till Datum, 0 timmar och en aktivitetstext för att tabellen ska acceptera raden
+                    String arbetspassSql = "INSERT INTO Arbetspass (AnstalldID, OrderID, Datum, Timmar, Aktivitet) "
+                            + "VALUES (" + OttoID + ", " + nyttOrderID + ", '" + datum + "', 0, 'Order registrerad')";
+                    idb.insert(arbetspassSql);
+                    System.out.println("Otto kopplad till order #" + nyttOrderID);
+                } catch (InfException ex) {
+                    System.out.println("Kunde inte spara Arbetspass: " + ex.getMessage());
+                }
+            }
+
             for (int i = 0; i < model.getRowCount(); i++) {
                 String hattNamn = model.getValueAt(i, 0).toString();
                 String farg = model.getValueAt(i, 1).toString();
                 String tyg = model.getValueAt(i, 2).toString();
                 String storlek = model.getValueAt(i, 3).toString();
-                String antal = model.getValueAt(i, 4).toString();
+                String antalHattar = model.getValueAt(i, 4).toString();
 
                 String dekoration = model.getValueAt(i, 6).toString();
 
@@ -625,9 +636,11 @@ jTable1.getColumnModel().getColumn(1).setCellRenderer(new javax.swing.table.Defa
 
                 String modellID = idb.fetchSingle("SELECT ModellID FROM Hattmodeller WHERE ModellNamn = '" + hattNamn + "'");
 
-                String radSql = "INSERT INTO Orderrader (OrderID, ModellID, Antal, Anpassningstext) "
-                        + "VALUES (" + nyttOrderID + ", " + modellID + ", " + antal + ", '" + komplettAnpassning + "')";
+                String radSql = "INSERT INTO Orderrader (OrderID, ModellID, Antal, Anpassningstext, Farg, Tyg, Storlek) "
+                        + "VALUES (" + nyttOrderID + ", " + modellID + ", " + antalHattar + ", '" + komplettAnpassning + "', '" + farg + "', '" + tyg + "', '" + storlek + "')";
                 idb.insert(radSql);
+
+                idb.update("UPDATE Material SET LagerSaldo = LagerSaldo - " + antalHattar + " WHERE Namn = '" + tyg + "'");
             }
 
             JOptionPane.showMessageDialog(this, "Order #" + nyttOrderID + " har registrerats!");
@@ -688,14 +701,12 @@ jTable1.getColumnModel().getColumn(1).setCellRenderer(new javax.swing.table.Defa
                 }
 
                 if ("Blå".equals(f)) {
-                        JpVisaFarg.setBackground(Color.BLUE);
+                    JpVisaFarg.setBackground(Color.BLUE);
                 }
 
                 if ("Grå".equals(f)) {
-                            JpVisaFarg.setBackground(Color.GRAY);
+                    JpVisaFarg.setBackground(Color.GRAY);
                 }
-                    
-                
 
                 String p = rad.get("PrisExklMoms");
                 if (p != null) {
@@ -763,7 +774,6 @@ jTable1.getColumnModel().getColumn(1).setCellRenderer(new javax.swing.table.Defa
         java.awt.Color aktuellFarg = JpVisaFarg.getBackground();
         String hexFarg = String.format("#%02x%02x%02x", aktuellFarg.getRed(), aktuellFarg.getGreen(), aktuellFarg.getBlue());
         System.out.println("Sparad färg: " + hexFarg);
-        
 
         double timpris = 50.0;
         String tidStr = txtUppskattadTid.getText().trim().replace(",", ".");
@@ -897,26 +907,26 @@ jTable1.getColumnModel().getColumn(1).setCellRenderer(new javax.swing.table.Defa
 
     private void btnTaBortOrderradActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnTaBortOrderradActionPerformed
         DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
-    
-    // Kontrollera om en rad är markerad
-    int markeradRad = jTable1.getSelectedRow();
-    
-    if (markeradRad != -1) {
-        // Valfritt: Bekräftelsefråga
-        int svar = JOptionPane.showConfirmDialog(this, "Vill du ta bort den valda hatten från ordern?", "Ta bort", JOptionPane.YES_NO_OPTION);
-        
-        if (svar == JOptionPane.YES_OPTION) {
-            // Ta bort raden från modellen
-            model.removeRow(markeradRad);
-            
-            // HÄR MÅSTE DU UPPDATERA PRISET
-            uppdateraTotalPris(); 
-            
-            JOptionPane.showMessageDialog(this, "Hatten har tagits bort.");
+
+        // Kontrollera om en rad är markerad
+        int markeradRad = jTable1.getSelectedRow();
+
+        if (markeradRad != -1) {
+            // Valfritt: Bekräftelsefråga
+            int svar = JOptionPane.showConfirmDialog(this, "Vill du ta bort den valda hatten från ordern?", "Ta bort", JOptionPane.YES_NO_OPTION);
+
+            if (svar == JOptionPane.YES_OPTION) {
+                // Ta bort raden från modellen
+                model.removeRow(markeradRad);
+
+                // HÄR MÅSTE DU UPPDATERA PRISET
+                uppdateraTotalPris();
+
+                JOptionPane.showMessageDialog(this, "Hatten har tagits bort.");
+            }
+        } else {
+            JOptionPane.showMessageDialog(this, "Markera först den hatt i listan som du vill ta bort.");
         }
-    } else {
-        JOptionPane.showMessageDialog(this, "Markera först den hatt i listan som du vill ta bort.");
-    }        
 
     }//GEN-LAST:event_btnTaBortOrderradActionPerformed
 
