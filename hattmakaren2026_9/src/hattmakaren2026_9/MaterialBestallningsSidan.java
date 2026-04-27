@@ -195,17 +195,15 @@ this.idb = idb;
     
     private void initMaterialListaTabell() {
 lagerModel = new DefaultTableModel(
-        // Här ändrar vi rubriken på sista kolumnen
         new Object[]{"MaterialID", "Material", "Antal i lager", "Antal att beställa", "Beställt senast:"}, 0
     ) {
         @Override
         public boolean isCellEditable(int row, int column) {
-            return column == 3; // Endast "Antal att beställa" ska gå att skriva i
+            return column == 3; 
         }
     };
     tblMaterialLista.setModel(lagerModel);
 }
-
 
     private void laddaMaterialLista() {
 try {
@@ -235,7 +233,6 @@ try {
     }
 
 }
-
  
     private void initMaterialTabell() {
 materialModel = new DefaultTableModel(
@@ -270,8 +267,6 @@ materialModel = new DefaultTableModel(
         "GROUP BY o.OrderID, m.MaterialID, m.Namn, m.LagerSaldo";
 
     return idb.fetchRows(sql);
-
-
     }
     private void uppdateraTabell() {
     try {
@@ -287,7 +282,6 @@ materialModel = new DefaultTableModel(
         if (dcTill.getDate() != null) {
             till = sdf.format(dcTill.getDate());
         }
-
         
         StringBuilder sql = new StringBuilder(
             "SELECT OrderID FROM Ordrar " +
@@ -336,8 +330,6 @@ if (tblMaterialLista.isEditing()) tblMaterialLista.getCellEditor().stopCellEditi
     if (tblMaterial.isEditing()) tblMaterial.getCellEditor().stopCellEditing();
 
     try {
-        // --- STEG 1: VALIDERING (Körs innan vi nollställer loggen) ---
-        // Kolla övre tabellen
         for (int i = 0; i < materialModel.getRowCount(); i++) {
             String vardeStr = materialModel.getValueAt(i, 4).toString().trim();
             String namn = materialModel.getValueAt(i, 1).toString();
@@ -345,7 +337,6 @@ if (tblMaterialLista.isEditing()) tblMaterialLista.getCellEditor().stopCellEditi
                 if (!Validering.arGiltigBestallning(new JTextField(vardeStr), namn)) return;
             }
         }
-        // Kolla nedre tabellen
         for (int i = 0; i < lagerModel.getRowCount(); i++) {
             String vardeStr = lagerModel.getValueAt(i, 3).toString().trim();
             String namn = lagerModel.getValueAt(i, 1).toString();
@@ -354,7 +345,6 @@ if (tblMaterialLista.isEditing()) tblMaterialLista.getCellEditor().stopCellEditi
             }
         }
 
-        // --- STEG 2: NOLLSTÄLL OCH FÖRBERED LOGG (Sker bara om valideringen gick bra) ---
         txtLogg.setText(""); // Helt tomt först
         txtLogg.setText("BEKRÄFTELSE PÅ BESTÄLLNING\n");
         txtLogg.append("==========================\n");
@@ -362,8 +352,6 @@ if (tblMaterialLista.isEditing()) tblMaterialLista.getCellEditor().stopCellEditi
         String nuvarandeDatum = java.time.LocalDateTime.now().format(java.time.format.DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm"));
         boolean harBestalltNagot = false;
 
-        // --- STEG 3: UTFÖR OCH SKRIV UT ---
-        // Övre tabellen
         for (int i = 0; i < materialModel.getRowCount(); i++) {
             double antal = Double.parseDouble(materialModel.getValueAt(i, 4).toString());
             if (antal > 0) {
@@ -379,7 +367,6 @@ if (tblMaterialLista.isEditing()) tblMaterialLista.getCellEditor().stopCellEditi
             }
         }
 
-        // Nedre tabellen
         for (int i = 0; i < lagerModel.getRowCount(); i++) {
             double antal = Double.parseDouble(lagerModel.getValueAt(i, 3).toString());
             if (antal > 0) {

@@ -13,7 +13,7 @@ import java.time.format.DateTimeParseException;
  * @author franz
  */
 public class Validering {
-    // 1. Kontrollera om fältet är tomt
+    // Kontrollera om fältet är tomt
     public static boolean arTom(JTextField falt, String felmeddelande) {
         if (falt.getText().trim().isEmpty()) {
             JOptionPane.showMessageDialog(null, felmeddelande);
@@ -23,7 +23,7 @@ public class Validering {
         return false;
     }
 
-    // 2. Kontrollera om det är ett giltigt heltal (t.ex. för Antal eller ModellID)
+    // Kontrollera om det är ett giltigt heltal 
     public static boolean arHeltal(JTextField falt) {
         try {
             Integer.parseInt(falt.getText());
@@ -34,20 +34,19 @@ public class Validering {
         }
     }
 
-    // 3. Kontrollera pris/decimal
+    // Kontrollera pris/decimal
     public static boolean arDecimal(JTextField falt) {
         try {
-            String text = falt.getText().replace(',', '.'); // Hanterar om användaren skriver komma
+            String text = falt.getText().replace(',', '.'); 
             Double.parseDouble(text);
             return true;
         } catch (NumberFormatException e) {
-            JOptionPane.showMessageDialog(null, "Ogiltigt pris. Använd siffror (t.ex. 1200.50).");
+            JOptionPane.showMessageDialog(null, "Ogiltigt pris. Använd siffror.");
             return false;
         }
     }
 
-    // 4. Kontrollera datumformat (Viktigt för OrderDatum)
-    // Förväntar sig formatet ÅÅÅÅ-MM-DD
+    // kontrollera datumformat
     public static boolean arGiltigtDatum(JTextField falt) {
         try {
             LocalDate.parse(falt.getText());
@@ -57,11 +56,10 @@ public class Validering {
             return false;
         }
     }
-    // Kontrollera om e-posten har rätt format (innehåller @ och punkt på rätt ställen)
+    // Kontrollera om e-posten har rätt format
 public static boolean isEpostGiltig(JTextField falt) {
     String epost = falt.getText().trim();
     
-    // Denna "regex" kollar: text + @ + text + punkt + text
     String epostMönster = "^[\\w-\\.]+@([\\w-]+\\.)+[\\w-]{2,4}$";
     
     if (!epost.matches(epostMönster)) {
@@ -85,14 +83,12 @@ public static boolean arPositivtTal(JTextField falt) {
         }
         return true;
     } catch (NumberFormatException e) {
-        return false; // Hanteras oftast av arDecimal redan
+        return false; 
     }
 }
 
-// Kontrollerar att telefonnumret bara innehåller siffror, mellanslag eller bindestreck
 public static boolean arGiltigtTelefonnummer(JTextField falt) {
     String tel = falt.getText().trim();
-    // Tillåter siffror, mellanslag, plus och bindestreck
     if (!tel.matches("^[0-9+\\s-]+$")) {
         JOptionPane.showMessageDialog(null, "Telefonnumret får bara innehålla siffror, mellanslag eller bindestreck.");
         falt.requestFocus();
@@ -103,7 +99,6 @@ public static boolean arGiltigtTelefonnummer(JTextField falt) {
 public static boolean arGiltigBestallning(JTextField falt, String artikelNamn) {
         String text = falt.getText().trim();
 
-        // 1. Kontrollera om användaren använt komma
         if (text.contains(",")) {
             JOptionPane.showMessageDialog(null, 
                 "Fel i artikel: " + artikelNamn + "\nAnvänd punkt (.) istället för komma (,).", 
@@ -112,7 +107,7 @@ public static boolean arGiltigBestallning(JTextField falt, String artikelNamn) {
             return false;
         }
 
-        // 2. Kontrollera om det är siffror (fångar bokstäver)
+        // Kontrollera om det är siffror
         try {
             double varde = Double.parseDouble(text);
             
@@ -135,14 +130,10 @@ public static boolean arGiltigBestallning(JTextField falt, String artikelNamn) {
     }
 
 
-// Kontrollerar att fältet innehåller minst två namn (för- och efternamn) separerade med mellanslag
+
 public static boolean harForOchEfternamn(JTextField falt) {
     String text = falt.getText().trim();
 
-    // Regex förklaring:
-    // ^[a-zA-ZåäöÅÄÖ]+  -> Börja med minst en bokstav
-    // \s+               -> Kräv minst ett mellanslag
-    // [a-zA-ZåäöÅÄÖ]+$  -> Avsluta med minst en bokstav
     String namnMonster = "^[a-zA-ZåäöÅÄÖ]+[\\s-]+[a-zA-ZåäöÅÄÖ\\s-]+$";
 
     if (!text.matches(namnMonster)) {
