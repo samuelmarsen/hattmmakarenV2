@@ -44,7 +44,6 @@ public class Kundsida extends javax.swing.JFrame {
         
             ArrayList<HashMap<String, String>> resultat = idb.fetchRows(sql);
 
-            // Kolla om det kom tillbaka några resultat
             if (resultat == null || resultat.isEmpty()) {
                 JOptionPane.showMessageDialog(this,
                     "Det finns inga kunder i databasen",
@@ -53,7 +52,6 @@ public class Kundsida extends javax.swing.JFrame {
                 return;
             }
 
-            // Lägg till raderna i tabellen
             for (HashMap<String, String> rad : resultat) {
                 Object[] row = {
                     rad.get("KundID"),
@@ -77,17 +75,15 @@ public class Kundsida extends javax.swing.JFrame {
     
     public void sokKunder(String sokText) {
     
-        // Rensa tabellen
         ((DefaultTableModel) TBLkund.getModel()).setRowCount(0);
 
-        // Om sökfältet är tomt → visa alla kunder istället
         if (sokText == null || sokText.trim().isEmpty()) {
             visaAllaKunder();
             return;
         }
 
         try {
-            // Använd LIKE direkt i SQL-strängen (InfDB gillar detta bättre)
+           
             String sql = "SELECT KundID, Namn, Epost, Telefon, Adress " +
                          "FROM Kunder " +
                          "WHERE KundID LIKE '%" + sokText.trim() + "%' " +
@@ -96,11 +92,9 @@ public class Kundsida extends javax.swing.JFrame {
                          "OR Telefon LIKE '%" + sokText.trim() + "%' " +
                          "OR Adress LIKE '%" + sokText.trim() + "%'";
 
-            // Här skickar vi INGEN extra parameter
             ArrayList<HashMap<String, String>> resultat = idb.fetchRows(sql);
 
 
-            // Fyll tabellen med resultaten
             for (HashMap<String, String> rad : resultat) {
                 Object[] row = {
                     rad.get("KundID"),
@@ -323,25 +317,20 @@ public class Kundsida extends javax.swing.JFrame {
     DefaultTableModel model = (DefaultTableModel) TBLkund.getModel();
 
     try {
-        // Loopa igenom alla rader i tabellen
         for (int row = 0; row < model.getRowCount(); row++) {
 
-            // Hämta värden från tabellens kolumner
             String kundID = model.getValueAt(row, 0).toString();
             String namn = model.getValueAt(row, 1).toString();
             String epost = model.getValueAt(row, 2).toString();
             String telefon = model.getValueAt(row, 3).toString();
             String adress = model.getValueAt(row, 4).toString();
 
-            // Skapa temporära fält för att kunna använda din Valideringsklass
             JTextField tempNamn = new JTextField(namn);
             JTextField tempEpost = new JTextField(epost);
             JTextField tempTelefon = new JTextField(telefon);
             JTextField tempAdress = new JTextField(adress);
 
-            // --- VALIDERINGSKONTROLLER ---
 
-            // A. Kontrollera att obligatoriska fält inte är tomma
             if (Validering.arTom(tempNamn, "Namn saknas på rad " + (row + 1))) {
                 TBLkund.setRowSelectionInterval(row, row);
                 return;
@@ -355,19 +344,16 @@ public class Kundsida extends javax.swing.JFrame {
                 return;
             }
 
-            // B. Kontrollera att namnet innehåller både för- och efternamn (endast bokstäver + mellanslag)
             if (!Validering.harForOchEfternamn(tempNamn)) {
                 TBLkund.setRowSelectionInterval(row, row);
                 return;
             }
 
-            // C. Kontrollera e-postens format (@ och punkt)
             if (!Validering.isEpostGiltig(tempEpost)) {
                 TBLkund.setRowSelectionInterval(row, row);
                 return;
             }
 
-            // D. Kontrollera telefonnummer (endast om fältet inte är tomt)
             if (!telefon.trim().isEmpty()) {
                 if (!Validering.arGiltigtTelefonnummer(tempTelefon)) {
                     TBLkund.setRowSelectionInterval(row, row);
@@ -375,8 +361,7 @@ public class Kundsida extends javax.swing.JFrame {
                 }
             }
 
-            // --- SQL UPPDATERING ---
-            // Om raden passerat alla kontroller ovan, körs SQL-frågan
+
             String sql = "UPDATE Kunder SET " +
                          "Namn = '" + namn + "', " +
                          "Epost = '" + epost + "', " +
@@ -387,7 +372,6 @@ public class Kundsida extends javax.swing.JFrame {
             idb.update(sql);
         }
 
-        // Meddelande när hela loopen är klar utan avbrott
         JOptionPane.showMessageDialog(this, "Alla ändringar har validerats och sparats i databasen!");
 
     } catch (InfException e) {
@@ -432,7 +416,7 @@ public class Kundsida extends javax.swing.JFrame {
         }
 
         String sql = "DELETE FROM Kunder WHERE KundID = " + kundID;
-        idb.delete(sql);   // om delete inte funkar, använd idb.update(sql);
+        idb.delete(sql);  
 
         JOptionPane.showMessageDialog(this, "Kunden togs bort.");
         visaAllaKunder();
