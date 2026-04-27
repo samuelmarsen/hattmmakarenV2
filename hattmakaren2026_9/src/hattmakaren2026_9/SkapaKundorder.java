@@ -49,6 +49,42 @@ public class SkapaKundorder extends javax.swing.JFrame {
         fyllRullistaMedHattar();
         fyllAlternativ();
         fyllRullistaMedMaterial();
+        
+        
+jTable1.getColumnModel().getColumn(1).setCellRenderer(new javax.swing.table.DefaultTableCellRenderer() {
+    @Override
+    public java.awt.Component getTableCellRendererComponent(javax.swing.JTable table, Object value, 
+            boolean isSelected, boolean hasFocus, int row, int column) {
+        
+        java.awt.Component c = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
+        
+        if (value != null && value.toString().startsWith("#")) {
+            try {
+                java.awt.Color farg = java.awt.Color.decode(value.toString());
+                c.setBackground(farg);
+                
+                setText(""); 
+                
+                setToolTipText(value.toString()); 
+            } catch (Exception e) {
+                
+                c.setBackground(table.getBackground());
+            }
+        } else {
+            
+            c.setBackground(table.getBackground());
+        }
+ 
+        
+        if (isSelected) {
+            setBorder(javax.swing.BorderFactory.createLineBorder(java.awt.Color.WHITE, 2));
+        } else {
+            setBorder(null);
+        }
+ 
+        return c;
+    }
+});
 
     }
 
@@ -125,6 +161,56 @@ public class SkapaKundorder extends javax.swing.JFrame {
         cmbStorlek.addItem("XL");
 
     }
+    
+    private void uppdateraTotalPris() {
+        DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
+        totaltPris = 0.0; 
+
+        
+        for (int i = 0; i < model.getRowCount(); i++) {
+            try {
+                String hattModell = model.getValueAt(i, 0).toString();
+                int antal = Integer.parseInt(model.getValueAt(i, 4).toString());
+                String snabborder = model.getValueAt(i, 5).toString();
+                String dekorationer = model.getValueAt(i, 6).toString();
+
+                
+                String prisStr = idb.fetchSingle("SELECT PrisExklMoms FROM Hattmodeller WHERE ModellNamn = '" + hattModell + "'");
+                double basPris = Double.parseDouble(prisStr);
+                
+                double radPris = basPris;
+
+                
+                if (dekorationer.contains("Egen text:")) {
+                    radPris += 150.0;
+                }
+                
+                
+                if (dekorationer.contains("Arbetstid:")) {
+                    
+                    String tidDel = dekorationer.substring(dekorationer.indexOf("Arbetstid:") + 11);
+                    double timmar = Double.parseDouble(tidDel.substring(0, tidDel.indexOf("h")));
+                    radPris += (timmar * 50.0);
+                }
+
+                
+                radPris *= antal;
+
+                if (snabborder.equals("Ja")) {
+                    radPris *= 1.2;
+                }
+
+                totaltPris += radPris;
+
+            } catch (Exception e) {
+                System.out.println("Kunde inte räkna om rad " + i + ": " + e.getMessage());
+            }
+        }
+
+       
+        txtPrisExklMoms.setText(String.format("%.2f", totaltPris));
+    }
+
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -175,6 +261,7 @@ public class SkapaKundorder extends javax.swing.JFrame {
         lblInloggadAnstalld = new javax.swing.JLabel();
         btnValjFarg = new javax.swing.JButton();
         JpVisaFarg = new javax.swing.JPanel();
+        btnTaBortOrderrad = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -281,6 +368,9 @@ public class SkapaKundorder extends javax.swing.JFrame {
             .addGap(0, 0, Short.MAX_VALUE)
         );
 
+        btnTaBortOrderrad.setText("Ta bort orderrad");
+        btnTaBortOrderrad.addActionListener(this::btnTaBortOrderradActionPerformed);
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -376,13 +466,15 @@ public class SkapaKundorder extends javax.swing.JFrame {
                                         .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 129, javax.swing.GroupLayout.PREFERRED_SIZE)
                                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                            .addComponent(btnLaggTillIOrder)
                                             .addGroup(layout.createSequentialGroup()
                                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
                                                     .addComponent(lblVäljAntal, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                                     .addComponent(txtAntalHattar, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 71, Short.MAX_VALUE))
                                                 .addGap(18, 18, 18)
-                                                .addComponent(chkSnabborder))))))
+                                                .addComponent(chkSnabborder))
+                                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                                                .addComponent(btnTaBortOrderrad, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                                .addComponent(btnLaggTillIOrder, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))))
                             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                                 .addGap(0, 0, Short.MAX_VALUE)
                                 .addComponent(btnPaborjaOrder)))
@@ -447,8 +539,13 @@ public class SkapaKundorder extends javax.swing.JFrame {
                             .addComponent(btnAdderaDekoration)
                             .addComponent(lblAntalDekoration)
                             .addComponent(lblDekoration))
-                        .addGap(11, 11, 11)
-                        .addComponent(jLabel5)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addGap(11, 11, 11)
+                                .addComponent(jLabel5))
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(btnTaBortOrderrad)))
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(layout.createSequentialGroup()
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
@@ -663,6 +760,10 @@ public class SkapaKundorder extends javax.swing.JFrame {
         String tyg = (String) cmbTyg.getSelectedItem();
         //String farg = (String) cmbFarg.getSelectedItem();
         String storlek = (String) cmbStorlek.getSelectedItem();
+        java.awt.Color aktuellFarg = JpVisaFarg.getBackground();
+        String hexFarg = String.format("#%02x%02x%02x", aktuellFarg.getRed(), aktuellFarg.getGreen(), aktuellFarg.getBlue());
+        System.out.println("Sparad färg: " + hexFarg);
+        
 
         double timpris = 50.0;
         String tidStr = txtUppskattadTid.getText().trim().replace(",", ".");
@@ -706,7 +807,7 @@ public class SkapaKundorder extends javax.swing.JFrame {
 
         javax.swing.table.DefaultTableModel model = (javax.swing.table.DefaultTableModel) jTable1.getModel();
 
-        model.addRow(new Object[]{hattModell, tyg, storlek, antal, snabborderText, dekorationer});
+        model.addRow(new Object[]{hattModell, hexFarg, tyg, storlek, antal, snabborderText, dekorationer});
         //Farg efter tyg
 
         extraKostnadMaterial = 0.0;
@@ -794,6 +895,31 @@ public class SkapaKundorder extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_cmbTygActionPerformed
 
+    private void btnTaBortOrderradActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnTaBortOrderradActionPerformed
+        DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
+    
+    // Kontrollera om en rad är markerad
+    int markeradRad = jTable1.getSelectedRow();
+    
+    if (markeradRad != -1) {
+        // Valfritt: Bekräftelsefråga
+        int svar = JOptionPane.showConfirmDialog(this, "Vill du ta bort den valda hatten från ordern?", "Ta bort", JOptionPane.YES_NO_OPTION);
+        
+        if (svar == JOptionPane.YES_OPTION) {
+            // Ta bort raden från modellen
+            model.removeRow(markeradRad);
+            
+            // HÄR MÅSTE DU UPPDATERA PRISET
+            uppdateraTotalPris(); 
+            
+            JOptionPane.showMessageDialog(this, "Hatten har tagits bort.");
+        }
+    } else {
+        JOptionPane.showMessageDialog(this, "Markera först den hatt i listan som du vill ta bort.");
+    }        
+
+    }//GEN-LAST:event_btnTaBortOrderradActionPerformed
+
     //public static void main(String args[]) {
     // java.awt.EventQueue.invokeLater(new Runnable() {S
     //  public void run() {
@@ -808,6 +934,7 @@ public class SkapaKundorder extends javax.swing.JFrame {
     private javax.swing.JButton btnBifogaReferensBild;
     private javax.swing.JButton btnLaggTillIOrder;
     private javax.swing.JButton btnPaborjaOrder;
+    private javax.swing.JButton btnTaBortOrderrad;
     private javax.swing.JButton btnTillbaka;
     private javax.swing.JButton btnValjFarg;
     private javax.swing.JCheckBox chkSnabborder;
