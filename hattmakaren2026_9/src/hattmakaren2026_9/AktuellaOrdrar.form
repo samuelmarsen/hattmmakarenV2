@@ -63,10 +63,14 @@
               </Group>
               <Group type="102" attributes="0">
                   <Group type="103" groupAlignment="0" attributes="0">
-                      <Component id="btnSpara" min="-2" max="-2" attributes="0"/>
+                      <Group type="102" attributes="0">
+                          <Component id="btnSpara" min="-2" max="-2" attributes="0"/>
+                          <EmptySpace min="-2" pref="47" max="-2" attributes="0"/>
+                          <Component id="btnMakuleraOrder" min="-2" max="-2" attributes="0"/>
+                      </Group>
                       <Component id="btnTillbaka" alignment="0" min="-2" max="-2" attributes="0"/>
                   </Group>
-                  <EmptySpace min="0" pref="1813" max="32767" attributes="0"/>
+                  <EmptySpace min="0" pref="1656" max="32767" attributes="0"/>
               </Group>
           </Group>
         </DimensionLayout>
@@ -112,7 +116,10 @@
                       </Group>
                   </Group>
                   <EmptySpace min="-2" pref="24" max="-2" attributes="0"/>
-                  <Component id="btnSpara" min="-2" max="-2" attributes="0"/>
+                  <Group type="103" groupAlignment="3" attributes="0">
+                      <Component id="btnSpara" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="btnMakuleraOrder" alignment="3" min="-2" max="-2" attributes="0"/>
+                  </Group>
                   <EmptySpace min="-2" pref="152" max="-2" attributes="0"/>
                   <Component id="btnTillbaka" min="-2" max="-2" attributes="0"/>
                   <EmptySpace min="-2" pref="341" max="-2" attributes="0"/>
@@ -279,6 +286,11 @@
           <Events>
             <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnTillbakaActionPerformed"/>
           </Events>
+        </Component>
+        <Component class="javax.swing.JButton" name="btnMakuleraOrder">
+          <Properties>
+            <Property name="text" type="java.lang.String" value="Makulera order"/>
+          </Properties>
         </Component>
       </SubComponents>
     </Container>

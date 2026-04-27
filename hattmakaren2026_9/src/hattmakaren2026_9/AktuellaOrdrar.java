@@ -28,9 +28,10 @@ public class AktuellaOrdrar extends javax.swing.JFrame {
     public AktuellaOrdrar(InfDB idb) {
         this.idb = idb;
         initComponents();
+        btnMakuleraOrder.setEnabled(false);
         
-        // --- NY KOD: Fyll rullistorna med rätt alternativ ---
-        cmbStatus.removeAllItems(); // Rensar bort "Item 1", "Item 2" osv.
+        
+        cmbStatus.removeAllItems(); 
         cmbStatus.addItem("Registrerad");
         cmbStatus.addItem("Tillverkning");
         cmbStatus.addItem("Under tillverkning");
@@ -53,13 +54,18 @@ public class AktuellaOrdrar extends javax.swing.JFrame {
             if (evt.getClickCount() == 2) {
                 visaOrderInnehall();
             }
+             if (jtAktuellaOrdrar.getSelectedRow() != -1) {
+                    btnMakuleraOrder.setEnabled(true);
+                }
+
         }
     });
     }
     
     private void fyllOrderTabell(){
         try {
-            String sql = "SELECT * FROM Ordrar WHERE Status != 'Klar'";
+            String sql = "SELECT * FROM Ordrar WHERE Status != 'Klar' and Status != 'Makulerad'";
+
             
             ArrayList<HashMap<String, String>> allaOrdrar = idb.fetchRows(sql);
             
@@ -136,9 +142,9 @@ public class AktuellaOrdrar extends javax.swing.JFrame {
             // -----------------------------------------------
 
             // --- Koden nedan (för att fylla textrutan till höger) är oförändrad ---
-            String sqlRader =  "SELECT H.ModellNamn, H.Farg, H.Tyg, H.Storlek, O.Antal " + 
-                               "FROM Orderrader O " + "JOIN Hattmodeller H ON O.ModellID = H.ModellID " +                      
-                               "WHERE O.OrderID = " + orderID;
+            String sqlRader = "SELECT H.ModellNamn, O.Farg, O.Tyg, O.Storlek, O.Antal "
+                    + "FROM Orderrader O " + "JOIN Hattmodeller H ON O.ModellID = H.ModellID "
+                    + "WHERE O.OrderID = " + orderID;
             ArrayList<HashMap<String, String>> rader = idb.fetchRows(sqlRader);
 
             String sqlMedarbetare = "SELECT DISTINCT a.Namn " +
@@ -209,6 +215,7 @@ public class AktuellaOrdrar extends javax.swing.JFrame {
         jLabel4 = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
         btnTillbaka = new javax.swing.JButton();
+        btnMakuleraOrder = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         getContentPane().setLayout(new java.awt.GridBagLayout());
@@ -253,6 +260,8 @@ public class AktuellaOrdrar extends javax.swing.JFrame {
         btnTillbaka.setText("Tillbaka");
         btnTillbaka.addActionListener(this::btnTillbakaActionPerformed);
 
+        btnMakuleraOrder.setText("Makulera order");
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -281,9 +290,12 @@ public class AktuellaOrdrar extends javax.swing.JFrame {
                 .addContainerGap())
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(btnSpara)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addComponent(btnSpara)
+                        .addGap(47, 47, 47)
+                        .addComponent(btnMakuleraOrder))
                     .addComponent(btnTillbaka))
-                .addGap(0, 1813, Short.MAX_VALUE))
+                .addGap(0, 1656, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -317,7 +329,9 @@ public class AktuellaOrdrar extends javax.swing.JFrame {
                         .addContainerGap()
                         .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 467, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addGap(24, 24, 24)
-                .addComponent(btnSpara)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(btnSpara)
+                    .addComponent(btnMakuleraOrder))
                 .addGap(152, 152, 152)
                 .addComponent(btnTillbaka)
                 .addGap(341, 341, 341))
@@ -423,6 +437,7 @@ public class AktuellaOrdrar extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnMakuleraOrder;
     private javax.swing.JButton btnSpara;
     private javax.swing.JButton btnTillbaka;
     private javax.swing.JComboBox<String> cmbSnabborder;
