@@ -261,6 +261,7 @@ public class AktuellaOrdrar extends javax.swing.JFrame {
         btnTillbaka.addActionListener(this::btnTillbakaActionPerformed);
 
         btnMakuleraOrder.setText("Makulera order");
+        btnMakuleraOrder.addActionListener(this::btnMakuleraOrderActionPerformed);
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -410,6 +411,30 @@ public class AktuellaOrdrar extends javax.swing.JFrame {
     private void txtAdressActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtAdressActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_txtAdressActionPerformed
+
+    private void btnMakuleraOrderActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMakuleraOrderActionPerformed
+         int valdRad = jtAktuellaOrdrar.getSelectedRow();
+
+        String orderID = jtAktuellaOrdrar.getValueAt(valdRad, 0).toString();
+        
+        int svar = JOptionPane.showConfirmDialog(this,
+                "Är du säker på att du vill makulera order #" + orderID + "?",
+                "Bekräfta makulering",
+                JOptionPane.YES_NO_OPTION);
+
+        if (svar == JOptionPane.YES_OPTION) {
+            try {
+                String sql = "UPDATE Ordrar SET Status = 'Makulerad' WHERE OrderID = " + orderID;
+                idb.update(sql);
+
+                fyllOrderTabell();
+
+            } catch (InfException ex) {
+                JOptionPane.showMessageDialog(this, "Ett fel uppstod vid kontakt med databasen: " + ex.getMessage());
+            }
+        }
+
+    }//GEN-LAST:event_btnMakuleraOrderActionPerformed
 
     /**
      * @param args the command line arguments
