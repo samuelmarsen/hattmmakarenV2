@@ -4,7 +4,6 @@ package hattmakaren2026_9;
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
  */
-
 /**
  *
  * @author ziggy
@@ -19,10 +18,12 @@ import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 
 public class Kundsida extends javax.swing.JFrame {
+
     private InfDB idb;
     private java.util.Set<Integer> changedRows = new java.util.HashSet<>();
-    
+
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(Kundsida.class.getName());
+
     /**
      * Creates new form Kundsida
      */
@@ -32,23 +33,23 @@ public class Kundsida extends javax.swing.JFrame {
         this.idb = idb;
         visaAllaKunder(); // ← istället för visaAllaKunder() 
         this.setExtendedState(javax.swing.JFrame.MAXIMIZED_BOTH);
-        
-}
-    
+
+    }
+
     public void visaAllaKunder() {
-        
+
         ((DefaultTableModel) TBLkund.getModel()).setRowCount(0);
 
         try {
             String sql = "SELECT KundID, Namn, Epost, Telefon, Adress FROM Kunder";
-        
+
             ArrayList<HashMap<String, String>> resultat = idb.fetchRows(sql);
 
             if (resultat == null || resultat.isEmpty()) {
                 JOptionPane.showMessageDialog(this,
-                    "Det finns inga kunder i databasen",
-                    "Inga kunder", 
-                    JOptionPane.INFORMATION_MESSAGE);
+                        "Det finns inga kunder i databasen",
+                        "Inga kunder",
+                        JOptionPane.INFORMATION_MESSAGE);
                 return;
             }
 
@@ -65,16 +66,15 @@ public class Kundsida extends javax.swing.JFrame {
 
         } catch (InfException e) {
             JOptionPane.showMessageDialog(this,
-                "Fel vid hämtning av kunder:\n" + e.getMessage(),
-                "Databasfel", 
-                JOptionPane.ERROR_MESSAGE);
+                    "Fel vid hämtning av kunder:\n" + e.getMessage(),
+                    "Databasfel",
+                    JOptionPane.ERROR_MESSAGE);
             e.printStackTrace();
         }
-}
-    
-    
+    }
+
     public void sokKunder(String sokText) {
-    
+
         ((DefaultTableModel) TBLkund.getModel()).setRowCount(0);
 
         if (sokText == null || sokText.trim().isEmpty()) {
@@ -83,17 +83,16 @@ public class Kundsida extends javax.swing.JFrame {
         }
 
         try {
-           
-            String sql = "SELECT KundID, Namn, Epost, Telefon, Adress " +
-                         "FROM Kunder " +
-                         "WHERE KundID LIKE '%" + sokText.trim() + "%' " +
-                         "OR Namn LIKE '%" + sokText.trim() + "%' " +
-                         "OR Epost LIKE '%" + sokText.trim() + "%' " +
-                         "OR Telefon LIKE '%" + sokText.trim() + "%' " +
-                         "OR Adress LIKE '%" + sokText.trim() + "%'";
+
+            String sql = "SELECT KundID, Namn, Epost, Telefon, Adress "
+                    + "FROM Kunder "
+                    + "WHERE KundID LIKE '%" + sokText.trim() + "%' "
+                    + "OR Namn LIKE '%" + sokText.trim() + "%' "
+                    + "OR Epost LIKE '%" + sokText.trim() + "%' "
+                    + "OR Telefon LIKE '%" + sokText.trim() + "%' "
+                    + "OR Adress LIKE '%" + sokText.trim() + "%'";
 
             ArrayList<HashMap<String, String>> resultat = idb.fetchRows(sql);
-
 
             for (HashMap<String, String> rad : resultat) {
                 Object[] row = {
@@ -108,35 +107,34 @@ public class Kundsida extends javax.swing.JFrame {
 
         } catch (InfException e) {
             JOptionPane.showMessageDialog(this,
-                "Fel vid sökning:\n" + e.getMessage(),
-                "Databasfel", 
-                JOptionPane.ERROR_MESSAGE);
+                    "Fel vid sökning:\n" + e.getMessage(),
+                    "Databasfel",
+                    JOptionPane.ERROR_MESSAGE);
             e.printStackTrace();
         }
     }
-    
+
     private void hamtaOchVisa(String sql) {
-    try {
-        ArrayList<HashMap<String, String>> resultat = idb.fetchRows(sql);
+        try {
+            ArrayList<HashMap<String, String>> resultat = idb.fetchRows(sql);
 
-        DefaultTableModel model = (DefaultTableModel) TBLkund.getModel();
-        model.setRowCount(0);
+            DefaultTableModel model = (DefaultTableModel) TBLkund.getModel();
+            model.setRowCount(0);
 
-        for (HashMap<String, String> rad : resultat) {
-            model.addRow(new Object[]{
-                rad.get("KundID"),
-                rad.get("Namn"),
-                rad.get("Epost"),
-                rad.get("Telefon"),
-                rad.get("Adress")
-            });
+            for (HashMap<String, String> rad : resultat) {
+                model.addRow(new Object[]{
+                    rad.get("KundID"),
+                    rad.get("Namn"),
+                    rad.get("Epost"),
+                    rad.get("Telefon"),
+                    rad.get("Adress")
+                });
+            }
+
+        } catch (InfException e) {
+            e.printStackTrace();
         }
-
-    } catch (InfException e) {
-        e.printStackTrace();
     }
-}
-  
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -259,7 +257,7 @@ public class Kundsida extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void BTNmenyActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BTNmenyActionPerformed
-    this.dispose(); // stänger Kundsida
+        this.dispose(); // stänger Kundsida
     }//GEN-LAST:event_BTNmenyActionPerformed
 
     private void TXTsokfunktionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_TXTsokfunktionActionPerformed
@@ -269,165 +267,163 @@ public class Kundsida extends javax.swing.JFrame {
     private void CBOXsorteraActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_CBOXsorteraActionPerformed
         String val = CBOXsortera.getSelectedItem().toString();
 
-    String sql = "";
+        String sql = "";
 
-    switch (val) {
-        case "Namn A-Ö":
-            sql = "SELECT KundID, Namn, Epost, Telefon, Adress FROM Kunder ORDER BY Namn ASC";
-            break;
+        switch (val) {
+            case "Namn A-Ö":
+                sql = "SELECT KundID, Namn, Epost, Telefon, Adress FROM Kunder ORDER BY Namn ASC";
+                break;
 
-        case "Namn Ö-A":
-            sql = "SELECT KundID, Namn, Epost, Telefon, Adress FROM Kunder ORDER BY Namn DESC";
-            break;
+            case "Namn Ö-A":
+                sql = "SELECT KundID, Namn, Epost, Telefon, Adress FROM Kunder ORDER BY Namn DESC";
+                break;
 
-        case "KundID stigande":
-            sql = "SELECT KundID, Namn, Epost, Telefon, Adress FROM Kunder ORDER BY KundID ASC";
-            break;
+            case "KundID stigande":
+                sql = "SELECT KundID, Namn, Epost, Telefon, Adress FROM Kunder ORDER BY KundID ASC";
+                break;
 
-        case "KundID fallande":
-            sql = "SELECT KundID, Namn, Epost, Telefon, Adress FROM Kunder ORDER BY KundID DESC";
-            break;
-    }
+            case "KundID fallande":
+                sql = "SELECT KundID, Namn, Epost, Telefon, Adress FROM Kunder ORDER BY KundID DESC";
+                break;
+        }
 
-    hamtaOchVisa(sql);
+        hamtaOchVisa(sql);
     }//GEN-LAST:event_CBOXsorteraActionPerformed
 
     private void TXTsokfunktionKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_TXTsokfunktionKeyPressed
-    String sokText = TXTsokfunktion.getText();
-    sokKunder(sokText);
+        String sokText = TXTsokfunktion.getText();
+        sokKunder(sokText);
     }//GEN-LAST:event_TXTsokfunktionKeyPressed
 
     private void formWindowOpened(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowOpened
-        
+
     }//GEN-LAST:event_formWindowOpened
 
     private void TXTregNykundActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_TXTregNykundActionPerformed
-                                           
-    RegistreraKunder regKunder = new RegistreraKunder(idb, this);
-    regKunder.setVisible(true);
-        // TODO add your handling code here:
+
+        RegistreraKunder regKunder = new RegistreraKunder(idb, this);
+        regKunder.setVisible(true);
+
     }//GEN-LAST:event_TXTregNykundActionPerformed
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-// 1. Tvinga tabellen att spara pågående redigering i cellen
-    if (TBLkund.isEditing()) {
-        TBLkund.getCellEditor().stopCellEditing();
-    }
 
-    DefaultTableModel model = (DefaultTableModel) TBLkund.getModel();
+        if (TBLkund.isEditing()) {
+            TBLkund.getCellEditor().stopCellEditing();
+        }
 
-    try {
-        for (int row = 0; row < model.getRowCount(); row++) {
+        DefaultTableModel model = (DefaultTableModel) TBLkund.getModel();
 
-            String kundID = model.getValueAt(row, 0).toString();
-            String namn = model.getValueAt(row, 1).toString();
-            String epost = model.getValueAt(row, 2).toString();
-            String telefon = model.getValueAt(row, 3).toString();
-            String adress = model.getValueAt(row, 4).toString();
+        try {
+            for (int row = 0; row < model.getRowCount(); row++) {
 
-            JTextField tempNamn = new JTextField(namn);
-            JTextField tempEpost = new JTextField(epost);
-            JTextField tempTelefon = new JTextField(telefon);
-            JTextField tempAdress = new JTextField(adress);
+                String kundID = model.getValueAt(row, 0).toString();
+                String namn = model.getValueAt(row, 1).toString();
+                String epost = model.getValueAt(row, 2).toString();
+                String telefon = model.getValueAt(row, 3).toString();
+                String adress = model.getValueAt(row, 4).toString();
 
+                JTextField tempNamn = new JTextField(namn);
+                JTextField tempEpost = new JTextField(epost);
+                JTextField tempTelefon = new JTextField(telefon);
+                JTextField tempAdress = new JTextField(adress);
 
-            if (Validering.arTom(tempNamn, "Namn saknas på rad " + (row + 1))) {
-                TBLkund.setRowSelectionInterval(row, row);
-                return;
-            }
-            if (Validering.arTom(tempEpost, "E-post saknas på rad " + (row + 1))) {
-                TBLkund.setRowSelectionInterval(row, row);
-                return;
-            }
-            if (Validering.arTom(tempAdress, "Adress saknas på rad " + (row + 1))) {
-                TBLkund.setRowSelectionInterval(row, row);
-                return;
-            }
-
-            if (!Validering.harForOchEfternamn(tempNamn)) {
-                TBLkund.setRowSelectionInterval(row, row);
-                return;
-            }
-
-            if (!Validering.isEpostGiltig(tempEpost)) {
-                TBLkund.setRowSelectionInterval(row, row);
-                return;
-            }
-
-            if (!telefon.trim().isEmpty()) {
-                if (!Validering.arGiltigtTelefonnummer(tempTelefon)) {
+                if (Validering.arTom(tempNamn, "Namn saknas på rad " + (row + 1))) {
                     TBLkund.setRowSelectionInterval(row, row);
                     return;
                 }
+                if (Validering.arTom(tempEpost, "E-post saknas på rad " + (row + 1))) {
+                    TBLkund.setRowSelectionInterval(row, row);
+                    return;
+                }
+                if (Validering.arTom(tempAdress, "Adress saknas på rad " + (row + 1))) {
+                    TBLkund.setRowSelectionInterval(row, row);
+                    return;
+                }
+
+                if (!Validering.harForOchEfternamn(tempNamn)) {
+                    TBLkund.setRowSelectionInterval(row, row);
+                    return;
+                }
+
+                if (!Validering.isEpostGiltig(tempEpost)) {
+                    TBLkund.setRowSelectionInterval(row, row);
+                    return;
+                }
+
+                if (!telefon.trim().isEmpty()) {
+                    if (!Validering.arGiltigtTelefonnummer(tempTelefon)) {
+                        TBLkund.setRowSelectionInterval(row, row);
+                        return;
+                    }
+                }
+
+                String sql = "UPDATE Kunder SET "
+                        + "Namn = '" + namn + "', "
+                        + "Epost = '" + epost + "', "
+                        + "Telefon = '" + telefon + "', "
+                        + "Adress = '" + adress + "' "
+                        + "WHERE KundID = '" + kundID + "'";
+
+                idb.update(sql);
             }
 
+            JOptionPane.showMessageDialog(this, "Alla ändringar har sparats");
 
-            String sql = "UPDATE Kunder SET " +
-                         "Namn = '" + namn + "', " +
-                         "Epost = '" + epost + "', " +
-                         "Telefon = '" + telefon + "', " +
-                         "Adress = '" + adress + "' " +
-                         "WHERE KundID = '" + kundID + "'";
-
-            idb.update(sql);
+        } catch (InfException e) {
+            JOptionPane.showMessageDialog(this,
+                    "Ett fel uppstod i databasen:\n" + e.getMessage(),
+                    "Databasfel",
+                    JOptionPane.ERROR_MESSAGE);
+            e.printStackTrace();
         }
-
-        JOptionPane.showMessageDialog(this, "Alla ändringar har sparats");
-
-    } catch (InfException e) {
-        JOptionPane.showMessageDialog(this,
-            "Ett fel uppstod i databasen:\n" + e.getMessage(),
-            "Databasfel",
-            JOptionPane.ERROR_MESSAGE);
-        e.printStackTrace();
-    }
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void btnTabortKundActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnTabortKundActionPerformed
-    int valdRad = TBLkund.getSelectedRow();
+        int valdRad = TBLkund.getSelectedRow();
 
-    if (valdRad == -1) {
-        JOptionPane.showMessageDialog(this, "Markera en kund först.");
-        return;
-    }
+        if (valdRad == -1) {
+            JOptionPane.showMessageDialog(this, "Markera en kund först.");
+            return;
+        }
 
-    String kundID = TBLkund.getValueAt(valdRad, 0).toString();
-    String namn = TBLkund.getValueAt(valdRad, 1).toString();
+        String kundID = TBLkund.getValueAt(valdRad, 0).toString();
+        String namn = TBLkund.getValueAt(valdRad, 1).toString();
 
-    try {
-        String kontrollSql = "SELECT KundID FROM Ordrar WHERE KundID = " + kundID;
-        String finnsOrder = idb.fetchSingle(kontrollSql);
+        try {
+            String kontrollSql = "SELECT KundID FROM Ordrar WHERE KundID = " + kundID;
+            String finnsOrder = idb.fetchSingle(kontrollSql);
 
-        if (finnsOrder != null) {
+            if (finnsOrder != null) {
+                JOptionPane.showMessageDialog(this,
+                        "Kunden kan inte tas bort eftersom den är kopplad till en eller flera ordrar.");
+                return;
+            }
+
+            int svar = JOptionPane.showConfirmDialog(
+                    this,
+                    "Vill du ta bort kunden " + namn + " (ID: " + kundID + ")?",
+                    "Bekräfta borttagning",
+                    JOptionPane.YES_NO_OPTION
+            );
+
+            if (svar != JOptionPane.YES_OPTION) {
+                return;
+            }
+
+            String sql = "DELETE FROM Kunder WHERE KundID = " + kundID;
+            idb.delete(sql);
+
+            JOptionPane.showMessageDialog(this, "Kunden togs bort.");
+            visaAllaKunder();
+
+        } catch (InfException e) {
             JOptionPane.showMessageDialog(this,
-                "Kunden kan inte tas bort eftersom den är kopplad till en eller flera ordrar.");
-            return;
-        }
-
-        int svar = JOptionPane.showConfirmDialog(
-            this,
-            "Vill du ta bort kunden " + namn + " (ID: " + kundID + ")?",
-            "Bekräfta borttagning",
-            JOptionPane.YES_NO_OPTION
-        );
-
-        if (svar != JOptionPane.YES_OPTION) {
-            return;
-        }
-
-        String sql = "DELETE FROM Kunder WHERE KundID = " + kundID;
-        idb.delete(sql);  
-
-        JOptionPane.showMessageDialog(this, "Kunden togs bort.");
-        visaAllaKunder();
-
-    } catch (InfException e) {
-        JOptionPane.showMessageDialog(this,
-            "Fel vid borttagning:\n" + e.getMessage(),
-            "Databasfel",
-            JOptionPane.ERROR_MESSAGE);
-        e.printStackTrace();
-    }      // TODO add your handling code here:
+                    "Fel vid borttagning:\n" + e.getMessage(),
+                    "Databasfel",
+                    JOptionPane.ERROR_MESSAGE);
+            e.printStackTrace();
+        }      
     }//GEN-LAST:event_btnTabortKundActionPerformed
 
 

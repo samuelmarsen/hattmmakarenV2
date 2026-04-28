@@ -123,29 +123,23 @@ public class OrderMeny extends javax.swing.JFrame {
 
     private void btnSkapaFraktsedelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSkapaFraktsedelActionPerformed
 try {
-        // Hämta alla tillgängliga Order-IDn för att fylla rullistan
-        // Vi hämtar även kundnamnet så det blir lättare för användaren att välja rätt
         String query = "SELECT Ordrar.OrderID, Kunder.Namn FROM Ordrar " +
                        "JOIN Kunder ON Ordrar.KundID = Kunder.KundID";
         java.util.ArrayList<java.util.HashMap<String, String>> allaOrdrar = idb.fetchRows(query);
 
         if (allaOrdrar != null && !allaOrdrar.isEmpty()) {
-            //Skapa en JComboBox och fyll den med "ID - Namn"
             javax.swing.JComboBox<String> orderValjare = new javax.swing.JComboBox<>();
             for (java.util.HashMap<String, String> rad : allaOrdrar) {
                 orderValjare.addItem(rad.get("OrderID") + " - " + rad.get("Namn"));
             }
 
-            // Visa rullistan i en dialogruta
             int val = javax.swing.JOptionPane.showConfirmDialog(this, orderValjare, 
                     "Välj order för fraktsedel", javax.swing.JOptionPane.OK_CANCEL_OPTION);
 
             if (val == javax.swing.JOptionPane.OK_OPTION) {
-                //Plocka ut bara siffran (OrderID) från det valda alternativet
                 String valtObjekt = (String) orderValjare.getSelectedItem();
                 String idStr = valtObjekt.split(" - ")[0];
 
-                // 5. Din befintliga SQL för att hämta detaljerna (JOIN-frågan)
                 String sql = "SELECT Kunder.Namn, Kunder.Adress, Hattmodeller.PrisExklMoms " +
                              "FROM Ordrar " +
                              "JOIN Kunder ON Ordrar.KundID = Kunder.KundID " +
@@ -186,7 +180,7 @@ try {
     }//GEN-LAST:event_btnTillbakaActionPerformed
 private void skapaFraktsedelFil(int orderID, String namn, String adress, String prisExkl) {
     String filnamn = "Fraktsedel_Order_" + orderID + ".txt";
-//metod för slumpmässig fraktkod
+
     java.util.Random rand = new java.util.Random();
 
     int slumpNummer = 10000000 + rand.nextInt(90000000); 
@@ -199,9 +193,7 @@ private void skapaFraktsedelFil(int orderID, String namn, String adress, String 
         double pris = Double.parseDouble(prisExkl);
         double moms = pris * 0.25;
         double totalt = pris + moms;
-//tydliggör om ordern är inrikes eller utrikes
-//writerprinln metoden skapar fraktsedeln som en txt fil som sparas lokalt
-     // Om adressen innehåller "London" eller "UK" så sätter vi export till true
+
 boolean arExport = adress.toLowerCase().contains("london");
         
           if (arExport) {

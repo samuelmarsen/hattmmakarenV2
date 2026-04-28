@@ -578,11 +578,9 @@ public class SchemaVy extends javax.swing.JFrame {
             return;
         }
 
-        // TEXTFIELDS (detta är rätt som du gjort)
         txtBeskrivningAktivitet.setText(jtPassLista.getValueAt(rad, 1).toString());
         txtTimmar.setText(jtPassLista.getValueAt(rad, 2).toString());
 
-        // DATECHOOSER (måste konverteras)
         try {
             String datumStr = jtPassLista.getValueAt(rad, 0).toString();
 
@@ -594,7 +592,7 @@ public class SchemaVy extends javax.swing.JFrame {
         } catch (Exception e) {
             JOptionPane.showMessageDialog(this, "Fel vid datum");
         }
-        // TODO add your handling code here:
+        
     }//GEN-LAST:event_jtPassListaMouseClicked
 
     private void btnTaBortActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnTaBortActionPerformed
@@ -698,17 +696,15 @@ public class SchemaVy extends javax.swing.JFrame {
 
     private int beraknaKolumnIndex(String startStr, String passStr) {
         try {
-            // Gör om textsträngarna till riktiga datum-objekt
+            
             java.time.LocalDate start = java.time.LocalDate.parse(startStr);
             java.time.LocalDate pass = java.time.LocalDate.parse(passStr);
 
-            // Räknar ut hur många dagar det skiljer mellan startdatumet och passets datum
             long skillnad = java.time.temporal.ChronoUnit.DAYS.between(start, pass);
 
-            // Returnera skillnaden + 1 (eftersom kolumn 0 är "Personal")
             return (int) skillnad + 1;
         } catch (Exception e) {
-            return -1; // Om något går fel (t.ex. felaktigt datumformat)
+            return -1; 
         }
     }
 

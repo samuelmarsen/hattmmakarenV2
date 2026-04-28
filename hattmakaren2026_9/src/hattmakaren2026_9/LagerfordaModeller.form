@@ -96,12 +96,9 @@
                               <Component id="tftAntal" min="-2" max="-2" attributes="0"/>
                           </Group>
                       </Group>
-                      <Group type="102" alignment="0" attributes="0">
-                          <EmptySpace max="-2" attributes="0"/>
-                          <Group type="103" groupAlignment="3" attributes="0">
-                              <Component id="btnMinskaLager" alignment="3" min="-2" max="-2" attributes="0"/>
-                              <Component id="btnOkaLager" alignment="3" min="-2" max="-2" attributes="0"/>
-                          </Group>
+                      <Group type="103" alignment="0" groupAlignment="3" attributes="0">
+                          <Component id="btnMinskaLager" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="btnOkaLager" alignment="3" min="-2" max="-2" attributes="0"/>
                       </Group>
                   </Group>
                   <EmptySpace pref="12" max="32767" attributes="0"/>

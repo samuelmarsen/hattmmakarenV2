@@ -88,7 +88,7 @@ public class LoginMedarbetare extends javax.swing.JFrame {
     }//GEN-LAST:event_jpfLosenordActionPerformed
 
     private void txtEpostActionPerformed(java.awt.event.ActionEvent evt) {                                              
-    loggaIn(); // Kör inloggningskontrollen direkt när man trycker Enter
+    loggaIn(); 
     }                                              
 private void loggaIn() {
     String email = txtEmail.getText().trim();

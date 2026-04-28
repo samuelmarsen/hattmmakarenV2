@@ -32,11 +32,8 @@ public class Hattmakaren2026_9 {
             idb = new InfDB("hattmakaren", "3306", "hattAdmin26", "hattAdmin26PW");
             System.out.println("Anslutningen lyckades!");
 
-            // HÄR ÖPPNAR DU HUVUDMENYN:
-            // Vi skapar ett objekt av din fönster-klass och gör det synligt 
             new LoginMedarbetare(idb).setVisible(true);
         } catch (InfException ex) {
-            // Om något går fel skrivs felet ut här
             System.out.println("Ett fel uppstod vid uppstart: " + ex.getMessage());
         }
     }

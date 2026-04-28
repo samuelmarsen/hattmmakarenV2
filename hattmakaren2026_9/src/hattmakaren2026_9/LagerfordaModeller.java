@@ -194,7 +194,6 @@ public class LagerfordaModeller extends javax.swing.JFrame {
     if (Validering.arTom(tftModellID, "Välj en modell i tabellen först!")) return;
     if (Validering.arTom(tftAntal, "Ange antal som ska läggas till.")) return;
 
-    // 2. Validera att Antal är ett heltal och är ett positivt tal
     if (!Validering.arHeltal(tftAntal)) return;
     if (!Validering.arPositivtTal(tftAntal)) return;
 
@@ -233,11 +232,10 @@ public class LagerfordaModeller extends javax.swing.JFrame {
     }//GEN-LAST:event_jtHattmodellerMouseClicked
 
     private void btnMinskaLagerActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMinskaLagerActionPerformed
-// 1. Validera fält
+
     if (Validering.arTom(tftModellID, "Välj en modell i tabellen först!")) return;
     if (Validering.arTom(tftAntal, "Ange antal som ska dras bort.")) return;
 
-    // 2. Validera format
     if (!Validering.arHeltal(tftAntal)) return;
     if (!Validering.arPositivtTal(tftAntal)) return;
 
@@ -245,7 +243,6 @@ public class LagerfordaModeller extends javax.swing.JFrame {
         int modellID = Integer.parseInt(tftModellID.getText());
         int antal = Integer.parseInt(tftAntal.getText());
 
-        // Hämta nuvarande saldo för att kontrollera att det inte blir minus
         String nuvarandeSaldoStr = idb.fetchSingle("SELECT Lagersaldo FROM Hattmodeller WHERE ModellID = " + modellID);
         int nuvarandeSaldo = Integer.parseInt(nuvarandeSaldoStr);
 

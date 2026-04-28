@@ -428,7 +428,7 @@ if (tblMaterialLista.isEditing()) tblMaterialLista.getCellEditor().stopCellEditi
             }
         }
 
-        txtLogg.setText(""); // Helt tomt först
+        txtLogg.setText(""); 
         txtLogg.setText("BEKRÄFTELSE PÅ BESTÄLLNING\n");
         txtLogg.append("==========================\n");
         

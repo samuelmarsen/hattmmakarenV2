@@ -73,25 +73,21 @@ public class AktuellaOrdrar extends javax.swing.JFrame {
             model.setRowCount(0);
             
             if(allaOrdrar != null) {
-                // Loopen måste börja HÄR, så att vi går igenom en rad i taget
                 for(HashMap<String, String> rad : allaOrdrar) {
                     
-                    // 1. Hämta värdet för den aktuella raden
                     String snabbVarde = rad.get("ArSnabborder");
             
-                    // 2. Skapa en textvariabel som översätter värdet
                     String snabbText = "Nej"; 
                     if (snabbVarde != null && (snabbVarde.equals("1") || snabbVarde.equalsIgnoreCase("true"))) {
                         snabbText = "Ja";
                     }
                     
-                    // 3. Lägg till raden i tabellen
                     model.addRow(new Object[]{
                         rad.get("OrderID"),
                         rad.get("KundID"),
                         rad.get("OrderDatum"),
                         rad.get("Status"),
-                        snabbText, // <-- Här skickar vi in "Ja" eller "Nej"
+                        snabbText, 
                         rad.get("FraktAdress"),
                         rad.get("TotalPrisInclMoms")
                     });
@@ -100,8 +96,7 @@ public class AktuellaOrdrar extends javax.swing.JFrame {
         } catch(InfException ex) {
             JOptionPane.showMessageDialog(null, "Kunde inte hämta ordrar: "+ ex.getMessage());
         }
-        
-        // --- Denna del ska bara finnas EN gång i slutet av metoden ---
+       
         jtAktuellaOrdrar.setAutoResizeMode(javax.swing.JTable.AUTO_RESIZE_ALL_COLUMNS);
         jtAktuellaOrdrar.getColumnModel().getColumn(0).setPreferredWidth(100);  
         jtAktuellaOrdrar.getColumnModel().getColumn(1).setPreferredWidth(100);  
@@ -119,29 +114,22 @@ public class AktuellaOrdrar extends javax.swing.JFrame {
         }
 
         try {
-            // Hämta OrderID
             String orderID = jtAktuellaOrdrar.getValueAt(valdRad, 0).toString();
 
-            // --- FYLL DE FASTA FÄLTEN FÖR REDIGERING ---
             txtAdress.setText(String.valueOf(jtAktuellaOrdrar.getValueAt(valdRad, 5)));
             txtTotalPris.setText(String.valueOf(jtAktuellaOrdrar.getValueAt(valdRad, 6)));
 
-            // Fyll rullgardinslistorna (ComboBox)
             cmbStatus.setSelectedItem(String.valueOf(jtAktuellaOrdrar.getValueAt(valdRad, 3)));
             cmbSnabborder.setSelectedItem(String.valueOf(jtAktuellaOrdrar.getValueAt(valdRad, 4)));
 
-            // Fyll Datum-väljaren
             try {
                 String datumStr = String.valueOf(jtAktuellaOrdrar.getValueAt(valdRad, 2));
-                // JDateChooser vill ha ett riktigt Date-objekt, inte en sträng
                 java.util.Date date = new java.text.SimpleDateFormat("yyyy-MM-dd").parse(datumStr);
                 jDOrderdatum.setDate(date); 
             } catch (Exception e) {
                 System.out.println("Kunde inte tolka datumet.");
             }
-            // -----------------------------------------------
-
-            // --- Koden nedan (för att fylla textrutan till höger) är oförändrad ---
+           
             String sqlRader = "SELECT H.ModellNamn, O.Farg, O.Tyg, O.Storlek, O.Antal "
                     + "FROM Orderrader O " + "JOIN Hattmodeller H ON O.ModellID = H.ModellID "
                     + "WHERE O.OrderID = " + orderID;
@@ -365,26 +353,21 @@ public class AktuellaOrdrar extends javax.swing.JFrame {
         }
 
         try {
-            // Hämta OrderID från den valda raden
             String orderID = String.valueOf(jtAktuellaOrdrar.getValueAt(radIndex, 0));
             
-            // 1. Läs av värden från dina fasta komponenter
             String inmatadAdress = txtAdress.getText();
             String inmatatPris = txtTotalPris.getText();
             String inmatadStatus = cmbStatus.getSelectedItem().toString();
             String inmatadSnabb = cmbSnabborder.getSelectedItem().toString();
 
-            // Översätt texten "Ja"/"Nej" tillbaka till databasens "1" eller "0"
             String snabbDBVarde = "0"; 
             if (inmatadSnabb.equalsIgnoreCase("Ja")) {
                 snabbDBVarde = "1";
             }
             
-            // Läs av och formatera datumet från JDateChooser
             java.text.SimpleDateFormat sdf = new java.text.SimpleDateFormat("yyyy-MM-dd");
             String inmatatDatum = sdf.format(jDOrderdatum.getDate());
 
-            // 2. Skicka värdena till databasen
             String sql = "UPDATE Ordrar SET "
                        + "FraktAdress = '" + inmatadAdress + "', "
                        + "Status = '" + inmatadStatus + "', "
@@ -395,7 +378,6 @@ public class AktuellaOrdrar extends javax.swing.JFrame {
             
             idb.update(sql);
             
-            // 3. Uppdatera tabellen i bakgrunden och ge feedback
             fyllOrderTabell(); 
             JOptionPane.showMessageDialog(this, "Order " + orderID + " har uppdaterats!");
             
@@ -405,7 +387,7 @@ public class AktuellaOrdrar extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(this, "Vänligen fyll i ett korrekt datum.");
         } catch (Exception ex) {
             JOptionPane.showMessageDialog(this, "Ett fel uppstod: " + ex.getMessage());
-        }      // TODO add your handling code here:
+        }      
     }//GEN-LAST:event_btnSparaActionPerformed
 
     private void txtAdressActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtAdressActionPerformed

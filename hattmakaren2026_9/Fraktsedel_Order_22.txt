@@ -1,0 +1,9 @@
+======= FRAKTSEDEL (INRIKES) =======
+Ordernummer: 22
+Mottagare:   Mikael Maskerad
+Adress:      Konventvägen 42, Linköping
+-----------------------------------
+Vikt:        0.8 kg
+Moms (25%):  300.0 kr
+Totalpris:   1500.0 kr
+===================================
