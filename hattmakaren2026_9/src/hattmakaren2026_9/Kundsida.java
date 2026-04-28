@@ -372,7 +372,7 @@ public class Kundsida extends javax.swing.JFrame {
             idb.update(sql);
         }
 
-        JOptionPane.showMessageDialog(this, "Alla ändringar har validerats och sparats i databasen!");
+        JOptionPane.showMessageDialog(this, "Alla ändringar har sparats");
 
     } catch (InfException e) {
         JOptionPane.showMessageDialog(this,

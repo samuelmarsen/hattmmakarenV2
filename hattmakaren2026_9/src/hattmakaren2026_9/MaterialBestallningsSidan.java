@@ -233,7 +233,7 @@ try {
     }
 
 }
- 
+    
     private void initMaterialTabell() {
 materialModel = new DefaultTableModel(
         new Object[]{"Kundorder", "Material", "Antal material", "Antal i lager", "Antal att beställa"}, 0
@@ -247,27 +247,105 @@ materialModel = new DefaultTableModel(
     }
     private List<HashMap<String, String>> hamtaMaterialbehov(List<Integer> orderIds) throws InfException {
 
-    if (orderIds == null || orderIds.isEmpty()) {
-        return new ArrayList<>();
+        if (orderIds == null || orderIds.isEmpty()) {
+            return new ArrayList<>();
+        }
+
+        String ids = orderIds.stream()
+                .map(String::valueOf)
+                .collect(Collectors.joining(", "));
+
+        String sql =
+            "SELECT o.OrderID, m.Namn, " +
+            "SUM(r.Antal * hm.Antal) AS TotaltBehov, " +
+            "m.LagerSaldo " +
+            "FROM Ordrar o " +
+            "JOIN Orderrader r ON o.OrderID = r.OrderID " +
+            "JOIN Hatt_Material hm ON r.ModellID = hm.ModellID " +
+            "JOIN Material m ON hm.MaterialID = m.MaterialID " +
+            "WHERE o.OrderID IN (" + ids + ") " +
+            "GROUP BY o.OrderID, m.MaterialID, m.Namn, m.LagerSaldo";
+
+        List<HashMap<String, String>> behovsLista = idb.fetchRows(sql);
+        if (behovsLista == null) {
+            behovsLista = new ArrayList<>();
+        }
+
+        String sqlOrderrader = "SELECT OrderID, Antal, Anpassningstext FROM Orderrader WHERE OrderID IN (" + ids + ")";
+        List<HashMap<String, String>> orderraderLista = idb.fetchRows(sqlOrderrader);
+
+        String sqlMaterial = "SELECT Namn, LagerSaldo FROM Material";
+        List<HashMap<String, String>> allaMaterial = idb.fetchRows(sqlMaterial);
+        HashMap<String, Double> materialLager = new HashMap<>();
+
+        if (allaMaterial != null) {
+            for (HashMap<String, String> mat : allaMaterial) {
+                materialLager.put(mat.get("Namn"), Double.parseDouble(mat.get("LagerSaldo")));
+            }
+        }
+
+        if (orderraderLista != null) {
+            for (HashMap<String, String> rad : orderraderLista) {
+                String anpassning = rad.get("Anpassningstext");
+                String orderId = rad.get("OrderID");
+                int hattAntal = Integer.parseInt(rad.get("Antal"));
+
+                if (anpassning != null && anpassning.contains("EXTRA:")) {
+                    String extraDel = anpassning.substring(anpassning.indexOf("EXTRA:") + 6).trim();
+                    String[] delar = extraDel.split(","); 
+
+                    for (String del : delar) {
+                        del = del.trim();
+                        if (del.contains("x ")) {
+                            try {
+                                String antalStr = del.substring(0, del.indexOf("x")).trim();
+                                double dekorAntalPerHatt = Double.parseDouble(antalStr);
+                                String dekorNamn = del.substring(del.indexOf("x") + 1).trim();
+
+                                if (materialLager.containsKey(dekorNamn)) {
+                                    double totaltDekorBehov = dekorAntalPerHatt * hattAntal;
+
+                                    boolean hittad = false;
+                                    for (HashMap<String, String> behov : behovsLista) {
+                                        if (behov.get("OrderID").equals(orderId) && behov.get("Namn").equals(dekorNamn)) {
+                                            double nuvarandeBehov = Double.parseDouble(behov.get("TotaltBehov"));
+                                            behov.put("TotaltBehov", String.valueOf(nuvarandeBehov + totaltDekorBehov));
+                                            hittad = true;
+                                            break;
+                                        }
+                                    }
+                                    if (!hittad) {
+                                        HashMap<String, String> nyttBehov = new HashMap<>();
+                                        nyttBehov.put("OrderID", orderId);
+                                        nyttBehov.put("Namn", dekorNamn);
+                                        nyttBehov.put("TotaltBehov", String.valueOf(totaltDekorBehov));
+                                        nyttBehov.put("LagerSaldo", String.valueOf(materialLager.get(dekorNamn)));
+                                        behovsLista.add(nyttBehov);
+                                    }
+                                }
+                            } catch (Exception e) {
+                                
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        behovsLista.sort((rad1, rad2) -> {
+            try {
+                int id1 = Integer.parseInt(rad1.get("OrderID"));
+                int id2 = Integer.parseInt(rad2.get("OrderID"));
+                return Integer.compare(id1, id2); 
+            } catch (NumberFormatException e) {
+                return 0; 
+            }
+        });
+
+        return behovsLista;
     }
-
-    String ids = orderIds.stream()
-            .map(String::valueOf)
-            .collect(Collectors.joining(", "));
-
-    String sql =
-        "SELECT o.OrderID, m.Namn, " +
-        "SUM(r.Antal * hm.Antal) AS TotaltBehov, " +
-        "m.LagerSaldo " +
-        "FROM Ordrar o " +
-        "JOIN Orderrader r ON o.OrderID = r.OrderID " +
-        "JOIN Hatt_Material hm ON r.ModellID = hm.ModellID " +
-        "JOIN Material m ON hm.MaterialID = m.MaterialID " +
-        "WHERE o.OrderID IN (" + ids + ") " +
-        "GROUP BY o.OrderID, m.MaterialID, m.Namn, m.LagerSaldo";
-
-    return idb.fetchRows(sql);
-    }
+    
+   
     private void uppdateraTabell() {
     try {
         java.text.SimpleDateFormat sdf = new java.text.SimpleDateFormat("yyyy-MM-dd");
@@ -407,7 +485,6 @@ if (tblMaterialLista.isEditing()) tblMaterialLista.getCellEditor().stopCellEditi
     }
 }
     
-
     public static class MaterialRad {
         public int orderId;
         public String material;
