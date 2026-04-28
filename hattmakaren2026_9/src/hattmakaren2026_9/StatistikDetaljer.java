@@ -8,8 +8,9 @@ package hattmakaren2026_9;
  *
  * @author ziggy
  */
-
-/** ta in datum från orderar och antal och pris från orderrader   **/
+/**
+ * ta in datum från orderar och antal och pris från orderrader   *
+ */
 import oru.inf.InfDB;
 import oru.inf.InfException;
 
@@ -29,6 +30,7 @@ import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 
 public class StatistikDetaljer extends javax.swing.JFrame {
+
     private InfDB idb;
     private boolean visaDiagram = false;
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(StatistikDetaljer.class.getName());
@@ -39,20 +41,20 @@ public class StatistikDetaljer extends javax.swing.JFrame {
     public StatistikDetaljer(InfDB idb) {
         initComponents();
         setExtendedState(javax.swing.JFrame.MAXIMIZED_BOTH);
-        
+
         this.idb = idb;
-        
+
         main.addChangeListener(e -> uppdateraVy());
-        
+
         hamtaIntaktPerAr();
         hamtaIntaktPerKvartal();
         hamtaIntaktPerManad();
         statistikKund();
         modellStatistik();
         uppdateraVy();
-        
+
     }
-    
+
     public void hamtaIntaktPerAr() {
 
         DefaultTableModel model = (DefaultTableModel) TBar.getModel();
@@ -60,14 +62,13 @@ public class StatistikDetaljer extends javax.swing.JFrame {
 
         try {
 
-            String sql =
-                "SELECT YEAR(o.OrderDatum) AS Ar, " +
-                "SUM(orad.RadPrisExklMoms) AS Intakt " +
-                "FROM Ordrar o " +
-                "JOIN Orderrader orad ON o.OrderID = orad.OrderID " +
-                "GROUP BY YEAR(o.OrderDatum) " +
-                "ORDER BY Ar";
-
+            String sql
+                    = "SELECT YEAR(o.OrderDatum) AS Ar, "
+                    + "SUM(IFNULL(orad.RadPrisExklMoms, 0)) AS Intakt "
+                    + "FROM Ordrar o "
+                    + "JOIN Orderrader orad ON o.OrderID = orad.OrderID "
+                    + "GROUP BY YEAR(o.OrderDatum) "
+                    + "ORDER BY Ar";
             ArrayList<HashMap<String, String>> resultat = idb.fetchRows(sql);
 
             for (HashMap<String, String> rad : resultat) {
@@ -83,27 +84,27 @@ public class StatistikDetaljer extends javax.swing.JFrame {
         } catch (InfException e) {
 
             JOptionPane.showMessageDialog(this,
-                "Fel vid hämtning av årsintäkt:\n" + e.getMessage());
+                    "Fel vid hämtning av årsintäkt:\n" + e.getMessage());
 
             e.printStackTrace();
         }
     }
-    
-        public void hamtaIntaktPerKvartal() {
+
+    public void hamtaIntaktPerKvartal() {
 
         DefaultTableModel model = (DefaultTableModel) TBkvartal.getModel();
         model.setRowCount(0);
 
         try {
 
-            String sql =
-                "SELECT YEAR(o.OrderDatum) AS Ar, " +
-                "QUARTER(o.OrderDatum) AS Kvartal, " +
-                "SUM(orad.RadPrisExklMoms) AS Intakt " +
-                "FROM Ordrar o " +
-                "JOIN Orderrader orad ON o.OrderID = orad.OrderID " +
-                "GROUP BY YEAR(o.OrderDatum), QUARTER(o.OrderDatum) " +
-                "ORDER BY Ar, Kvartal";
+            String sql
+                    = "SELECT YEAR(o.OrderDatum) AS Ar, "
+                    + "QUARTER(o.OrderDatum) AS Kvartal, "
+                    + "SUM(IFNULL(orad.RadPrisExklMoms, 0)) AS Intakt "
+                    + "FROM Ordrar o "
+                    + "JOIN Orderrader orad ON o.OrderID = orad.OrderID "
+                    + "GROUP BY YEAR(o.OrderDatum), QUARTER(o.OrderDatum) "
+                    + "ORDER BY Ar, Kvartal";
 
             ArrayList<HashMap<String, String>> resultat = idb.fetchRows(sql);
 
@@ -122,12 +123,12 @@ public class StatistikDetaljer extends javax.swing.JFrame {
         } catch (InfException e) {
 
             JOptionPane.showMessageDialog(this,
-                "Fel vid hämtning av kvartalsintäkt:\n" + e.getMessage());
+                    "Fel vid hämtning av kvartalsintäkt:\n" + e.getMessage());
 
             e.printStackTrace();
         }
     }
-        
+
     public void hamtaIntaktPerManad() {
 
         DefaultTableModel model = (DefaultTableModel) TBmanad.getModel();
@@ -135,14 +136,14 @@ public class StatistikDetaljer extends javax.swing.JFrame {
 
         try {
 
-            String sql =
-                "SELECT YEAR(o.OrderDatum) AS Ar, " +
-                "MONTH(o.OrderDatum) AS Manad, " +
-                "SUM(orad.RadPrisExklMoms) AS Intakt " +
-                "FROM Ordrar o " +
-                "JOIN Orderrader orad ON o.OrderID = orad.OrderID " +
-                "GROUP BY YEAR(o.OrderDatum), MONTH(o.OrderDatum) " +
-                "ORDER BY Ar, Manad";
+            String sql
+                    = "SELECT YEAR(o.OrderDatum) AS Ar, "
+                    + "MONTH(o.OrderDatum) AS Manad, "
+                    + "SUM(IFNULL(orad.RadPrisExklMoms, 0)) AS Intakt "
+                    + "FROM Ordrar o "
+                    + "JOIN Orderrader orad ON o.OrderID = orad.OrderID "
+                    + "GROUP BY YEAR(o.OrderDatum), MONTH(o.OrderDatum) "
+                    + "ORDER BY Ar, Manad";
 
             ArrayList<HashMap<String, String>> resultat = idb.fetchRows(sql);
 
@@ -161,36 +162,40 @@ public class StatistikDetaljer extends javax.swing.JFrame {
         } catch (InfException e) {
 
             JOptionPane.showMessageDialog(this,
-                "Fel vid hämtning av månadsintäkt:\n" + e.getMessage());
+                    "Fel vid hämtning av månadsintäkt:\n" + e.getMessage());
 
             e.printStackTrace();
         }
     }
-    
+
     private void statistikKund() {
         try {
-            String sql = "SELECT Kunder.Epost, " + 
-                         "SUM(IFNULL(Orderrader.Antal, 0)) AS AntalHattar, " +
-                         "SUM(IFNULL(Orderrader.Antal * Orderrader.RadPrisExklMoms, 0)) AS SummaSpenderat " + 
-                         "FROM Kunder " +
-                         "LEFT JOIN Ordrar ON Kunder.KundID = Ordrar.KundID " + 
-                         "LEFT JOIN Orderrader ON Ordrar.OrderID = Orderrader.OrderID " + 
-                         "GROUP BY Kunder.Epost"; 
+            String sql = "SELECT Kunder.Epost, "
+                    + "SUM(IFNULL(Orderrader.Antal, 0)) AS AntalHattar, "
+                    + "SUM(IFNULL(Orderrader.Antal * Orderrader.RadPrisExklMoms, 0)) AS SummaSpenderat "
+                    + "FROM Kunder "
+                    + "LEFT JOIN Ordrar ON Kunder.KundID = Ordrar.KundID "
+                    + "LEFT JOIN Orderrader ON Ordrar.OrderID = Orderrader.OrderID "
+                    + "GROUP BY Kunder.Epost";
 
             ArrayList<HashMap<String, String>> rader = idb.fetchRows(sql);
-            
+
             DefaultTableModel model = (DefaultTableModel) TBkund.getModel();
             model.setRowCount(0);
-            
+
             if (rader != null) {
                 for (HashMap<String, String> rad : rader) {
                     String epost = rad.get("Epost");
                     String antal = rad.get("AntalHattar");
                     String pengar = rad.get("SummaSpenderat");
-                    
-                    if (antal == null) antal = "0";
-                    if (pengar == null) pengar = "0";
-                    
+
+                    if (antal == null) {
+                        antal = "0";
+                    }
+                    if (pengar == null) {
+                        pengar = "0";
+                    }
+
                     model.addRow(new Object[]{
                         epost,
                         antal,
@@ -203,49 +208,48 @@ public class StatistikDetaljer extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(null, "Fel vid hämntning av kundstatistik: " + ex.getMessage());
         }
     }
-    
+
     private void modellStatistik() {
-    
-    try { 
-        
-        String sql = "SELECT Hattmodeller.ModellNamn, " +
-             "SUM(IFNULL(Orderrader.Antal, 0)) AS TotaltAntal, " +
-             "SUM(IFNULL(Orderrader.Antal * Orderrader.RadPrisExklMoms, 0)) AS TotalSumma " +
-             "FROM Hattmodeller " +
-             "LEFT JOIN Orderrader ON Hattmodeller.ModellID = Orderrader.ModellID " +
-             "GROUP BY Hattmodeller.ModellID, Hattmodeller.ModellNamn";
 
-        
-        ArrayList<HashMap<String, String>> rader = idb.fetchRows(sql);
-        
-        DefaultTableModel model = (DefaultTableModel) TBmodell.getModel();
-        model.setRowCount(0);
-        
-        if (rader != null) {
-    for (HashMap<String, String> rad : rader) {
-        String namn = rad.get("ModellNamn");
-        String antal = rad.get("TotaltAntal");
-        String summa = rad.get("TotalSumma"); // 
+        try {
 
-        if (summa == null) {
-            summa = "0";
+            String sql = "SELECT Hattmodeller.ModellNamn, "
+                    + "SUM(IFNULL(Orderrader.Antal, 0)) AS TotaltAntal, "
+                    + "SUM(IFNULL(Orderrader.Antal * Orderrader.RadPrisExklMoms, 0)) AS TotalSumma "
+                    + "FROM Hattmodeller "
+                    + "LEFT JOIN Orderrader ON Hattmodeller.ModellID = Orderrader.ModellID "
+                    + "GROUP BY Hattmodeller.ModellID, Hattmodeller.ModellNamn";
+
+            ArrayList<HashMap<String, String>> rader = idb.fetchRows(sql);
+
+            DefaultTableModel model = (DefaultTableModel) TBmodell.getModel();
+            model.setRowCount(0);
+
+            if (rader != null) {
+                for (HashMap<String, String> rad : rader) {
+                    String namn = rad.get("ModellNamn");
+                    String antal = rad.get("TotaltAntal");
+                    String summa = rad.get("TotalSumma"); // 
+
+                    if (summa == null) {
+                        summa = "0";
+                    }
+                    if (antal == null) {
+                        antal = "0";
+                    }
+
+                    model.addRow(new Object[]{
+                        namn,
+                        antal,
+                        summa + " kr"
+                    });
+                }
+            }
+        } catch (InfException ex) {
+            JOptionPane.showMessageDialog(null, "Fel vid hämtning av statistik: " + ex.getMessage());
         }
-        if (antal == null) {
-            antal = "0";
-        }
+    }
 
-        model.addRow(new Object[]{
-            namn,
-            antal,
-            summa + " kr"
-        });
-    }
-}
-    } catch (InfException ex) {
-        JOptionPane.showMessageDialog(null, "Fel vid hämtning av statistik: " + ex.getMessage());
-    }
-    }
-    
     public ChartPanel visaDiagramAr() {
 
         DefaultCategoryDataset dataset = new DefaultCategoryDataset();
@@ -260,15 +264,15 @@ public class StatistikDetaljer extends javax.swing.JFrame {
         }
 
         JFreeChart chart = ChartFactory.createBarChart(
-            "Intäkt per år",
-            "År",
-            "Intäkt",
-            dataset
+                "Intäkt per år",
+                "År",
+                "Intäkt",
+                dataset
         );
 
         return new ChartPanel(chart);
     }
-    
+
     public ChartPanel visaDiagramKvartal() {
 
         DefaultCategoryDataset dataset = new DefaultCategoryDataset();
@@ -283,15 +287,15 @@ public class StatistikDetaljer extends javax.swing.JFrame {
         }
 
         JFreeChart chart = ChartFactory.createBarChart(
-            "Intäkt per kvartal",
-            "Kvartal",
-            "Intäkt",
-            dataset
+                "Intäkt per kvartal",
+                "Kvartal",
+                "Intäkt",
+                dataset
         );
 
         return new ChartPanel(chart);
     }
-    
+
     public ChartPanel visaDiagramManad() {
 
         DefaultCategoryDataset dataset = new DefaultCategoryDataset();
@@ -306,15 +310,15 @@ public class StatistikDetaljer extends javax.swing.JFrame {
         }
 
         JFreeChart chart = ChartFactory.createBarChart(
-            "Intäkt per månad",
-            "Månad",
-            "Intäkt",
-            dataset
+                "Intäkt per månad",
+                "Månad",
+                "Intäkt",
+                dataset
         );
 
         return new ChartPanel(chart);
     }
-    
+
     public ChartPanel visaDiagramModell() {
 
         DefaultCategoryDataset dataset = new DefaultCategoryDataset();
@@ -324,22 +328,22 @@ public class StatistikDetaljer extends javax.swing.JFrame {
             String modell = TBmodell.getValueAt(i, 0).toString();
 
             double intakt = Double.parseDouble(
-                TBmodell.getValueAt(i, 2).toString().replace(" kr", "")
+                    TBmodell.getValueAt(i, 2).toString().replace(" kr", "")
             );
 
             dataset.addValue(intakt, "Intäkt", modell);
         }
 
         JFreeChart chart = ChartFactory.createBarChart(
-            "Intäkt per hattmodell",
-            "Modell",
-            "Intäkt",
-            dataset
+                "Intäkt per hattmodell",
+                "Modell",
+                "Intäkt",
+                dataset
         );
 
         return new ChartPanel(chart);
     }
-    
+
     public ChartPanel visaDiagramKund() {
 
         DefaultCategoryDataset dataset = new DefaultCategoryDataset();
@@ -349,22 +353,22 @@ public class StatistikDetaljer extends javax.swing.JFrame {
             String kund = TBkund.getValueAt(i, 0).toString();
 
             double spendering = Double.parseDouble(
-                TBkund.getValueAt(i, 2).toString().replace(" kr", "")
+                    TBkund.getValueAt(i, 2).toString().replace(" kr", "")
             );
 
             dataset.addValue(spendering, "Spendering", kund);
         }
 
         JFreeChart chart = ChartFactory.createBarChart(
-            "Kundstatistik",
-            "Kund",
-            "Spendering",
-            dataset
+                "Kundstatistik",
+                "Kund",
+                "Spendering",
+                dataset
         );
 
         return new ChartPanel(chart);
     }
-    
+
     private void uppdateraVy() {
 
         int index = main.getSelectedIndex();
@@ -413,20 +417,30 @@ public class StatistikDetaljer extends javax.swing.JFrame {
         revalidate();
         repaint();
     }
-    
+
     private JTable getValdTabell() {
 
-       int index = main.getSelectedIndex();
+        int index = main.getSelectedIndex();
 
-       if (index == 0) return TBar;
-       if (index == 1) return TBkvartal;
-       if (index == 2) return TBmanad;
-       if (index == 3) return TBmodell;
-       if (index == 4) return TBkund;
+        if (index == 0) {
+            return TBar;
+        }
+        if (index == 1) {
+            return TBkvartal;
+        }
+        if (index == 2) {
+            return TBmanad;
+        }
+        if (index == 3) {
+            return TBmodell;
+        }
+        if (index == 4) {
+            return TBkund;
+        }
 
-    return null;
-   }
-    
+        return null;
+    }
+
     private void exporteraTillXML(JTable table, String filnamn) {
 
         try (java.io.PrintWriter writer = new java.io.PrintWriter(filnamn, "UTF-8")) {
@@ -445,9 +459,9 @@ public class StatistikDetaljer extends javax.swing.JFrame {
                     String kolumnNamn = model.getColumnName(j);
                     Object value = model.getValueAt(i, j);
 
-                    writer.println("        <" + kolumnNamn + ">" +
-                                   value +
-                                   "</" + kolumnNamn + ">");
+                    writer.println("        <" + kolumnNamn + ">"
+                            + value
+                            + "</" + kolumnNamn + ">");
                 }
 
                 writer.println("    </row>");
@@ -462,8 +476,6 @@ public class StatistikDetaljer extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(this, "Fel vid export:\n" + e.getMessage());
         }
     }
-    
-    
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -756,7 +768,6 @@ public class StatistikDetaljer extends javax.swing.JFrame {
         }
 
     }//GEN-LAST:event_BTNxlmfilActionPerformed
-
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

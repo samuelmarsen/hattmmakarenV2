@@ -75,6 +75,7 @@ public class OrderHistorik extends javax.swing.JFrame {
         gridBagConstraints.insets = new java.awt.Insets(6, 24, 0, 0);
         getContentPane().add(lblOrderHistorikRubrik, gridBagConstraints);
 
+        txtHistorikText.setEditable(false);
         txtHistorikText.setColumns(20);
         txtHistorikText.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         txtHistorikText.setRows(5);

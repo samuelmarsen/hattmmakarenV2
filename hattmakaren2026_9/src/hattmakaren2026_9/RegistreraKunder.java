@@ -153,35 +153,52 @@ public class RegistreraKunder extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnRegNyKundActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegNyKundActionPerformed
-    try {
+try {
+        // --- 1. VALIDERING ---
+        // Vi använder "if (!...)" vilket betyder: "Om det INTE är sant, avbryt".
+        // Dina metoder i Validering.java sköter sina egna felmeddelanden.
+        
+        if (Validering.arTom(txtNamn, "Namn måste fyllas i!")) return;
+        if (!Validering.harForOchEfternamn(txtNamn)) return;
+        
+        if (Validering.arTom(txtMejladress, "E-post måste fyllas i!")) return;
+        if (!Validering.isEpostGiltig(txtMejladress)) return;
+        
+        if (Validering.arTom(txtTelefonnummer, "Telefonnummer måste fyllas i!")) return;
+        if (!Validering.arGiltigtTelefonnummer(txtTelefonnummer)) return;
+        
+        if (Validering.arTom(txtAdress, "Adress måste fyllas i!")) return;
+
+        // --- 2. HÄMTA DATA ---
         String namn = txtNamn.getText().trim();
         String mejladress = txtMejladress.getText().trim();
         String telefon = txtTelefonnummer.getText().trim();
         String adress = txtAdress.getText().trim();
-               
-       if (namn.isEmpty() || adress.isEmpty() || mejladress.isEmpty() || telefon.isEmpty()) {
-           JOptionPane.showMessageDialog(null, "Alla fält måste fyllas i!");
-       }
-       String nyttID = idb.getAutoIncrement("Kunder", "KundID");
-       String sql = "INSERT INTO Kunder (KundID, Namn, Adress, Telefon, Epost) " + "VALUES (" + nyttID + " ,'"
-        + namn + "', '" 
-        + adress + "', '" 
-        + telefon + "', '" 
-        + mejladress + "')";
-       
-       
-       idb.insert(sql);
-       
-       if (kundsida != null) {
+
+        // --- 3. SPARA I DATABAS ---
+        String nyttID = idb.getAutoIncrement("Kunder", "KundID");
+        String sql = "INSERT INTO Kunder (KundID, Namn, Adress, Telefon, Epost) " 
+                   + "VALUES (" + nyttID + ", '" + namn + "', '" + adress + "', '" 
+                   + telefon + "', '" + mejladress + "')";
+
+        idb.insert(sql);
+
+        // Uppdatera listan på kundsidan
+        if (kundsida != null) {
             kundsida.visaAllaKunder();
         }
-       
-       JOptionPane.showMessageDialog(null, "Ny kund har registrerats!");
-       
-       txtNamn.setText(""); txtAdress.setText(""); txtMejladress.setText(""); txtTelefonnummer.setText("");
-       
+
+        // --- 4. BEKRÄFTELSE (Detta är den ENDA rutan som ska synas vid framgång) ---
+        JOptionPane.showMessageDialog(this, "Kunduppgifterna har sparats.");
+
+        // Töm fälten
+        txtNamn.setText("");
+        txtAdress.setText("");
+        txtMejladress.setText("");
+        txtTelefonnummer.setText("");
+
     } catch (InfException ex) {
-        JOptionPane.showMessageDialog(null, "Gick inte att spara i databasen. Kontrollera uppgifterna.");
+        JOptionPane.showMessageDialog(this, "Ett fel uppstod i databasen: " + ex.getMessage());
     }
     }//GEN-LAST:event_btnRegNyKundActionPerformed
 
