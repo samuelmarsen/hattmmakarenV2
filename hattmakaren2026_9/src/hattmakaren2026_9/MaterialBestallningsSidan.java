@@ -255,7 +255,6 @@ materialModel = new DefaultTableModel(
                 .map(String::valueOf)
                 .collect(Collectors.joining(", "));
 
-        // 1. Hämta basmaterial
         String sql =
             "SELECT o.OrderID, m.Namn, " +
             "SUM(r.Antal * hm.Antal) AS TotaltBehov, " +
@@ -272,7 +271,6 @@ materialModel = new DefaultTableModel(
             behovsLista = new ArrayList<>();
         }
 
-        // 2. Hämta orderrader för att bygga listan på dekorationer
         String sqlOrderrader = "SELECT OrderID, Antal, Anpassningstext FROM Orderrader WHERE OrderID IN (" + ids + ")";
         List<HashMap<String, String>> orderraderLista = idb.fetchRows(sqlOrderrader);
 
@@ -286,9 +284,7 @@ materialModel = new DefaultTableModel(
             }
         }
 
-        // 3. SKOTTSÄKER REGEX-PARSNING AV DEKORATIONER
         if (orderraderLista != null) {
-            // Detta mönster letar efter "Siffra" följt av "x" följt av "Text".
             java.util.regex.Pattern pattern = java.util.regex.Pattern.compile("(\\d+(?:\\.\\d+)?)\\s*[xX]\\s*([^,\\n|;]+)");
             
             for (HashMap<String, String> rad : orderraderLista) {
@@ -300,13 +296,11 @@ materialModel = new DefaultTableModel(
                     String extraDel = anpassning.substring(anpassning.indexOf("EXTRA:") + 6);
                     java.util.regex.Matcher matcher = pattern.matcher(extraDel);
                     
-                    // Varje gång den hittar ett matchande mönster (t.ex. "12x Pärlor")
                     while (matcher.find()) {
                         try {
-                            double dekorAntalPerHatt = Double.parseDouble(matcher.group(1)); // Plockar ut 12
-                            String dekorNamn = matcher.group(2).trim(); // Plockar ut Pärlor
+                            double dekorAntalPerHatt = Double.parseDouble(matcher.group(1)); 
+                            String dekorNamn = matcher.group(2).trim(); 
                             
-                            // Dubbel säkerhet: Städa bort ev. ihopklibbad text om kommatecken saknats i sparningen
                             if (dekorNamn.contains("Egen text:")) {
                                 dekorNamn = dekorNamn.substring(0, dekorNamn.indexOf("Egen text:")).trim();
                             }
@@ -314,7 +308,6 @@ materialModel = new DefaultTableModel(
                                 dekorNamn = dekorNamn.substring(0, dekorNamn.indexOf("Arbetstid:")).trim();
                             }
 
-                            // Om materialet finns i lagret lägger vi till det i vår lista
                             if (materialLager.containsKey(dekorNamn)) {
                                 double totaltDekorBehov = dekorAntalPerHatt * hattAntal;
 
@@ -338,14 +331,12 @@ materialModel = new DefaultTableModel(
                                 }
                             }
                         } catch (Exception e) {
-                            // Om det blir fel på en exakt rad, ignorera och hoppa till nästa matchning
                         }
                     }
                 }
             }
         }
 
-        // Sortera listan efter OrderID
         behovsLista.sort((rad1, rad2) -> {
             try {
                 int id1 = Integer.parseInt(rad1.get("OrderID"));

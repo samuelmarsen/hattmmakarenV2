@@ -609,7 +609,6 @@ public class SkapaKundorder extends javax.swing.JFrame {
             String fraktAdress = txtFraktadress.getText();
             String datum = txtDatum.getText();
             
-            // Kontrollera att en kund är vald
             if (kundID.isEmpty()) {
                 JOptionPane.showMessageDialog(this, "Välj en kund först!");
                 return;
@@ -645,10 +644,8 @@ public class SkapaKundorder extends javax.swing.JFrame {
 
             String nyttOrderID = idb.fetchSingle("SELECT MAX(OrderID) FROM Ordrar");
 
-            // 5. REGISTRERA OTTO I ARBETSPASS (Viktigt: vi fyller i alla kolumner nu!)
             if (OttoID != null && nyttOrderID != null) {
                 try {
-                    // Vi lägger till Datum, 0 timmar och en aktivitetstext för att tabellen ska acceptera raden
                     String arbetspassSql = "INSERT INTO Arbetspass (AnstalldID, OrderID, Datum, Timmar, Aktivitet) "
                             + "VALUES (" + OttoID + ", " + nyttOrderID + ", '" + datum + "', 0, 'Order registrerad')";
                     idb.insert(arbetspassSql);
@@ -677,22 +674,18 @@ public class SkapaKundorder extends javax.swing.JFrame {
                         + "VALUES (" + nyttOrderID + ", " + modellID + ", " + antalHattar + ", '" + komplettAnpassning + "', '" + farg + "', '" + tyg + "', '" + storlek + "')";
                 idb.insert(radSql);
 
-                // --- 1. Uppdatera lagret för Tyget ---
                 idb.update("UPDATE Material SET LagerSaldo = LagerSaldo - " + antalHattar + " WHERE Namn = '" + tyg + "'");
                 
-                // --- 2. Uppdatera lagret för Dekorationerna (SKOTTSÄKER REGEX) ---
                 if (dekoration != null && !dekoration.isEmpty() && !dekoration.equalsIgnoreCase("Ingen")) {
                     
-                    // Regex som letar efter mönstret "Siffra x Namn" (t.ex. "12x Pärlor")
                     java.util.regex.Pattern pattern = java.util.regex.Pattern.compile("(\\d+(?:\\.\\d+)?)\\s*[xX]\\s*([^,\\n|;]+)");
                     java.util.regex.Matcher matcher = pattern.matcher(dekoration);
 
                     while (matcher.find()) {
                         try {
-                            double antalDekorPerHatt = Double.parseDouble(matcher.group(1)); // Plockar ut antalet
-                            String rentDekorNamn = matcher.group(2).trim(); // Plockar ut materialet
+                            double antalDekorPerHatt = Double.parseDouble(matcher.group(1)); 
+                            String rentDekorNamn = matcher.group(2).trim(); 
 
-                            // Städa bort ev. ihopklibbad text ("Egen text" och "Arbetstid" ska inte dras från lagret)
                             if (rentDekorNamn.contains("Egen text:")) {
                                 rentDekorNamn = rentDekorNamn.substring(0, rentDekorNamn.indexOf("Egen text:")).trim();
                             }
@@ -700,7 +693,6 @@ public class SkapaKundorder extends javax.swing.JFrame {
                                 rentDekorNamn = rentDekorNamn.substring(0, rentDekorNamn.indexOf("Arbetstid:")).trim();
                             }
 
-                            // Om det faktiskt finns ett materialnamn kvar, dra från saldot!
                             if (!rentDekorNamn.isEmpty()) {
                                 double totalMinskningDekor = antalHattar * antalDekorPerHatt;
                                 idb.update("UPDATE Material SET LagerSaldo = LagerSaldo - " + totalMinskningDekor + " WHERE Namn = '" + rentDekorNamn + "'");
@@ -711,11 +703,10 @@ public class SkapaKundorder extends javax.swing.JFrame {
                         }
                     }
                 }
-            } // <-- Slut på orderrads-loopen
+            } 
 
             JOptionPane.showMessageDialog(this, "Order #" + nyttOrderID + " har registrerats!");
 
-            // Återställ UI:t
             model.setRowCount(0);
             totaltPris = 0;
             txtPrisExklMoms.setText("0.00");
