@@ -96,7 +96,6 @@ public class OrderHistorik extends javax.swing.JFrame {
 
         jPanel1.setLayout(new java.awt.GridLayout(0, 2, 15, 15));
 
-        cmbKunder.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
         cmbKunder.addActionListener(this::cmbKunderActionPerformed);
         jPanel1.add(cmbKunder);
 

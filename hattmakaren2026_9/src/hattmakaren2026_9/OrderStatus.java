@@ -72,7 +72,6 @@ public class OrderStatus extends javax.swing.JFrame {
 
         jPanel1.setLayout(new java.awt.GridLayout(0, 2, 15, 15));
 
-        cmbVisaKunder.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
         jPanel1.add(cmbVisaKunder);
 
         btnVisaStatus.setText("Visa status");

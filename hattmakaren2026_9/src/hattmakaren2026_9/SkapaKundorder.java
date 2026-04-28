@@ -676,7 +676,7 @@ public class SkapaKundorder extends javax.swing.JFrame {
                 String farg = model.getValueAt(i, 1).toString();
                 String tyg = model.getValueAt(i, 2).toString();
                 String storlek = model.getValueAt(i, 3).toString();
-                String antalHattar = model.getValueAt(i, 4).toString();
+                int antalHattar = Integer.parseInt(model.getValueAt(i, 4).toString());
 
                 String dekoration = model.getValueAt(i, 6).toString();
 
@@ -692,6 +692,29 @@ public class SkapaKundorder extends javax.swing.JFrame {
                 idb.insert(radSql);
 
                 idb.update("UPDATE Material SET LagerSaldo = LagerSaldo - " + antalHattar + " WHERE Namn = '" + tyg + "'");
+                
+                if (dekoration != null && !dekoration.isEmpty() && !dekoration.equalsIgnoreCase("Ingen")) {
+                    String rentDekorNamn = dekoration;
+                    int antalDekorPerHatt = 1; 
+
+                    if (dekoration.contains("x ")) {
+                        try {
+                            
+                            String antalStr = dekoration.substring(0, dekoration.indexOf("x")).trim();
+                            antalDekorPerHatt = Integer.parseInt(antalStr);
+                            
+                            rentDekorNamn = dekoration.substring(dekoration.indexOf(" ") + 1).trim();
+                        } catch (Exception e) {
+                            antalDekorPerHatt = 1;
+                        }
+                    }
+                    
+                    
+                    int totalMinskningDekor = antalHattar * antalDekorPerHatt;
+                    
+                    idb.update("UPDATE Material SET LagerSaldo = LagerSaldo - " + totalMinskningDekor + " WHERE Namn = '" + rentDekorNamn + "'");
+                }
+
             }
 
             JOptionPane.showMessageDialog(this, "Order #" + nyttOrderID + " har registrerats!");
