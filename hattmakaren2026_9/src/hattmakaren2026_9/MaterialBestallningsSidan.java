@@ -255,6 +255,7 @@ materialModel = new DefaultTableModel(
                 .map(String::valueOf)
                 .collect(Collectors.joining(", "));
 
+        // 1. Hämta basmaterial
         String sql =
             "SELECT o.OrderID, m.Namn, " +
             "SUM(r.Antal * hm.Antal) AS TotaltBehov, " +
@@ -271,6 +272,7 @@ materialModel = new DefaultTableModel(
             behovsLista = new ArrayList<>();
         }
 
+        // 2. Hämta orderrader för att bygga listan på dekorationer
         String sqlOrderrader = "SELECT OrderID, Antal, Anpassningstext FROM Orderrader WHERE OrderID IN (" + ids + ")";
         List<HashMap<String, String>> orderraderLista = idb.fetchRows(sqlOrderrader);
 
@@ -284,54 +286,66 @@ materialModel = new DefaultTableModel(
             }
         }
 
+        // 3. SKOTTSÄKER REGEX-PARSNING AV DEKORATIONER
         if (orderraderLista != null) {
+            // Detta mönster letar efter "Siffra" följt av "x" följt av "Text".
+            java.util.regex.Pattern pattern = java.util.regex.Pattern.compile("(\\d+(?:\\.\\d+)?)\\s*[xX]\\s*([^,\\n|;]+)");
+            
             for (HashMap<String, String> rad : orderraderLista) {
                 String anpassning = rad.get("Anpassningstext");
                 String orderId = rad.get("OrderID");
                 int hattAntal = Integer.parseInt(rad.get("Antal"));
 
                 if (anpassning != null && anpassning.contains("EXTRA:")) {
-                    String extraDel = anpassning.substring(anpassning.indexOf("EXTRA:") + 6).trim();
-                    String[] delar = extraDel.split(","); 
+                    String extraDel = anpassning.substring(anpassning.indexOf("EXTRA:") + 6);
+                    java.util.regex.Matcher matcher = pattern.matcher(extraDel);
+                    
+                    // Varje gång den hittar ett matchande mönster (t.ex. "12x Pärlor")
+                    while (matcher.find()) {
+                        try {
+                            double dekorAntalPerHatt = Double.parseDouble(matcher.group(1)); // Plockar ut 12
+                            String dekorNamn = matcher.group(2).trim(); // Plockar ut Pärlor
+                            
+                            // Dubbel säkerhet: Städa bort ev. ihopklibbad text om kommatecken saknats i sparningen
+                            if (dekorNamn.contains("Egen text:")) {
+                                dekorNamn = dekorNamn.substring(0, dekorNamn.indexOf("Egen text:")).trim();
+                            }
+                            if (dekorNamn.contains("Arbetstid:")) {
+                                dekorNamn = dekorNamn.substring(0, dekorNamn.indexOf("Arbetstid:")).trim();
+                            }
 
-                    for (String del : delar) {
-                        del = del.trim();
-                        if (del.contains("x ")) {
-                            try {
-                                String antalStr = del.substring(0, del.indexOf("x")).trim();
-                                double dekorAntalPerHatt = Double.parseDouble(antalStr);
-                                String dekorNamn = del.substring(del.indexOf("x") + 1).trim();
+                            // Om materialet finns i lagret lägger vi till det i vår lista
+                            if (materialLager.containsKey(dekorNamn)) {
+                                double totaltDekorBehov = dekorAntalPerHatt * hattAntal;
 
-                                if (materialLager.containsKey(dekorNamn)) {
-                                    double totaltDekorBehov = dekorAntalPerHatt * hattAntal;
-
-                                    boolean hittad = false;
-                                    for (HashMap<String, String> behov : behovsLista) {
-                                        if (behov.get("OrderID").equals(orderId) && behov.get("Namn").equals(dekorNamn)) {
-                                            double nuvarandeBehov = Double.parseDouble(behov.get("TotaltBehov"));
-                                            behov.put("TotaltBehov", String.valueOf(nuvarandeBehov + totaltDekorBehov));
-                                            hittad = true;
-                                            break;
-                                        }
-                                    }
-                                    if (!hittad) {
-                                        HashMap<String, String> nyttBehov = new HashMap<>();
-                                        nyttBehov.put("OrderID", orderId);
-                                        nyttBehov.put("Namn", dekorNamn);
-                                        nyttBehov.put("TotaltBehov", String.valueOf(totaltDekorBehov));
-                                        nyttBehov.put("LagerSaldo", String.valueOf(materialLager.get(dekorNamn)));
-                                        behovsLista.add(nyttBehov);
+                                boolean hittad = false;
+                                for (HashMap<String, String> behov : behovsLista) {
+                                    if (behov.get("OrderID").equals(orderId) && behov.get("Namn").equals(dekorNamn)) {
+                                        double nuvarandeBehov = Double.parseDouble(behov.get("TotaltBehov"));
+                                        behov.put("TotaltBehov", String.valueOf(nuvarandeBehov + totaltDekorBehov));
+                                        hittad = true;
+                                        break;
                                     }
                                 }
-                            } catch (Exception e) {
-                                
+
+                                if (!hittad) {
+                                    HashMap<String, String> nyttBehov = new HashMap<>();
+                                    nyttBehov.put("OrderID", orderId);
+                                    nyttBehov.put("Namn", dekorNamn);
+                                    nyttBehov.put("TotaltBehov", String.valueOf(totaltDekorBehov));
+                                    nyttBehov.put("LagerSaldo", String.valueOf(materialLager.get(dekorNamn)));
+                                    behovsLista.add(nyttBehov);
+                                }
                             }
+                        } catch (Exception e) {
+                            // Om det blir fel på en exakt rad, ignorera och hoppa till nästa matchning
                         }
                     }
                 }
             }
         }
 
+        // Sortera listan efter OrderID
         behovsLista.sort((rad1, rad2) -> {
             try {
                 int id1 = Integer.parseInt(rad1.get("OrderID"));
