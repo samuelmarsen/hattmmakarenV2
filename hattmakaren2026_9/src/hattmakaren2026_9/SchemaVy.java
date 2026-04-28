@@ -3,6 +3,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
  */
 package hattmakaren2026_9;
+
 import oru.inf.InfDB;
 import oru.inf.InfException;
 import java.util.ArrayList;
@@ -17,12 +18,12 @@ import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.JTextField;
 import com.toedter.calendar.JDateChooser;
 
-
 /**
  *
  * @author rodaf
  */
 public class SchemaVy extends javax.swing.JFrame {
+
     private InfDB idb;
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(SchemaVy.class.getName());
 
@@ -40,157 +41,156 @@ public class SchemaVy extends javax.swing.JFrame {
     }
 
     private void visaStartVecka() {
-    cbVecka.setSelectedIndex(0);
-}
+        cbVecka.setSelectedIndex(0);
+    }
     private ArrayList<String> passIDLista = new ArrayList<>();
-    
+
     private void fyllPlaneraComboboxar() {
-    try {
-        cmbValjAnstalld.removeAllItems();
-        cmbValjOrder.removeAllItems();
+        try {
+            cmbValjAnstalld.removeAllItems();
+            cmbValjOrder.removeAllItems();
 
-        ArrayList<String> anstallda = idb.fetchColumn("SELECT Namn FROM Anstallda");
-        ArrayList<String> ordrar = idb.fetchColumn("SELECT OrderID FROM Ordrar");
+            ArrayList<String> anstallda = idb.fetchColumn("SELECT Namn FROM Anstallda");
+            ArrayList<String> ordrar = idb.fetchColumn("SELECT OrderID FROM Ordrar");
 
-        if (anstallda != null) {
-            for (String namn : anstallda) {
-                cmbValjAnstalld.addItem(namn);
+            if (anstallda != null) {
+                for (String namn : anstallda) {
+                    cmbValjAnstalld.addItem(namn);
+                }
             }
-        }
 
-        cmbValjOrder.addItem("Inget (Allmänt arbete)");
+            cmbValjOrder.addItem("Inget (Allmänt arbete)");
 
-        if (ordrar != null) {
-            for (String orderID : ordrar) {
-                cmbValjOrder.addItem(orderID);
+            if (ordrar != null) {
+                for (String orderID : ordrar) {
+                    cmbValjOrder.addItem(orderID);
+                }
             }
-        }
 
-    } catch (InfException e) {
-        JOptionPane.showMessageDialog(this, "Kunde inte ladda listor: " + e.getMessage());
+        } catch (InfException e) {
+            JOptionPane.showMessageDialog(this, "Kunde inte ladda listor: " + e.getMessage());
+        }
     }
-}
-    
+
     private void sparaPlaneratPass() {
-    try {
-        if (cmbValjAnstalld.getSelectedItem() == null) {
-            JOptionPane.showMessageDialog(this, "Välj en anställd!");
-            return;
+        try {
+            if (cmbValjAnstalld.getSelectedItem() == null) {
+                JOptionPane.showMessageDialog(this, "Välj en anställd!");
+                return;
+            }
+
+            if (cmbValjOrder.getSelectedItem() == null) {
+                JOptionPane.showMessageDialog(this, "Välj en order!");
+                return;
+            }
+
+            if (jDateChooser1.getDate() == null) {
+                JOptionPane.showMessageDialog(this, "Välj ett datum!");
+                return;
+            }
+
+            if (Validering.arTom(txtAntalTimmar, "Timmar saknas!")
+                    || Validering.arTom(txtBeskrivning, "Beskrivning saknas!")) {
+                return;
+            }
+
+            if (!Validering.arDecimal(txtAntalTimmar)
+                    || !Validering.arPositivtTal(txtAntalTimmar)) {
+                return;
+            }
+
+            String valtNamn = cmbValjAnstalld.getSelectedItem().toString();
+
+            String anstID = idb.fetchSingle(
+                    "SELECT AnstalldID FROM Anstallda WHERE Namn = '" + valtNamn + "'"
+            );
+
+            String valtOrderID = cmbValjOrder.getSelectedItem().toString();
+            String orderValue = valtOrderID.contains("Inget") ? "NULL" : valtOrderID;
+
+            java.text.SimpleDateFormat sdf = new java.text.SimpleDateFormat("yyyy-MM-dd");
+            String datum = sdf.format(jDateChooser1.getDate());
+
+            String aktivitet = txtBeskrivning.getText().replace("'", "''");
+
+            String sql = "INSERT INTO Arbetspass (AnstalldID, OrderID, Datum, Timmar, Aktivitet) VALUES ("
+                    + anstID + ", "
+                    + orderValue + ", '"
+                    + datum + "', "
+                    + txtAntalTimmar.getText().replace(',', '.') + ", '"
+                    + aktivitet + "')";
+
+            idb.insert(sql);
+
+            visaValdVecka();
+
+            JOptionPane.showMessageDialog(this, "Passet har sparats!");
+
+            txtAntalTimmar.setText("");
+            txtBeskrivning.setText("");
+
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, "Kunde inte spara passet: " + e.getMessage());
         }
-
-        if (cmbValjOrder.getSelectedItem() == null) {
-            JOptionPane.showMessageDialog(this, "Välj en order!");
-            return;
-        }
-
-        if (jDateChooser1.getDate() == null) {
-            JOptionPane.showMessageDialog(this, "Välj ett datum!");
-            return;
-        }
-
-        if (Validering.arTom(txtAntalTimmar, "Timmar saknas!") ||
-            Validering.arTom(txtBeskrivning, "Beskrivning saknas!")) {
-            return;
-        }
-
-        if (!Validering.arDecimal(txtAntalTimmar) || 
-            !Validering.arPositivtTal(txtAntalTimmar)) {
-            return;
-        }
-
-        String valtNamn = cmbValjAnstalld.getSelectedItem().toString();
-
-        String anstID = idb.fetchSingle(
-            "SELECT AnstalldID FROM Anstallda WHERE Namn = '" + valtNamn + "'"
-        );
-
-        String valtOrderID = cmbValjOrder.getSelectedItem().toString();
-        String orderValue = valtOrderID.contains("Inget") ? "NULL" : valtOrderID;
-
-        java.text.SimpleDateFormat sdf = new java.text.SimpleDateFormat("yyyy-MM-dd");
-        String datum = sdf.format(jDateChooser1.getDate());
-
-        String aktivitet = txtBeskrivning.getText().replace("'", "''");
-
-        String sql = "INSERT INTO Arbetspass (AnstalldID, OrderID, Datum, Timmar, Aktivitet) VALUES ("
-                + anstID + ", "
-                + orderValue + ", '"
-                + datum + "', "
-                + txtAntalTimmar.getText().replace(',', '.') + ", '"
-                + aktivitet + "')";
-
-        idb.insert(sql);
-
-        visaValdVecka();
-
-        JOptionPane.showMessageDialog(this, "Passet har sparats!");
-
-        txtAntalTimmar.setText("");
-        txtBeskrivning.setText("");
-
-    } catch (Exception e) {
-        JOptionPane.showMessageDialog(this, "Kunde inte spara passet: " + e.getMessage());
     }
-}
-    
+
     private void visaValdVecka() {
-    String valdVecka = cbVecka.getSelectedItem().toString();
+        String valdVecka = cbVecka.getSelectedItem().toString();
 
-    String startDatum = "";
-    String slutDatum = "";
+        String startDatum = "";
+        String slutDatum = "";
 
-    if (valdVecka.contains("Vecka 16")) {
-        startDatum = "2026-04-13";
-        slutDatum = "2026-04-17";
-    } else if (valdVecka.contains("Vecka 17")) {
-        startDatum = "2026-04-20";
-        slutDatum = "2026-04-24";
+        if (valdVecka.contains("Vecka 16")) {
+            startDatum = "2026-04-13";
+            slutDatum = "2026-04-17";
+        } else if (valdVecka.contains("Vecka 17")) {
+            startDatum = "2026-04-20";
+            slutDatum = "2026-04-24";
+        }
+
+        fyllSchemaTabell(startDatum, slutDatum);
     }
 
-    fyllSchemaTabell(startDatum, slutDatum);
-}
-    
     private void fyllPassTabellForValdPerson() {
-    int valdRad = jtSchema.getSelectedRow();
+        int valdRad = jtSchema.getSelectedRow();
 
-    if (valdRad == -1) {
-        return;
-    }
+        if (valdRad == -1) {
+            return;
+        }
 
-    try {
-        String anstalldNamn = jtSchema.getValueAt(valdRad, 0).toString();
+        try {
+            String anstalldNamn = jtSchema.getValueAt(valdRad, 0).toString();
 
-        String anstalldID = idb.fetchSingle(
-            "SELECT AnstalldID FROM Anstallda WHERE Namn = '" + anstalldNamn + "'"
-        );
+            String anstalldID = idb.fetchSingle(
+                    "SELECT AnstalldID FROM Anstallda WHERE Namn = '" + anstalldNamn + "'"
+            );
 
-        String sql = "SELECT PassID, Datum, Aktivitet, Timmar FROM Arbetspass "
-                   + "WHERE AnstalldID = " + anstalldID + " "
-                   + "ORDER BY Datum";
+            String sql = "SELECT PassID, Datum, Aktivitet, Timmar FROM Arbetspass "
+                    + "WHERE AnstalldID = " + anstalldID + " "
+                    + "ORDER BY Datum";
 
-        ArrayList<HashMap<String, String>> passLista = idb.fetchRows(sql);
+            ArrayList<HashMap<String, String>> passLista = idb.fetchRows(sql);
 
-        DefaultTableModel model = (DefaultTableModel) jtPassLista.getModel();
+            DefaultTableModel model = (DefaultTableModel) jtPassLista.getModel();
             model.setRowCount(0);
             passIDLista.clear();
 
-    if (passLista != null) {
-        for (HashMap<String, String> pass : passLista) {
-         passIDLista.add(pass.get("PassID"));
+            if (passLista != null) {
+                for (HashMap<String, String> pass : passLista) {
+                    passIDLista.add(pass.get("PassID"));
 
-        model.addRow(new Object[]{
-             pass.get("Datum"),
-             pass.get("Aktivitet"),
-             pass.get("Timmar")
-        });
+                    model.addRow(new Object[]{
+                        pass.get("Datum"),
+                        pass.get("Aktivitet"),
+                        pass.get("Timmar")
+                    });
+                }
+            }
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, "Kunde inte hämta pass: " + e.getMessage());
+        }
     }
-}
-    } catch (Exception e) {
-        JOptionPane.showMessageDialog(this, "Kunde inte hämta pass: " + e.getMessage());
-    }
-}
-    
-   
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -330,6 +330,7 @@ public class SchemaVy extends javax.swing.JFrame {
         lblTimmarRedigera.setText("Timmar");
 
         btnTaBort.setText("Ta bort");
+        btnTaBort.addActionListener(this::btnTaBortActionPerformed);
 
         btnSparaRedigera.setText("Spara");
         btnSparaRedigera.addActionListener(this::btnSparaRedigeraActionPerformed);
@@ -403,9 +404,7 @@ public class SchemaVy extends javax.swing.JFrame {
                         .addGap(732, 732, 732)))
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                        .addGroup(layout.createSequentialGroup()
-                            .addGap(227, 227, 227)
-                            .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 387, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
                         .addGroup(layout.createSequentialGroup()
@@ -506,11 +505,11 @@ public class SchemaVy extends javax.swing.JFrame {
     }//GEN-LAST:event_cbVeckaActionPerformed
 
     private void btnSparaPassActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSparaPassActionPerformed
-    sparaPlaneratPass();        // TODO add your handling code here:
+        sparaPlaneratPass();        // TODO add your handling code here:
     }//GEN-LAST:event_btnSparaPassActionPerformed
 
     private void jtSchemaMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jtSchemaMouseClicked
-      fyllPassTabellForValdPerson();  // TODO add your handling code here:
+        fyllPassTabellForValdPerson();  // TODO add your handling code here:
     }//GEN-LAST:event_jtSchemaMouseClicked
 
     private void txtBeskrivningAktivitetActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtBeskrivningAktivitetActionPerformed
@@ -522,207 +521,248 @@ public class SchemaVy extends javax.swing.JFrame {
     }//GEN-LAST:event_txtTimmarActionPerformed
 
     private void btnSparaRedigeraActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSparaRedigeraActionPerformed
-                                               
-    try {
-        int rad = jtPassLista.getSelectedRow();
 
-        if (rad == -1) {
-            JOptionPane.showMessageDialog(this, "Välj ett pass i tabellen först!");
-            return;
-        }
+        try {
+            int rad = jtPassLista.getSelectedRow();
 
-        if (jdDatumRedigera.getDate() == null) {
-            JOptionPane.showMessageDialog(this, "Välj ett datum!");
-            return;
-        }
+            if (rad == -1) {
+                JOptionPane.showMessageDialog(this, "Välj ett pass i tabellen först!");
+                return;
+            }
 
-        if (Validering.arTom(txtBeskrivningAktivitet, "Beskrivning saknas!") ||
-            Validering.arTom(txtTimmar, "Timmar saknas!")) {
-            return;
-        }
+            if (jdDatumRedigera.getDate() == null) {
+                JOptionPane.showMessageDialog(this, "Välj ett datum!");
+                return;
+            }
 
-        if (!Validering.arDecimal(txtTimmar) || 
-            !Validering.arPositivtTal(txtTimmar)) {
-            return;
-        }
+            if (Validering.arTom(txtBeskrivningAktivitet, "Beskrivning saknas!")
+                    || Validering.arTom(txtTimmar, "Timmar saknas!")) {
+                return;
+            }
 
-        String passID = passIDLista.get(rad);
+            if (!Validering.arDecimal(txtTimmar)
+                    || !Validering.arPositivtTal(txtTimmar)) {
+                return;
+            }
 
-        java.text.SimpleDateFormat sdf = new java.text.SimpleDateFormat("yyyy-MM-dd");
-        String datum = sdf.format(jdDatumRedigera.getDate());
+            String passID = passIDLista.get(rad);
 
-        String aktivitet = txtBeskrivningAktivitet.getText().replace("'", "''");
-        String timmar = txtTimmar.getText().replace(',', '.');
+            java.text.SimpleDateFormat sdf = new java.text.SimpleDateFormat("yyyy-MM-dd");
+            String datum = sdf.format(jdDatumRedigera.getDate());
 
-        String sql = "UPDATE Arbetspass SET "
-                + "Aktivitet='" + aktivitet + "', "
-                + "Datum='" + datum + "', "
-                + "Timmar=" + timmar + " "
-                + "WHERE PassID=" + passID;
+            String aktivitet = txtBeskrivningAktivitet.getText().replace("'", "''");
+            String timmar = txtTimmar.getText().replace(',', '.');
 
-        idb.update(sql);
+            String sql = "UPDATE Arbetspass SET "
+                    + "Aktivitet='" + aktivitet + "', "
+                    + "Datum='" + datum + "', "
+                    + "Timmar=" + timmar + " "
+                    + "WHERE PassID=" + passID;
 
-        visaValdVecka();
-        fyllPassTabellForValdPerson();
+            idb.update(sql);
 
-        JOptionPane.showMessageDialog(this, "Passet har uppdaterats!");
+            visaValdVecka();
+            fyllPassTabellForValdPerson();
 
-    } catch (Exception e) {
-        JOptionPane.showMessageDialog(this, "Kunde inte uppdatera passet: " + e.getMessage());
-    }    // TODO add your handling code here:
+            JOptionPane.showMessageDialog(this, "Passet har uppdaterats!");
+
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, "Kunde inte uppdatera passet: " + e.getMessage());
+        }    // TODO add your handling code here:
     }//GEN-LAST:event_btnSparaRedigeraActionPerformed
 
     private void jtPassListaMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jtPassListaMouseClicked
-      int rad = jtPassLista.getSelectedRow();
+        int rad = jtPassLista.getSelectedRow();
 
-    if (rad == -1) {
-        return;
-    }
+        if (rad == -1) {
+            return;
+        }
 
-    // TEXTFIELDS (detta är rätt som du gjort)
-    txtBeskrivningAktivitet.setText(jtPassLista.getValueAt(rad, 1).toString());
-    txtTimmar.setText(jtPassLista.getValueAt(rad, 2).toString());
+        // TEXTFIELDS (detta är rätt som du gjort)
+        txtBeskrivningAktivitet.setText(jtPassLista.getValueAt(rad, 1).toString());
+        txtTimmar.setText(jtPassLista.getValueAt(rad, 2).toString());
 
-    // DATECHOOSER (måste konverteras)
-    try {
-        String datumStr = jtPassLista.getValueAt(rad, 0).toString();
+        // DATECHOOSER (måste konverteras)
+        try {
+            String datumStr = jtPassLista.getValueAt(rad, 0).toString();
 
-        java.util.Date datum = new java.text.SimpleDateFormat("yyyy-MM-dd")
-                .parse(datumStr);
+            java.util.Date datum = new java.text.SimpleDateFormat("yyyy-MM-dd")
+                    .parse(datumStr);
 
-        jdDatumRedigera.setDate(datum);
+            jdDatumRedigera.setDate(datum);
 
-    } catch (Exception e) {
-        JOptionPane.showMessageDialog(this, "Fel vid datum");
-    }
-   // TODO add your handling code here:
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, "Fel vid datum");
+        }
+        // TODO add your handling code here:
     }//GEN-LAST:event_jtPassListaMouseClicked
 
-    private void fyllSchemaTabell(String startDatum, String slutDatum) {
-   try {
-        DefaultTableModel model = (DefaultTableModel) jtSchema.getModel();
-        model.setRowCount(0); 
-        
-        String sqlAnstallda = "SELECT AnstalldID, Namn FROM Anstallda";
-        ArrayList<HashMap<String, String>> listaAnstallda = idb.fetchRows(sqlAnstallda);
+    private void btnTaBortActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnTaBortActionPerformed
+        try {
+            
+            int valdRad = jtPassLista.getSelectedRow();
 
-        if (listaAnstallda != null) {
-            for (HashMap<String, String> anstalld : listaAnstallda) {
-                String id = anstalld.get("AnstalldID");
-                Object[] radData = new Object[6];
-                radData[0] = anstalld.get("Namn");
+            if (valdRad == -1) {
+                JOptionPane.showMessageDialog(this, "Vänligen välj ett pass i listan som du vill ta bort.");
+                return;
+            }
 
-                String sqlPass = "SELECT Datum, Aktivitet, OrderID, Timmar FROM Arbetspass " +
-                                 "WHERE AnstalldID = " + id + " " +
-                                 "AND Datum BETWEEN '" + startDatum + "' AND '" + slutDatum + "'";
+            
+            int svar = JOptionPane.showConfirmDialog(this,
+                    "Är du säker på att du vill ta bort det markerade arbetspasset?",
+                    "Bekräfta borttagning",
+                    JOptionPane.YES_NO_OPTION);
+
+            if (svar == JOptionPane.YES_OPTION) {
                 
-                ArrayList<HashMap<String, String>> passData = idb.fetchRows(sqlPass);
+                String passID = passIDLista.get(valdRad);
 
-                if (passData != null) {
-                    for (HashMap<String, String> pass : passData) {
-                        String datum = pass.get("Datum");
-                        String aktivitet = pass.get("Aktivitet");
-                        String order = (pass.get("OrderID") != null) ? " (#" + pass.get("OrderID") + ")" : "";
-                        String timmar = pass.get("Timmar") != null ? pass.get("Timmar") : "0";
-                        
-                        int kolumn = beraknaKolumnIndex(startDatum, datum);
-                        
-                        if (kolumn >= 1 && kolumn <= 5) {
-                            String nyttPassInfo = aktivitet + order + " [" + timmar + "h]";
-                          
-                            if (radData[kolumn] == null) {
-                              
-                                radData[kolumn] = nyttPassInfo;
-                            } else {
+                
+                String sql = "DELETE FROM Arbetspass WHERE PassID = " + passID;
+                idb.delete(sql);
 
-                                String befintligText = radData[kolumn].toString();
+   
+                visaValdVecka(); 
+                fyllPassTabellForValdPerson(); 
 
-                                if (!befintligText.startsWith("<html>")) {
-                                    radData[kolumn] = "<html>" + befintligText + "<br>" + nyttPassInfo + "</html>";
+                
+                txtBeskrivningAktivitet.setText("");
+                txtTimmar.setText("");
+                jdDatumRedigera.setDate(null);
+
+            
+            }
+        } catch (InfException ex) {
+            JOptionPane.showMessageDialog(this, "Ett fel uppstod i databasen: " + ex.getMessage());
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, "Ett fel uppstod: " + e.getMessage());
+        }
+    }//GEN-LAST:event_btnTaBortActionPerformed
+
+    private void fyllSchemaTabell(String startDatum, String slutDatum) {
+        try {
+            DefaultTableModel model = (DefaultTableModel) jtSchema.getModel();
+            model.setRowCount(0);
+
+            String sqlAnstallda = "SELECT AnstalldID, Namn FROM Anstallda";
+            ArrayList<HashMap<String, String>> listaAnstallda = idb.fetchRows(sqlAnstallda);
+
+            if (listaAnstallda != null) {
+                for (HashMap<String, String> anstalld : listaAnstallda) {
+                    String id = anstalld.get("AnstalldID");
+                    Object[] radData = new Object[6];
+                    radData[0] = anstalld.get("Namn");
+
+                    String sqlPass = "SELECT Datum, Aktivitet, OrderID, Timmar FROM Arbetspass "
+                            + "WHERE AnstalldID = " + id + " "
+                            + "AND Datum BETWEEN '" + startDatum + "' AND '" + slutDatum + "'";
+
+                    ArrayList<HashMap<String, String>> passData = idb.fetchRows(sqlPass);
+
+                    if (passData != null) {
+                        for (HashMap<String, String> pass : passData) {
+                            String datum = pass.get("Datum");
+                            String aktivitet = pass.get("Aktivitet");
+                            String order = (pass.get("OrderID") != null) ? " (#" + pass.get("OrderID") + ")" : "";
+                            String timmar = pass.get("Timmar") != null ? pass.get("Timmar") : "0";
+
+                            int kolumn = beraknaKolumnIndex(startDatum, datum);
+
+                            if (kolumn >= 1 && kolumn <= 5) {
+                                String nyttPassInfo = aktivitet + order + " [" + timmar + "h]";
+
+                                if (radData[kolumn] == null) {
+
+                                    radData[kolumn] = nyttPassInfo;
                                 } else {
-                                    String städadText = befintligText.replace("</html>", "");
-                                    radData[kolumn] = städadText + "<br>" + nyttPassInfo + "</html>";
+
+                                    String befintligText = radData[kolumn].toString();
+
+                                    if (!befintligText.startsWith("<html>")) {
+                                        radData[kolumn] = "<html>" + befintligText + "<br>" + nyttPassInfo + "</html>";
+                                    } else {
+                                        String städadText = befintligText.replace("</html>", "");
+                                        radData[kolumn] = städadText + "<br>" + nyttPassInfo + "</html>";
+                                    }
                                 }
                             }
                         }
                     }
+                    model.addRow(radData);
                 }
-                model.addRow(radData);
             }
+        } catch (InfException ex) {
+            JOptionPane.showMessageDialog(this, "Fel vid hämtning: " + ex.getMessage());
         }
-    } catch (InfException ex) {
-        JOptionPane.showMessageDialog(this, "Fel vid hämtning: " + ex.getMessage());
     }
-}
-    
-    
+
     private int beraknaKolumnIndex(String startStr, String passStr) {
-    try {
-        // Gör om textsträngarna till riktiga datum-objekt
-        java.time.LocalDate start = java.time.LocalDate.parse(startStr);
-        java.time.LocalDate pass = java.time.LocalDate.parse(passStr);
-        
-        // Räknar ut hur många dagar det skiljer mellan startdatumet och passets datum
-        long skillnad = java.time.temporal.ChronoUnit.DAYS.between(start, pass);
-        
-        // Returnera skillnaden + 1 (eftersom kolumn 0 är "Personal")
-        return (int) skillnad + 1;
-    } catch (Exception e) {
-        return -1; // Om något går fel (t.ex. felaktigt datumformat)
-    }
-}
-    
-  public class SchemaFargsattare extends DefaultTableCellRenderer {
-
-    @Override
-    public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
-        Component c = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
-        c.setBackground(Color.WHITE);
-        c.setForeground(Color.BLACK);
-
-        if (column > 0 && value != null) {
-            String cellText = value.toString();
-            int totalaTimmar = extraheraOchSummeraTimmar(cellText);
-
-            if (totalaTimmar >= 7) {
-                c.setBackground(new Color(255, 153, 153)); // Röd
-            } else if (totalaTimmar >= 4) {
-                c.setBackground(new Color(255, 255, 153)); // Gul
-            } else if (totalaTimmar > 0) {
-                c.setBackground(new Color(153, 255, 153)); // Grön
-            }
-        }
-        if (isSelected) {
-            c.setBackground(table.getSelectionBackground());
-            c.setForeground(table.getSelectionForeground());
-        }
-        return c;
-    }
-
-    private int extraheraOchSummeraTimmar(String text) {
-        int summa = 0;
         try {
-            String[] delar = text.split("\\[");
-            for (int i = 1; i < delar.length; i++) {
-                StringBuilder siffra = new StringBuilder();
-                for (char tecken : delar[i].toCharArray()) {
-                    if (Character.isDigit(tecken)) {
-                        siffra.append(tecken);
-                    } else {
-                        break; 
+            // Gör om textsträngarna till riktiga datum-objekt
+            java.time.LocalDate start = java.time.LocalDate.parse(startStr);
+            java.time.LocalDate pass = java.time.LocalDate.parse(passStr);
+
+            // Räknar ut hur många dagar det skiljer mellan startdatumet och passets datum
+            long skillnad = java.time.temporal.ChronoUnit.DAYS.between(start, pass);
+
+            // Returnera skillnaden + 1 (eftersom kolumn 0 är "Personal")
+            return (int) skillnad + 1;
+        } catch (Exception e) {
+            return -1; // Om något går fel (t.ex. felaktigt datumformat)
+        }
+    }
+
+    public class SchemaFargsattare extends DefaultTableCellRenderer {
+
+        @Override
+        public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
+            Component c = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
+            c.setBackground(Color.WHITE);
+            c.setForeground(Color.BLACK);
+
+            if (column > 0 && value != null) {
+                String cellText = value.toString();
+                int totalaTimmar = extraheraOchSummeraTimmar(cellText);
+
+                if (totalaTimmar >= 7) {
+                    c.setBackground(new Color(255, 153, 153)); // Röd
+                } else if (totalaTimmar >= 4) {
+                    c.setBackground(new Color(255, 255, 153)); // Gul
+                } else if (totalaTimmar > 0) {
+                    c.setBackground(new Color(153, 255, 153)); // Grön
+                }
+            }
+            if (isSelected) {
+                c.setBackground(table.getSelectionBackground());
+                c.setForeground(table.getSelectionForeground());
+            }
+            return c;
+        }
+
+        private int extraheraOchSummeraTimmar(String text) {
+            int summa = 0;
+            try {
+                String[] delar = text.split("\\[");
+                for (int i = 1; i < delar.length; i++) {
+                    StringBuilder siffra = new StringBuilder();
+                    for (char tecken : delar[i].toCharArray()) {
+                        if (Character.isDigit(tecken)) {
+                            siffra.append(tecken);
+                        } else {
+                            break;
+                        }
+                    }
+                    if (siffra.length() > 0) {
+                        summa += Integer.parseInt(siffra.toString());
                     }
                 }
-                if (siffra.length() > 0) {
-                    summa += Integer.parseInt(siffra.toString());
-                }
+            } catch (Exception e) {
+                System.out.println("Fel vid summering: " + e.getMessage());
             }
-        } catch (Exception e) {
-            System.out.println("Fel vid summering: " + e.getMessage());
+            return summa;
         }
-        return summa;
     }
-}
-    
+
     /**
      * @param args the command line arguments
      */
