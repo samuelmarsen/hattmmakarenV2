@@ -91,6 +91,7 @@ public class OrderStatus extends javax.swing.JFrame {
         gridBagConstraints.insets = new java.awt.Insets(210, 163, 0, 0);
         getContentPane().add(jPanel1, gridBagConstraints);
 
+        txtVisaOrderStatus.setEditable(false);
         txtVisaOrderStatus.setColumns(20);
         txtVisaOrderStatus.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         txtVisaOrderStatus.setRows(5);

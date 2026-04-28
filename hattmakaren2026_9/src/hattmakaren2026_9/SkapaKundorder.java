@@ -5,10 +5,6 @@
  */
 package hattmakaren2026_9;
 
-//import java.sql.Connection;
-//import java.sql.DriverManager;
-//import java.sql.PreparedStatement;
-//import java.sql.ResultSet;
 import java.util.ArrayList;
 import javax.swing.JOptionPane;
 import oru.inf.InfDB;
@@ -137,15 +133,6 @@ public class SkapaKundorder extends javax.swing.JFrame {
     }
 
     private void fyllAlternativ() {
-        //cmbFarg.addItem("Svart");
-        //cmbFarg.addItem("Vit");
-        //cmbFarg.addItem("Blå");
-        //cmbFarg.addItem("Röd");
-        //cmbFarg.addItem("Grön");
-        //cmbFarg.addItem("Gul");
-        //cmbFarg.addItem("Brun");
-        //cmbFarg.addItem("Natur");
-
         cmbTyg.addItem("Ullfilt");
         cmbTyg.addItem("Kaninfilt");
         cmbTyg.addItem("Läder");
@@ -622,7 +609,6 @@ public class SkapaKundorder extends javax.swing.JFrame {
             String kundID = txtKundId.getText();
             String fraktAdress = txtFraktadress.getText();
             String datum = txtDatum.getText();
-            // Kontrollera att en kund är vald
             if (kundID.isEmpty()) {
                 JOptionPane.showMessageDialog(this, "Välj en kund först!");
                 return;
@@ -658,10 +644,8 @@ public class SkapaKundorder extends javax.swing.JFrame {
 
             String nyttOrderID = idb.fetchSingle("SELECT MAX(OrderID) FROM Ordrar");
 
-            // 5. REGISTRERA OTTO I ARBETSPASS (Viktigt: vi fyller i alla kolumner nu!)
             if (OttoID != null && nyttOrderID != null) {
                 try {
-                    // Vi lägger till Datum, 0 timmar och en aktivitetstext för att tabellen ska acceptera raden
                     String arbetspassSql = "INSERT INTO Arbetspass (AnstalldID, OrderID, Datum, Timmar, Aktivitet) "
                             + "VALUES (" + OttoID + ", " + nyttOrderID + ", '" + datum + "', 0, 'Order registrerad')";
                     idb.insert(arbetspassSql);
@@ -788,14 +772,8 @@ public class SkapaKundorder extends javax.swing.JFrame {
                 }
 
                 javax.swing.SwingUtilities.invokeLater(() -> {
-
-                    //7cmbFarg.setSelectedItem(f != null ? f : "Saknas");
                     cmbTyg.setSelectedItem(t != null ? t : "Saknas");
-
                     cmbStorlek.setSelectedItem(s != null ? s : "Saknas");
-
-                    //cmbFarg.revalidate();
-                    //cmbFarg.repaint();
                     cmbTyg.revalidate();
                     cmbTyg.repaint();
                     cmbStorlek.revalidate();
@@ -843,7 +821,7 @@ public class SkapaKundorder extends javax.swing.JFrame {
         int antal = antalStr.isEmpty() ? 1 : Integer.parseInt(antalStr);
         String hattModell = (String) cmbHatt.getSelectedItem();
         String tyg = (String) cmbTyg.getSelectedItem();
-        //String farg = (String) cmbFarg.getSelectedItem();
+
         String storlek = (String) cmbStorlek.getSelectedItem();
         java.awt.Color aktuellFarg = JpVisaFarg.getBackground();
         String hexFarg = String.format("#%02x%02x%02x", aktuellFarg.getRed(), aktuellFarg.getGreen(), aktuellFarg.getBlue());
@@ -892,7 +870,6 @@ public class SkapaKundorder extends javax.swing.JFrame {
         javax.swing.table.DefaultTableModel model = (javax.swing.table.DefaultTableModel) jTable1.getModel();
 
         model.addRow(new Object[]{hattModell, hexFarg, tyg, storlek, antal, snabborderText, dekorationer});
-        //Farg efter tyg
 
         extraKostnadMaterial = 0.0;
         txtAreaSpecial.setText("");
@@ -919,14 +896,10 @@ public class SkapaKundorder extends javax.swing.JFrame {
             String valtMat = cmbDekoration.getSelectedItem().toString();
             int antal = Integer.parseInt(txtDekorationAntal.getText().trim());
 
-            // Hämta priset för materialet från databasen
             String prisStr = idb.fetchSingle("SELECT EnhetsPris FROM Material WHERE Namn = '" + valtMat + "'");
             double styckPris = Double.parseDouble(prisStr);
 
-            // Addera till den temporära potten
             extraKostnadMaterial += (styckPris * antal);
-
-            // Visa i loggen för Otto
             txtAreaSpecial.append(antal + "x " + valtMat + "\n");
             txtDekorationAntal.setText("");
         } catch (Exception e) {
@@ -946,20 +919,16 @@ public class SkapaKundorder extends javax.swing.JFrame {
             java.io.File fil = fc.getSelectedFile();
             valdBildSokvag = fil.getAbsolutePath();
 
-            // 1. Skapa en ImageIcon från filen
             javax.swing.ImageIcon originalIkon = new javax.swing.ImageIcon(valdBildSokvag);
 
-            // 2. Skala om bilden så den passar i din label (t.ex. 150x150 pixlar)
             java.awt.Image bild = originalIkon.getImage();
             java.awt.Image skaladBild = bild.getScaledInstance(150, 150, java.awt.Image.SCALE_SMOOTH);
 
-            // 3. Skapa en ny ikon av den skalade bilden och sätt på labeln
             javax.swing.ImageIcon färdigIkon = new javax.swing.ImageIcon(skaladBild);
             lblBildStatus.setIcon(färdigIkon);
 
-            // Valfritt: Ta bort texten om du bara vill se bilden
             lblBildStatus.setText("");
-        }      // TODO add your handling code here:
+        }      
     }//GEN-LAST:event_btnBifogaReferensBildActionPerformed
 
     private void txtInloggadEmailActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtInloggadEmailActionPerformed
@@ -982,18 +951,13 @@ public class SkapaKundorder extends javax.swing.JFrame {
     private void btnTaBortOrderradActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnTaBortOrderradActionPerformed
         DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
 
-        // Kontrollera om en rad är markerad
         int markeradRad = jTable1.getSelectedRow();
 
         if (markeradRad != -1) {
-            // Valfritt: Bekräftelsefråga
             int svar = JOptionPane.showConfirmDialog(this, "Vill du ta bort den valda hatten från ordern?", "Ta bort", JOptionPane.YES_NO_OPTION);
 
             if (svar == JOptionPane.YES_OPTION) {
-                // Ta bort raden från modellen
                 model.removeRow(markeradRad);
-
-                // HÄR MÅSTE DU UPPDATERA PRISET
                 uppdateraTotalPris();
 
                 JOptionPane.showMessageDialog(this, "Hatten har tagits bort.");

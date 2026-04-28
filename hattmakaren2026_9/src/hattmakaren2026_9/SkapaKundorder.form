@@ -132,7 +132,6 @@
                               </Group>
                               <EmptySpace pref="18" max="32767" attributes="0"/>
                               <Component id="jPanel1" min="-2" max="-2" attributes="0"/>
-                              <EmptySpace type="separate" max="-2" attributes="0"/>
                           </Group>
                           <Group type="102" alignment="0" attributes="0">
                               <EmptySpace min="19" pref="19" max="-2" attributes="0"/>
@@ -141,7 +140,6 @@
                               <Component id="txtKundId" min="-2" max="-2" attributes="0"/>
                               <EmptySpace type="separate" max="-2" attributes="0"/>
                               <Component id="jPanel2" min="-2" max="-2" attributes="0"/>
-                              <EmptySpace max="32767" attributes="0"/>
                           </Group>
                       </Group>
                       <EmptySpace min="-2" pref="47" max="-2" attributes="0"/>
@@ -173,7 +171,6 @@
               <EmptySpace min="-2" pref="29" max="-2" attributes="0"/>
               <Group type="103" groupAlignment="0" attributes="0">
                   <Group type="102" attributes="0">
-                      <EmptySpace type="unrelated" min="-2" max="-2" attributes="0"/>
                       <Component id="jScrollPane1" max="32767" attributes="0"/>
                       <EmptySpace type="unrelated" min="-2" max="-2" attributes="0"/>
                   </Group>
