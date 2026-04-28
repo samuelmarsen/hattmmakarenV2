@@ -23,261 +23,179 @@
   <Layout>
     <DimensionLayout dim="0">
       <Group type="103" groupAlignment="0" attributes="0">
-          <Group type="102" alignment="0" attributes="0">
+          <Group type="102" attributes="0">
+              <Group type="103" groupAlignment="0" attributes="0">
+                  <Group type="102" alignment="1" attributes="0">
+                      <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
+                      <Component id="chkSnabborder" min="-2" pref="130" max="-2" attributes="0"/>
+                      <EmptySpace type="separate" max="-2" attributes="0"/>
+                      <Component id="btnPaborjaOrder" min="-2" pref="136" max="-2" attributes="0"/>
+                      <EmptySpace min="-2" pref="14" max="-2" attributes="0"/>
+                  </Group>
+                  <Group type="102" alignment="1" attributes="0">
+                      <Component id="txtInloggadEmail" min="-2" pref="309" max="-2" attributes="0"/>
+                      <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
+                  </Group>
+                  <Group type="102" attributes="0">
+                      <Group type="103" groupAlignment="0" attributes="0">
+                          <Group type="102" attributes="0">
+                              <EmptySpace min="-2" pref="6" max="-2" attributes="0"/>
+                              <Component id="lblInloggadAnstalld" pref="575" max="32767" attributes="0"/>
+                              <EmptySpace min="-2" pref="205" max="-2" attributes="0"/>
+                              <Component id="jLabel1" min="-2" pref="258" max="-2" attributes="0"/>
+                              <EmptySpace min="-2" pref="434" max="-2" attributes="0"/>
+                          </Group>
+                          <Group type="102" attributes="0">
+                              <EmptySpace max="-2" attributes="0"/>
+                              <Group type="103" groupAlignment="0" attributes="0">
+                                  <Component id="cmbValjKund" alignment="0" min="-2" max="-2" attributes="0"/>
+                                  <Component id="jPanel1" alignment="0" min="-2" max="-2" attributes="0"/>
+                                  <Group type="102" alignment="0" attributes="0">
+                                      <Component id="lblHattmodell" min="-2" pref="139" max="-2" attributes="0"/>
+                                      <EmptySpace type="separate" max="-2" attributes="0"/>
+                                      <Component id="cmbHatt" min="-2" pref="81" max="-2" attributes="0"/>
+                                      <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                                      <Component id="btnValjFarg" min="-2" max="-2" attributes="0"/>
+                                      <EmptySpace max="-2" attributes="0"/>
+                                      <Component id="JpVisaFarg" min="-2" max="-2" attributes="0"/>
+                                      <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                                      <Component id="cmbTyg" min="-2" pref="98" max="-2" attributes="0"/>
+                                      <EmptySpace min="-2" pref="26" max="-2" attributes="0"/>
+                                      <Component id="cmbStorlek" min="-2" pref="111" max="-2" attributes="0"/>
+                                      <EmptySpace min="-2" pref="63" max="-2" attributes="0"/>
+                                      <Group type="103" groupAlignment="1" max="-2" attributes="0">
+                                          <Component id="lblVäljAntal" alignment="0" max="32767" attributes="0"/>
+                                          <Component id="txtAntalHattar" alignment="0" min="-2" pref="71" max="-2" attributes="0"/>
+                                      </Group>
+                                      <EmptySpace min="-2" pref="91" max="-2" attributes="0"/>
+                                      <Group type="103" groupAlignment="0" max="-2" attributes="0">
+                                          <Component id="btnTaBortOrderrad" pref="135" max="32767" attributes="0"/>
+                                          <Component id="btnLaggTillIOrder" max="32767" attributes="0"/>
+                                      </Group>
+                                  </Group>
+                              </Group>
+                          </Group>
+                      </Group>
+                      <EmptySpace max="32767" attributes="0"/>
+                      <Group type="103" groupAlignment="0" attributes="0">
+                          <Component id="txtKundId" alignment="1" min="-2" pref="102" max="-2" attributes="0"/>
+                          <Component id="lblKundIdForOrder" alignment="1" min="-2" pref="102" max="-2" attributes="0"/>
+                          <Component id="jPanel2" alignment="1" min="-2" max="-2" attributes="0"/>
+                      </Group>
+                  </Group>
+              </Group>
+              <EmptySpace min="-2" pref="25" max="-2" attributes="0"/>
+          </Group>
+          <Group type="102" attributes="0">
               <Group type="103" groupAlignment="0" attributes="0">
                   <Component id="lblBildStatus" max="32767" attributes="0"/>
                   <Component id="btnBifogaReferensBild" min="-2" pref="168" max="-2" attributes="0"/>
               </Group>
               <EmptySpace max="-2" attributes="0"/>
               <Group type="103" groupAlignment="0" attributes="0">
-                  <Group type="102" attributes="0">
-                      <EmptySpace min="6" pref="6" max="-2" attributes="0"/>
-                      <Component id="jScrollPane1" max="32767" attributes="0"/>
-                  </Group>
-                  <Group type="102" attributes="0">
+                  <Component id="jScrollPane1" alignment="0" max="32767" attributes="0"/>
+                  <Group type="102" alignment="0" attributes="0">
                       <Group type="103" groupAlignment="0" attributes="0">
                           <Component id="jLabel2" min="-2" pref="107" max="-2" attributes="0"/>
                           <Component id="jLabel5" min="-2" pref="99" max="-2" attributes="0"/>
-                          <Component id="btnTillbaka" min="-2" max="-2" attributes="0"/>
                           <Component id="txtPrisExklMoms" alignment="0" min="-2" pref="107" max="-2" attributes="0"/>
                       </Group>
-                      <EmptySpace min="0" pref="847" max="32767" attributes="0"/>
+                      <EmptySpace min="0" pref="1633" max="32767" attributes="0"/>
                   </Group>
               </Group>
               <EmptySpace max="-2" attributes="0"/>
           </Group>
           <Group type="102" alignment="0" attributes="0">
-              <EmptySpace min="-2" max="-2" attributes="0"/>
-              <Group type="103" groupAlignment="0" attributes="0">
-                  <Group type="102" attributes="0">
-                      <EmptySpace min="-2" pref="10" max="-2" attributes="0"/>
-                      <Component id="lblEgenText" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace max="32767" attributes="0"/>
-                  </Group>
-                  <Group type="102" attributes="0">
-                      <Group type="103" groupAlignment="0" attributes="0">
-                          <Group type="102" alignment="1" attributes="0">
-                              <Group type="103" groupAlignment="0" attributes="0">
-                                  <Component id="cmbValjKund" min="-2" max="-2" attributes="0"/>
-                                  <Component id="txtInloggadEmail" min="-2" pref="309" max="-2" attributes="0"/>
-                              </Group>
-                              <EmptySpace max="32767" attributes="0"/>
-                              <Group type="103" groupAlignment="0" attributes="0">
-                                  <Group type="102" alignment="1" attributes="0">
-                                      <Component id="lblDatum" min="-2" pref="178" max="-2" attributes="0"/>
-                                      <EmptySpace min="-2" pref="205" max="-2" attributes="0"/>
-                                  </Group>
-                                  <Group type="102" alignment="1" attributes="0">
-                                      <Component id="lblFraktadress" min="-2" pref="70" max="-2" attributes="0"/>
-                                      <EmptySpace min="-2" max="-2" attributes="0"/>
-                                      <Component id="txtFraktadress" min="-2" pref="187" max="-2" attributes="0"/>
-                                      <EmptySpace min="120" pref="120" max="-2" attributes="0"/>
-                                  </Group>
-                              </Group>
-                          </Group>
-                          <Group type="102" attributes="0">
-                              <Group type="103" groupAlignment="0" attributes="0">
-                                  <Group type="102" attributes="0">
-                                      <Group type="103" groupAlignment="1" attributes="0">
-                                          <Group type="102" attributes="0">
-                                              <Group type="103" groupAlignment="0" attributes="0">
-                                                  <Component id="lblHattmodell" min="-2" pref="139" max="-2" attributes="0"/>
-                                                  <Component id="lblDekoration" min="-2" max="-2" attributes="0"/>
-                                              </Group>
-                                              <EmptySpace type="separate" max="-2" attributes="0"/>
-                                              <Group type="103" groupAlignment="0" attributes="0">
-                                                  <Group type="102" attributes="0">
-                                                      <Group type="103" groupAlignment="0" attributes="0">
-                                                          <Component id="cmbHatt" alignment="0" min="-2" pref="81" max="-2" attributes="0"/>
-                                                          <Component id="cmbDekoration" alignment="0" min="-2" max="-2" attributes="0"/>
-                                                      </Group>
-                                                      <EmptySpace type="unrelated" max="-2" attributes="0"/>
-                                                      <Group type="103" groupAlignment="1" attributes="0">
-                                                          <Group type="102" attributes="0">
-                                                              <Component id="lblAntalDekoration" min="-2" pref="46" max="-2" attributes="0"/>
-                                                              <EmptySpace min="-2" pref="43" max="-2" attributes="0"/>
-                                                              <Component id="txtDekorationAntal" min="-2" pref="90" max="-2" attributes="0"/>
-                                                          </Group>
-                                                          <Group type="102" alignment="1" attributes="0">
-                                                              <Component id="btnValjFarg" min="-2" max="-2" attributes="0"/>
-                                                              <EmptySpace max="-2" attributes="0"/>
-                                                              <Component id="JpVisaFarg" min="-2" max="-2" attributes="0"/>
-                                                              <EmptySpace type="unrelated" max="-2" attributes="0"/>
-                                                              <Component id="cmbTyg" min="-2" pref="98" max="-2" attributes="0"/>
-                                                          </Group>
-                                                      </Group>
-                                                      <EmptySpace min="-2" pref="26" max="-2" attributes="0"/>
-                                                      <Component id="cmbStorlek" min="-2" pref="111" max="-2" attributes="0"/>
-                                                  </Group>
-                                                  <Component id="txtUppskattadTid" alignment="0" min="-2" max="-2" attributes="0"/>
-                                                  <Component id="txtEgenHattText" alignment="0" min="-2" pref="341" max="-2" attributes="0"/>
-                                              </Group>
-                                              <EmptySpace max="32767" attributes="0"/>
-                                          </Group>
-                                          <Group type="102" attributes="0">
-                                              <Component id="lblInloggadAnstalld" max="32767" attributes="0"/>
-                                              <EmptySpace min="-2" pref="205" max="-2" attributes="0"/>
-                                              <Component id="jLabel1" min="-2" pref="136" max="-2" attributes="0"/>
-                                              <EmptySpace min="-2" pref="136" max="-2" attributes="0"/>
-                                          </Group>
-                                      </Group>
-                                      <Component id="btnAdderaDekoration" min="-2" max="-2" attributes="0"/>
-                                  </Group>
-                                  <Component id="lblUppskattadTid" alignment="0" min="-2" max="-2" attributes="0"/>
-                              </Group>
-                              <Group type="103" groupAlignment="1" attributes="0">
-                                  <Group type="102" alignment="1" attributes="0">
-                                      <EmptySpace max="32767" attributes="0"/>
-                                      <Component id="txtDatum" min="-2" pref="118" max="-2" attributes="0"/>
-                                      <EmptySpace min="-2" pref="87" max="-2" attributes="0"/>
-                                      <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                                          <Component id="lblKundIdForOrder" max="32767" attributes="0"/>
-                                          <Component id="txtKundId" min="-2" pref="102" max="-2" attributes="0"/>
-                                      </Group>
-                                  </Group>
-                                  <Group type="102" alignment="1" attributes="0">
-                                      <EmptySpace min="-2" pref="29" max="-2" attributes="0"/>
-                                      <Component id="jScrollPane2" min="-2" pref="129" max="-2" attributes="0"/>
-                                      <EmptySpace max="32767" attributes="0"/>
-                                      <Group type="103" groupAlignment="0" attributes="0">
-                                          <Group type="102" alignment="0" attributes="0">
-                                              <Group type="103" groupAlignment="1" max="-2" attributes="0">
-                                                  <Component id="lblVäljAntal" alignment="0" max="32767" attributes="0"/>
-                                                  <Component id="txtAntalHattar" alignment="0" pref="71" max="32767" attributes="0"/>
-                                              </Group>
-                                              <EmptySpace type="separate" max="-2" attributes="0"/>
-                                              <Component id="chkSnabborder" min="-2" max="-2" attributes="0"/>
-                                          </Group>
-                                          <Group type="103" alignment="0" groupAlignment="1" max="-2" attributes="0">
-                                              <Component id="btnTaBortOrderrad" alignment="0" max="32767" attributes="0"/>
-                                              <Component id="btnLaggTillIOrder" alignment="0" max="32767" attributes="0"/>
-                                          </Group>
-                                      </Group>
-                                  </Group>
-                              </Group>
-                          </Group>
-                          <Group type="102" alignment="1" attributes="0">
-                              <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
-                              <Component id="btnPaborjaOrder" min="-2" max="-2" attributes="0"/>
-                          </Group>
-                      </Group>
-                      <EmptySpace min="-2" pref="25" max="-2" attributes="0"/>
-                  </Group>
-              </Group>
+              <EmptySpace max="-2" attributes="0"/>
+              <Component id="btnTillbaka" min="-2" pref="101" max="-2" attributes="0"/>
+              <EmptySpace max="32767" attributes="0"/>
           </Group>
       </Group>
     </DimensionLayout>
     <DimensionLayout dim="1">
       <Group type="103" groupAlignment="0" attributes="0">
           <Group type="102" alignment="0" attributes="0">
-              <Group type="103" groupAlignment="0" attributes="0">
-                  <Group type="102" attributes="0">
+              <Group type="103" groupAlignment="1" attributes="0">
+                  <Group type="102" alignment="1" attributes="0">
                       <Group type="103" groupAlignment="0" attributes="0">
-                          <Group type="102" attributes="0">
+                          <Group type="102" alignment="0" attributes="0">
+                              <Group type="103" groupAlignment="0" attributes="0">
+                                  <Group type="102" alignment="0" attributes="0">
+                                      <EmptySpace min="-2" pref="8" max="-2" attributes="0"/>
+                                      <Component id="lblInloggadAnstalld" min="-2" max="-2" attributes="0"/>
+                                      <EmptySpace max="-2" attributes="0"/>
+                                      <Component id="txtInloggadEmail" min="-2" max="-2" attributes="0"/>
+                                      <EmptySpace type="separate" max="-2" attributes="0"/>
+                                      <Component id="cmbValjKund" min="-2" max="-2" attributes="0"/>
+                                  </Group>
+                                  <Component id="jLabel1" alignment="0" min="-2" pref="30" max="-2" attributes="0"/>
+                              </Group>
+                              <EmptySpace pref="18" max="32767" attributes="0"/>
+                              <Component id="jPanel1" min="-2" max="-2" attributes="0"/>
+                              <EmptySpace type="separate" max="-2" attributes="0"/>
+                          </Group>
+                          <Group type="102" alignment="0" attributes="0">
                               <EmptySpace min="19" pref="19" max="-2" attributes="0"/>
                               <Component id="lblKundIdForOrder" min="-2" max="-2" attributes="0"/>
-                          </Group>
-                          <Component id="jLabel1" alignment="0" min="-2" pref="30" max="-2" attributes="0"/>
-                      </Group>
-                      <EmptySpace pref="16" max="32767" attributes="0"/>
-                      <Group type="103" groupAlignment="0" attributes="0">
-                          <Component id="txtKundId" min="-2" max="-2" attributes="0"/>
-                          <Group type="102" alignment="0" attributes="0">
-                              <EmptySpace min="6" pref="6" max="-2" attributes="0"/>
-                              <Component id="lblDatum" min="-2" max="-2" attributes="0"/>
-                          </Group>
-                          <Component id="txtDatum" min="-2" max="-2" attributes="0"/>
-                      </Group>
-                  </Group>
-                  <Group type="102" alignment="0" attributes="0">
-                      <EmptySpace min="-2" pref="8" max="-2" attributes="0"/>
-                      <Component id="lblInloggadAnstalld" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace max="-2" attributes="0"/>
-                      <Component id="txtInloggadEmail" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
-                  </Group>
-              </Group>
-              <Group type="103" groupAlignment="0" attributes="0">
-                  <Component id="cmbValjKund" min="-2" max="-2" attributes="0"/>
-                  <Component id="txtFraktadress" min="-2" max="-2" attributes="0"/>
-                  <Group type="102" alignment="0" attributes="0">
-                      <EmptySpace min="6" pref="6" max="-2" attributes="0"/>
-                      <Component id="lblFraktadress" min="-2" max="-2" attributes="0"/>
-                  </Group>
-              </Group>
-              <EmptySpace type="separate" max="-2" attributes="0"/>
-              <Group type="103" groupAlignment="3" attributes="0">
-                  <Component id="lblEgenText" alignment="3" min="-2" max="-2" attributes="0"/>
-                  <Component id="txtEgenHattText" alignment="3" min="-2" max="-2" attributes="0"/>
-              </Group>
-              <EmptySpace min="-2" pref="2" max="-2" attributes="0"/>
-              <Group type="103" groupAlignment="3" attributes="0">
-                  <Component id="lblVäljAntal" alignment="3" min="-2" max="-2" attributes="0"/>
-                  <Component id="lblUppskattadTid" alignment="3" min="-2" max="-2" attributes="0"/>
-                  <Component id="txtUppskattadTid" alignment="3" min="-2" max="-2" attributes="0"/>
-              </Group>
-              <EmptySpace min="-2" max="-2" attributes="0"/>
-              <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                  <Component id="JpVisaFarg" max="32767" attributes="0"/>
-                  <Group type="103" groupAlignment="3" attributes="0">
-                      <Component id="cmbHatt" alignment="3" min="-2" max="-2" attributes="0"/>
-                      <Component id="lblHattmodell" alignment="3" min="-2" max="-2" attributes="0"/>
-                      <Component id="txtAntalHattar" alignment="3" min="-2" max="-2" attributes="0"/>
-                      <Component id="cmbTyg" alignment="3" min="-2" max="-2" attributes="0"/>
-                      <Component id="cmbStorlek" alignment="3" min="-2" max="-2" attributes="0"/>
-                      <Component id="chkSnabborder" alignment="3" min="-2" max="-2" attributes="0"/>
-                      <Component id="btnValjFarg" alignment="3" min="-2" max="-2" attributes="0"/>
-                  </Group>
-              </Group>
-              <EmptySpace max="-2" attributes="0"/>
-              <Group type="103" groupAlignment="0" attributes="0">
-                  <Group type="102" attributes="0">
-                      <Group type="103" groupAlignment="3" attributes="0">
-                          <Component id="btnLaggTillIOrder" alignment="3" min="-2" max="-2" attributes="0"/>
-                          <Component id="cmbDekoration" alignment="3" min="-2" max="-2" attributes="0"/>
-                          <Component id="txtDekorationAntal" alignment="3" min="-2" max="-2" attributes="0"/>
-                          <Component id="btnAdderaDekoration" alignment="3" min="-2" max="-2" attributes="0"/>
-                          <Component id="lblAntalDekoration" alignment="3" min="-2" max="-2" attributes="0"/>
-                          <Component id="lblDekoration" alignment="3" min="-2" max="-2" attributes="0"/>
-                      </Group>
-                      <Group type="103" groupAlignment="0" attributes="0">
-                          <Group type="102" attributes="0">
-                              <EmptySpace min="-2" pref="11" max="-2" attributes="0"/>
-                              <Component id="jLabel5" min="-2" max="-2" attributes="0"/>
-                          </Group>
-                          <Group type="102" alignment="1" attributes="0">
                               <EmptySpace max="-2" attributes="0"/>
-                              <Component id="btnTaBortOrderrad" min="-2" max="-2" attributes="0"/>
-                          </Group>
-                      </Group>
-                      <Group type="103" groupAlignment="0" attributes="0">
-                          <Group type="102" attributes="0">
-                              <EmptySpace type="unrelated" min="-2" max="-2" attributes="0"/>
-                              <Component id="jScrollPane1" pref="338" max="32767" attributes="0"/>
-                              <EmptySpace type="unrelated" min="-2" max="-2" attributes="0"/>
-                          </Group>
-                          <Group type="102" alignment="0" attributes="0">
-                              <EmptySpace min="-2" pref="33" max="-2" attributes="0"/>
-                              <Component id="btnBifogaReferensBild" min="-2" max="-2" attributes="0"/>
+                              <Component id="txtKundId" min="-2" max="-2" attributes="0"/>
                               <EmptySpace type="separate" max="-2" attributes="0"/>
-                              <Component id="lblBildStatus" min="-2" pref="150" max="-2" attributes="0"/>
+                              <Component id="jPanel2" min="-2" max="-2" attributes="0"/>
                               <EmptySpace max="32767" attributes="0"/>
                           </Group>
                       </Group>
-                      <Component id="jLabel2" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace min="-2" max="-2" attributes="0"/>
-                      <Component id="txtPrisExklMoms" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace min="-2" pref="7" max="-2" attributes="0"/>
-                      <Component id="btnPaborjaOrder" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace min="-2" max="-2" attributes="0"/>
-                      <Component id="btnTillbaka" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace min="-2" pref="40" max="-2" attributes="0"/>
+                      <EmptySpace min="-2" pref="47" max="-2" attributes="0"/>
+                      <Group type="103" groupAlignment="0" attributes="0">
+                          <Group type="103" groupAlignment="0" max="-2" attributes="0">
+                              <Component id="JpVisaFarg" max="32767" attributes="0"/>
+                              <Group type="103" alignment="0" groupAlignment="3" attributes="0">
+                                  <Component id="cmbHatt" alignment="3" min="-2" max="-2" attributes="0"/>
+                                  <Component id="lblHattmodell" alignment="3" min="-2" max="-2" attributes="0"/>
+                                  <Component id="cmbTyg" alignment="3" min="-2" max="-2" attributes="0"/>
+                                  <Component id="cmbStorlek" alignment="3" min="-2" max="-2" attributes="0"/>
+                                  <Component id="btnValjFarg" alignment="3" min="-2" max="-2" attributes="0"/>
+                              </Group>
+                          </Group>
+                          <Component id="btnLaggTillIOrder" min="-2" max="-2" attributes="0"/>
+                      </Group>
                   </Group>
-                  <Group type="102" alignment="0" attributes="0">
-                      <Component id="jScrollPane2" min="-2" pref="59" max="-2" attributes="0"/>
-                      <EmptySpace max="32767" attributes="0"/>
+                  <Group type="102" alignment="1" attributes="0">
+                      <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
+                      <Component id="lblVäljAntal" min="-2" max="-2" attributes="0"/>
+                      <EmptySpace max="-2" attributes="0"/>
+                      <Component id="txtAntalHattar" min="-2" max="-2" attributes="0"/>
                   </Group>
               </Group>
+              <EmptySpace max="-2" attributes="0"/>
+              <Component id="btnTaBortOrderrad" min="-2" max="-2" attributes="0"/>
+              <EmptySpace min="-2" pref="9" max="-2" attributes="0"/>
+              <Component id="jLabel5" min="-2" max="-2" attributes="0"/>
+              <EmptySpace min="-2" pref="29" max="-2" attributes="0"/>
+              <Group type="103" groupAlignment="0" attributes="0">
+                  <Group type="102" attributes="0">
+                      <EmptySpace type="unrelated" min="-2" max="-2" attributes="0"/>
+                      <Component id="jScrollPane1" max="32767" attributes="0"/>
+                      <EmptySpace type="unrelated" min="-2" max="-2" attributes="0"/>
+                  </Group>
+                  <Group type="102" alignment="0" attributes="0">
+                      <EmptySpace min="-2" pref="33" max="-2" attributes="0"/>
+                      <Component id="btnBifogaReferensBild" min="-2" max="-2" attributes="0"/>
+                      <EmptySpace type="separate" max="-2" attributes="0"/>
+                      <Component id="lblBildStatus" min="-2" pref="150" max="-2" attributes="0"/>
+                      <EmptySpace pref="241" max="32767" attributes="0"/>
+                  </Group>
+              </Group>
+              <Component id="jLabel2" min="-2" max="-2" attributes="0"/>
+              <EmptySpace min="-2" max="-2" attributes="0"/>
+              <Component id="txtPrisExklMoms" min="-2" max="-2" attributes="0"/>
+              <EmptySpace min="-2" pref="8" max="-2" attributes="0"/>
+              <Group type="103" groupAlignment="1" attributes="0">
+                  <Component id="btnPaborjaOrder" min="-2" pref="24" max="-2" attributes="0"/>
+                  <Component id="chkSnabborder" min="-2" max="-2" attributes="0"/>
+              </Group>
+              <EmptySpace min="-2" pref="3" max="-2" attributes="0"/>
+              <Component id="btnTillbaka" min="-2" pref="47" max="-2" attributes="0"/>
+              <EmptySpace min="-2" pref="19" max="-2" attributes="0"/>
           </Group>
       </Group>
     </DimensionLayout>
@@ -285,6 +203,9 @@
   <SubComponents>
     <Component class="javax.swing.JLabel" name="jLabel1">
       <Properties>
+        <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+          <Font name="Segoe UI" size="18" style="1"/>
+        </Property>
         <Property name="text" type="java.lang.String" value="Skapa en ny kundorder"/>
       </Properties>
     </Component>
@@ -352,16 +273,6 @@
     <Component class="javax.swing.JLabel" name="lblKundIdForOrder">
       <Properties>
         <Property name="text" type="java.lang.String" value="KundId f&#xf6;r ordern"/>
-      </Properties>
-    </Component>
-    <Component class="javax.swing.JLabel" name="lblFraktadress">
-      <Properties>
-        <Property name="text" type="java.lang.String" value="Fraktadress"/>
-      </Properties>
-    </Component>
-    <Component class="javax.swing.JTextField" name="txtFraktadress">
-      <Properties>
-        <Property name="text" type="java.lang.String" value="Fraktadress"/>
       </Properties>
     </Component>
     <Component class="javax.swing.JTextField" name="txtAntalHattar">
@@ -448,16 +359,6 @@
         <Property name="text" type="java.lang.String" value="Hattar i order"/>
       </Properties>
     </Component>
-    <Component class="javax.swing.JTextField" name="txtDatum">
-      <Properties>
-        <Property name="text" type="java.lang.String" value="Datum"/>
-      </Properties>
-    </Component>
-    <Component class="javax.swing.JLabel" name="lblDatum">
-      <Properties>
-        <Property name="text" type="java.lang.String" value="Datum"/>
-      </Properties>
-    </Component>
     <Component class="javax.swing.JComboBox" name="cmbTyg">
       <Properties>
         <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
@@ -487,6 +388,9 @@
       </Properties>
     </Component>
     <Component class="javax.swing.JTextField" name="txtPrisExklMoms">
+      <Properties>
+        <Property name="editable" type="boolean" value="false"/>
+      </Properties>
       <Events>
         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="txtPrisExklMomsActionPerformed"/>
       </Events>
@@ -498,6 +402,9 @@
     </Component>
     <Component class="javax.swing.JCheckBox" name="chkSnabborder">
       <Properties>
+        <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+          <Font name="Segoe UI" size="14" style="0"/>
+        </Property>
         <Property name="text" type="java.lang.String" value="Snabborder"/>
       </Properties>
       <Events>
@@ -510,74 +417,6 @@
       </Properties>
       <Events>
         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnTillbakaActionPerformed"/>
-      </Events>
-    </Component>
-    <Component class="javax.swing.JComboBox" name="cmbDekoration">
-      <Properties>
-        <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
-          <StringArray count="4">
-            <StringItem index="0" value="Item 1"/>
-            <StringItem index="1" value="Item 2"/>
-            <StringItem index="2" value="Item 3"/>
-            <StringItem index="3" value="Item 4"/>
-          </StringArray>
-        </Property>
-      </Properties>
-      <AuxValues>
-        <AuxValue name="JavaCodeGenerator_TypeParameters" type="java.lang.String" value="&lt;String&gt;"/>
-      </AuxValues>
-    </Component>
-    <Component class="javax.swing.JTextField" name="txtDekorationAntal">
-    </Component>
-    <Component class="javax.swing.JButton" name="btnAdderaDekoration">
-      <Properties>
-        <Property name="text" type="java.lang.String" value="L&#xe4;gg till dekoration"/>
-      </Properties>
-      <Events>
-        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnAdderaDekorationActionPerformed"/>
-      </Events>
-    </Component>
-    <Container class="javax.swing.JScrollPane" name="jScrollPane2">
-
-      <Layout class="org.netbeans.modules.form.compat2.layouts.support.JScrollPaneSupportLayout"/>
-      <SubComponents>
-        <Component class="javax.swing.JTextArea" name="txtAreaSpecial">
-          <Properties>
-            <Property name="editable" type="boolean" value="false"/>
-            <Property name="columns" type="int" value="20"/>
-            <Property name="rows" type="int" value="5"/>
-          </Properties>
-        </Component>
-      </SubComponents>
-    </Container>
-    <Component class="javax.swing.JLabel" name="lblEgenText">
-      <Properties>
-        <Property name="text" type="java.lang.String" value="Egen text p&#xe5; hatt"/>
-      </Properties>
-    </Component>
-    <Component class="javax.swing.JTextField" name="txtEgenHattText">
-    </Component>
-    <Component class="javax.swing.JLabel" name="lblAntalDekoration">
-      <Properties>
-        <Property name="text" type="java.lang.String" value="Antal"/>
-      </Properties>
-    </Component>
-    <Component class="javax.swing.JLabel" name="lblDekoration">
-      <Properties>
-        <Property name="text" type="java.lang.String" value="Dekoration"/>
-      </Properties>
-    </Component>
-    <Component class="javax.swing.JLabel" name="lblUppskattadTid">
-      <Properties>
-        <Property name="text" type="java.lang.String" value="Uppskattad tid(h)"/>
-      </Properties>
-    </Component>
-    <Component class="javax.swing.JTextField" name="txtUppskattadTid">
-      <Properties>
-        <Property name="columns" type="int" value="10"/>
-      </Properties>
-      <Events>
-        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="txtUppskattadTidActionPerformed"/>
       </Events>
     </Component>
     <Component class="javax.swing.JLabel" name="lblBildStatus">
@@ -644,5 +483,238 @@
         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnTaBortOrderradActionPerformed"/>
       </Events>
     </Component>
+    <Container class="javax.swing.JPanel" name="jPanel1">
+      <Properties>
+        <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
+          <Border info="org.netbeans.modules.form.compat2.border.LineBorderInfo">
+            <LineBorder roundedCorners="true"/>
+          </Border>
+        </Property>
+      </Properties>
+
+      <Layout>
+        <DimensionLayout dim="0">
+          <Group type="103" groupAlignment="0" attributes="0">
+              <Group type="102" attributes="0">
+                  <Group type="103" groupAlignment="0" attributes="0">
+                      <Group type="102" alignment="0" attributes="0">
+                          <EmptySpace min="-2" pref="18" max="-2" attributes="0"/>
+                          <Component id="lblSpecialorder" min="-2" pref="104" max="-2" attributes="0"/>
+                      </Group>
+                      <Group type="102" alignment="0" attributes="0">
+                          <EmptySpace max="-2" attributes="0"/>
+                          <Component id="lblEgenText" min="-2" max="-2" attributes="0"/>
+                          <EmptySpace type="separate" max="-2" attributes="0"/>
+                          <Component id="txtEgenHattText" min="-2" pref="341" max="-2" attributes="0"/>
+                      </Group>
+                      <Group type="102" alignment="0" attributes="0">
+                          <EmptySpace max="-2" attributes="0"/>
+                          <Group type="103" groupAlignment="1" max="-2" attributes="0">
+                              <Group type="102" alignment="0" attributes="0">
+                                  <Component id="lblDekoration" min="-2" max="-2" attributes="0"/>
+                                  <EmptySpace type="separate" max="-2" attributes="0"/>
+                                  <Component id="cmbDekoration" min="-2" max="-2" attributes="0"/>
+                                  <EmptySpace max="32767" attributes="0"/>
+                                  <Component id="lblAntalDekoration" min="-2" pref="46" max="-2" attributes="0"/>
+                              </Group>
+                              <Group type="102" alignment="0" attributes="0">
+                                  <Component id="lblUppskattadTid" min="-2" max="-2" attributes="0"/>
+                                  <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                                  <Component id="txtUppskattadTid" min="-2" max="-2" attributes="0"/>
+                              </Group>
+                          </Group>
+                          <EmptySpace max="-2" attributes="0"/>
+                          <Component id="txtDekorationAntal" min="-2" pref="90" max="-2" attributes="0"/>
+                          <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                          <Component id="btnAdderaDekoration" min="-2" max="-2" attributes="0"/>
+                          <EmptySpace min="-2" pref="27" max="-2" attributes="0"/>
+                          <Component id="jScrollPane2" min="-2" pref="129" max="-2" attributes="0"/>
+                      </Group>
+                  </Group>
+                  <EmptySpace pref="30" max="32767" attributes="0"/>
+              </Group>
+          </Group>
+        </DimensionLayout>
+        <DimensionLayout dim="1">
+          <Group type="103" groupAlignment="0" attributes="0">
+              <Group type="102" alignment="0" attributes="0">
+                  <EmptySpace max="-2" attributes="0"/>
+                  <Group type="103" groupAlignment="1" attributes="0">
+                      <Component id="jScrollPane2" min="-2" pref="59" max="-2" attributes="0"/>
+                      <Group type="102" attributes="0">
+                          <Component id="lblSpecialorder" min="-2" max="-2" attributes="0"/>
+                          <EmptySpace max="-2" attributes="0"/>
+                          <Group type="103" groupAlignment="3" attributes="0">
+                              <Component id="lblEgenText" alignment="3" min="-2" max="-2" attributes="0"/>
+                              <Component id="txtEgenHattText" alignment="3" min="-2" max="-2" attributes="0"/>
+                          </Group>
+                          <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                          <Group type="103" groupAlignment="3" attributes="0">
+                              <Component id="lblUppskattadTid" alignment="3" min="-2" max="-2" attributes="0"/>
+                              <Component id="txtUppskattadTid" alignment="3" min="-2" max="-2" attributes="0"/>
+                          </Group>
+                          <EmptySpace type="separate" max="-2" attributes="0"/>
+                          <Group type="103" groupAlignment="3" attributes="0">
+                              <Component id="lblDekoration" alignment="3" min="-2" max="-2" attributes="0"/>
+                              <Component id="cmbDekoration" alignment="3" min="-2" max="-2" attributes="0"/>
+                              <Component id="lblAntalDekoration" alignment="3" min="-2" max="-2" attributes="0"/>
+                              <Component id="txtDekorationAntal" alignment="3" min="-2" max="-2" attributes="0"/>
+                              <Component id="btnAdderaDekoration" alignment="3" min="-2" max="-2" attributes="0"/>
+                          </Group>
+                      </Group>
+                  </Group>
+                  <EmptySpace pref="33" max="32767" attributes="0"/>
+              </Group>
+          </Group>
+        </DimensionLayout>
+      </Layout>
+      <SubComponents>
+        <Component class="javax.swing.JLabel" name="lblSpecialorder">
+          <Properties>
+            <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+              <Font name="Segoe UI" size="14" style="1"/>
+            </Property>
+            <Property name="text" type="java.lang.String" value="Specialorder"/>
+          </Properties>
+        </Component>
+        <Component class="javax.swing.JLabel" name="lblEgenText">
+          <Properties>
+            <Property name="text" type="java.lang.String" value="Egen text p&#xe5; hatt"/>
+          </Properties>
+        </Component>
+        <Component class="javax.swing.JTextField" name="txtEgenHattText">
+        </Component>
+        <Component class="javax.swing.JLabel" name="lblUppskattadTid">
+          <Properties>
+            <Property name="text" type="java.lang.String" value="Uppskattad tid(h)"/>
+          </Properties>
+        </Component>
+        <Component class="javax.swing.JTextField" name="txtUppskattadTid">
+          <Properties>
+            <Property name="columns" type="int" value="10"/>
+          </Properties>
+          <Events>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="txtUppskattadTidActionPerformed"/>
+          </Events>
+        </Component>
+        <Component class="javax.swing.JLabel" name="lblDekoration">
+          <Properties>
+            <Property name="text" type="java.lang.String" value="Dekoration"/>
+          </Properties>
+        </Component>
+        <Component class="javax.swing.JComboBox" name="cmbDekoration">
+          <Properties>
+            <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
+              <StringArray count="4">
+                <StringItem index="0" value="Item 1"/>
+                <StringItem index="1" value="Item 2"/>
+                <StringItem index="2" value="Item 3"/>
+                <StringItem index="3" value="Item 4"/>
+              </StringArray>
+            </Property>
+          </Properties>
+          <AuxValues>
+            <AuxValue name="JavaCodeGenerator_TypeParameters" type="java.lang.String" value="&lt;String&gt;"/>
+          </AuxValues>
+        </Component>
+        <Component class="javax.swing.JLabel" name="lblAntalDekoration">
+          <Properties>
+            <Property name="text" type="java.lang.String" value="Antal"/>
+          </Properties>
+        </Component>
+        <Component class="javax.swing.JTextField" name="txtDekorationAntal">
+        </Component>
+        <Component class="javax.swing.JButton" name="btnAdderaDekoration">
+          <Properties>
+            <Property name="text" type="java.lang.String" value="L&#xe4;gg till dekoration"/>
+          </Properties>
+          <Events>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnAdderaDekorationActionPerformed"/>
+          </Events>
+        </Component>
+        <Container class="javax.swing.JScrollPane" name="jScrollPane2">
+
+          <Layout class="org.netbeans.modules.form.compat2.layouts.support.JScrollPaneSupportLayout"/>
+          <SubComponents>
+            <Component class="javax.swing.JTextArea" name="txtAreaSpecial">
+              <Properties>
+                <Property name="editable" type="boolean" value="false"/>
+                <Property name="columns" type="int" value="20"/>
+                <Property name="rows" type="int" value="5"/>
+              </Properties>
+            </Component>
+          </SubComponents>
+        </Container>
+      </SubComponents>
+    </Container>
+    <Container class="javax.swing.JPanel" name="jPanel2">
+
+      <Layout>
+        <DimensionLayout dim="0">
+          <Group type="103" groupAlignment="0" attributes="0">
+              <Group type="102" alignment="1" attributes="0">
+                  <Group type="103" groupAlignment="0" attributes="0">
+                      <Component id="lblFraktadress" alignment="0" min="-2" pref="70" max="-2" attributes="0"/>
+                      <Group type="102" alignment="0" attributes="0">
+                          <EmptySpace max="-2" attributes="0"/>
+                          <Component id="lblDatum" min="-2" pref="178" max="-2" attributes="0"/>
+                      </Group>
+                  </Group>
+                  <EmptySpace max="32767" attributes="0"/>
+                  <Group type="103" groupAlignment="0" attributes="0">
+                      <Component id="txtDatum" min="-2" pref="118" max="-2" attributes="0"/>
+                      <Component id="txtFraktadress" min="-2" pref="187" max="-2" attributes="0"/>
+                  </Group>
+                  <EmptySpace min="-2" pref="40" max="-2" attributes="0"/>
+              </Group>
+          </Group>
+        </DimensionLayout>
+        <DimensionLayout dim="1">
+          <Group type="103" groupAlignment="0" attributes="0">
+              <Group type="102" alignment="0" attributes="0">
+                  <EmptySpace min="-2" pref="37" max="-2" attributes="0"/>
+                  <Group type="103" groupAlignment="3" attributes="0">
+                      <Component id="lblDatum" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="txtDatum" alignment="3" min="-2" max="-2" attributes="0"/>
+                  </Group>
+                  <Group type="103" groupAlignment="0" attributes="0">
+                      <Group type="102" attributes="0">
+                          <EmptySpace pref="21" max="32767" attributes="0"/>
+                          <Component id="lblFraktadress" min="-2" max="-2" attributes="0"/>
+                          <EmptySpace min="-2" pref="29" max="-2" attributes="0"/>
+                      </Group>
+                      <Group type="102" alignment="0" attributes="0">
+                          <EmptySpace type="separate" max="-2" attributes="0"/>
+                          <Component id="txtFraktadress" min="-2" max="-2" attributes="0"/>
+                          <EmptySpace max="32767" attributes="0"/>
+                      </Group>
+                  </Group>
+              </Group>
+          </Group>
+        </DimensionLayout>
+      </Layout>
+      <SubComponents>
+        <Component class="javax.swing.JLabel" name="lblDatum">
+          <Properties>
+            <Property name="text" type="java.lang.String" value="Datum"/>
+          </Properties>
+        </Component>
+        <Component class="javax.swing.JTextField" name="txtDatum">
+          <Properties>
+            <Property name="text" type="java.lang.String" value="Datum"/>
+          </Properties>
+        </Component>
+        <Component class="javax.swing.JLabel" name="lblFraktadress">
+          <Properties>
+            <Property name="text" type="java.lang.String" value="Fraktadress"/>
+          </Properties>
+        </Component>
+        <Component class="javax.swing.JTextField" name="txtFraktadress">
+          <Properties>
+            <Property name="text" type="java.lang.String" value="Fraktadress"/>
+          </Properties>
+        </Component>
+      </SubComponents>
+    </Container>
   </SubComponents>
 </Form>
