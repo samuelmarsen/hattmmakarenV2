@@ -3,6 +3,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
  */
 package hattmakaren2026_9;
+
 import oru.inf.InfDB;
 import oru.inf.InfException;
 
@@ -11,11 +12,11 @@ import oru.inf.InfException;
  * @author Linus
  */
 public class HuvudMeny extends javax.swing.JFrame {
-    
+
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(HuvudMeny.class.getName());
     private InfDB idb;
     private String InloggadEmail;
-    
+
     /**
      * Creates new form HuvudMeny
      */
@@ -43,6 +44,7 @@ public class HuvudMeny extends javax.swing.JFrame {
         btnSchemaVy = new javax.swing.JButton();
         btnStatistik = new javax.swing.JButton();
         btnLagerfordaModeller = new javax.swing.JButton();
+        jButton1 = new javax.swing.JButton();
         lblValkommenText = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -86,6 +88,11 @@ public class HuvudMeny extends javax.swing.JFrame {
         btnLagerfordaModeller.addActionListener(this::btnLagerfordaModellerActionPerformed);
         jPanel1.add(btnLagerfordaModeller);
 
+        jButton1.setFont(new java.awt.Font("Segoe UI Semibold", 1, 18)); // NOI18N
+        jButton1.setText("Logga ut");
+        jButton1.addActionListener(this::jButton1ActionPerformed);
+        jPanel1.add(jButton1);
+
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 1;
@@ -106,14 +113,14 @@ public class HuvudMeny extends javax.swing.JFrame {
 
     private void btnMaterialActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMaterialActionPerformed
         // TODO add your handling code here:
-        
+
         try {
             new MaterialBestallningsSidan(idb).setVisible(true);
         } catch (InfException e) {
             System.out.println("Error: " + e.getMessage());
         }
-         
-        
+
+
     }//GEN-LAST:event_btnMaterialActionPerformed
 
     private void btnOrderMenyActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnOrderMenyActionPerformed
@@ -123,19 +130,19 @@ public class HuvudMeny extends javax.swing.JFrame {
         } catch (InfException e) {
             System.out.println("Error: " + e.getMessage());
         }
-          
-        
+
+
     }//GEN-LAST:event_btnOrderMenyActionPerformed
 
     private void btnLagerfordaModellerActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLagerfordaModellerActionPerformed
-    LagerfordaModeller lagerFonster = new LagerfordaModeller(idb);
-    lagerFonster.setVisible(true);// TODO add your handling code here:
+        LagerfordaModeller lagerFonster = new LagerfordaModeller(idb);
+        lagerFonster.setVisible(true);// TODO add your handling code here:
     }//GEN-LAST:event_btnLagerfordaModellerActionPerformed
 
     private void BTNkundSidaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BTNkundSidaActionPerformed
-    Kundsida ks = new Kundsida(idb);
-    ks.setVisible(true);
-    
+        Kundsida ks = new Kundsida(idb);
+        ks.setVisible(true);
+
     }//GEN-LAST:event_BTNkundSidaActionPerformed
 
     private void btnStatistikActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnStatistikActionPerformed
@@ -148,32 +155,36 @@ public class HuvudMeny extends javax.swing.JFrame {
         sv.setVisible(true);
     }//GEN-LAST:event_btnSchemaVyActionPerformed
 
-    
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        new LoginMedarbetare(idb).setVisible(true);
+        this.dispose();
+    }//GEN-LAST:event_jButton1ActionPerformed
+
     /**
      * @param args the command line arguments
      */
     //public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
+    /* Set the Nimbus look and feel */
+    //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
+    /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
          * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
-        //try {
-            //for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                //if ("Nimbus".equals(info.getName())) {
-                   // javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                  //  break;
-                //}
-            //}
-       // } catch (ReflectiveOperationException | javax.swing.UnsupportedLookAndFeelException ex) {
-            //logger.log(java.util.logging.Level.SEVERE, null, ex);
-       // }
-        //</editor-fold>
+     */
+    //try {
+    //for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
+    //if ("Nimbus".equals(info.getName())) {
+    // javax.swing.UIManager.setLookAndFeel(info.getClassName());
+    //  break;
+    //}
+    //}
+    // } catch (ReflectiveOperationException | javax.swing.UnsupportedLookAndFeelException ex) {
+    //logger.log(java.util.logging.Level.SEVERE, null, ex);
+    // }
+    //</editor-fold>
 
-        /* Create and display the form */
-        // java.awt.EventQueue.invokeLater(() -> new HuvudMeny().setVisible(true));
+    /* Create and display the form */
+    // java.awt.EventQueue.invokeLater(() -> new HuvudMeny().setVisible(true));
     {
-}
+    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton BTNkundSida;
@@ -182,6 +193,7 @@ public class HuvudMeny extends javax.swing.JFrame {
     private javax.swing.JButton btnOrderMeny;
     private javax.swing.JButton btnSchemaVy;
     private javax.swing.JButton btnStatistik;
+    private javax.swing.JButton jButton1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JLabel lblValkommenText;
     // End of variables declaration//GEN-END:variables
