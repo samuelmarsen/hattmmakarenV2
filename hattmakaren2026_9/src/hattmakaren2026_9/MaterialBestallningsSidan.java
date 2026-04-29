@@ -410,75 +410,102 @@ materialModel = new DefaultTableModel(
     
     private void btnSkapaPdfActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSkapaPdfActionPerformed
 if (tblMaterialLista.isEditing()) tblMaterialLista.getCellEditor().stopCellEditing();
-    if (tblMaterial.isEditing()) tblMaterial.getCellEditor().stopCellEditing();
+        if (tblMaterial.isEditing()) tblMaterial.getCellEditor().stopCellEditing();
 
-    try {
-        for (int i = 0; i < materialModel.getRowCount(); i++) {
-            String vardeStr = materialModel.getValueAt(i, 4).toString().trim();
-            String namn = materialModel.getValueAt(i, 1).toString();
-            if (!vardeStr.equals("0") && !vardeStr.equals("0.0")) {
-                if (!Validering.arGiltigBestallning(new JTextField(vardeStr), namn)) return;
-            }
-        }
-        for (int i = 0; i < lagerModel.getRowCount(); i++) {
-            String vardeStr = lagerModel.getValueAt(i, 3).toString().trim();
-            String namn = lagerModel.getValueAt(i, 1).toString();
-            if (!vardeStr.equals("0") && !vardeStr.equals("0.0")) {
-                if (!Validering.arGiltigBestallning(new JTextField(vardeStr), namn)) return;
-            }
-        }
-
-        txtLogg.setText(""); 
-        txtLogg.setText("BEKRÄFTELSE PÅ BESTÄLLNING\n");
-        txtLogg.append("==========================\n");
-        
-        String nuvarandeDatum = java.time.LocalDateTime.now().format(java.time.format.DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm"));
-        boolean harBestalltNagot = false;
-
-        for (int i = 0; i < materialModel.getRowCount(); i++) {
-            double antal = Double.parseDouble(materialModel.getValueAt(i, 4).toString());
-            if (antal > 0) {
-                String orderID = materialModel.getValueAt(i, 0).toString();
+        try {
+            // --- 1. STENHÅRD VALIDERING AV INPUT ---
+            for (int i = 0; i < materialModel.getRowCount(); i++) {
+                String vardeStr = materialModel.getValueAt(i, 4).toString().trim();
                 String namn = materialModel.getValueAt(i, 1).toString();
-                String matID = idb.fetchSingle("SELECT MaterialID FROM Material WHERE Namn = '" + namn + "'");
                 
-                idb.update("UPDATE Material SET Bestallt = TRUE, BestallningsDatum = '" + nuvarandeDatum + "' WHERE MaterialID = " + matID);
-                idb.update("UPDATE Ordrar SET MaterialBestallt = TRUE WHERE OrderID = " + orderID);
-                
-                txtLogg.append("- " + namn + ": " + antal + " st (Order #" + orderID + ")\n");
-                harBestalltNagot = true;
-            }
-        }
+                // Hämtar exakt det antal som ordern kräver (kolumn 2: "Antal material")
+                double behov = Double.parseDouble(materialModel.getValueAt(i, 2).toString());
 
-        for (int i = 0; i < lagerModel.getRowCount(); i++) {
-            double antal = Double.parseDouble(lagerModel.getValueAt(i, 3).toString());
-            if (antal > 0) {
-                String matID = lagerModel.getValueAt(i, 0).toString();
+                if (!vardeStr.equals("0") && !vardeStr.equals("0.0")) {
+                    if (!Validering.arGiltigBestallning(new JTextField(vardeStr), namn)) return;
+                    
+                    double inskrivetAntal = Double.parseDouble(vardeStr);
+                    
+                    // --- Måste vara EXAKT lika med behovet ---
+                    if (Math.abs(inskrivetAntal - behov) > 0.001) {
+                        JOptionPane.showMessageDialog(this, "Felaktigt antal! Du måste beställa exakt " + behov + " st av " + namn + " för denna order.\n(Skriv 0 om du vill vänta med att beställa denna rad).");
+                        // Sätter tillbaka värdet till 0 så han får försöka igen
+                        materialModel.setValueAt(0.0, i, 4); 
+                        return; // Avbryter hela beställningen tills han gjort rätt
+                    }
+                }
+            }
+
+            // Validering för lagertabellen
+            for (int i = 0; i < lagerModel.getRowCount(); i++) {
+                String vardeStr = lagerModel.getValueAt(i, 3).toString().trim();
                 String namn = lagerModel.getValueAt(i, 1).toString();
-                
-                idb.update("UPDATE Material SET Bestallt = TRUE, BestallningsDatum = '" + nuvarandeDatum + "' WHERE MaterialID = " + matID);
-                
-                txtLogg.append("- " + namn + ": " + antal + " st (Lagerbeställning)\n");
-                harBestalltNagot = true;
+                if (!vardeStr.equals("0") && !vardeStr.equals("0.0")) {
+                    if (!Validering.arGiltigBestallning(new JTextField(vardeStr), namn)) return;
+                }
             }
-        }
 
-        if (harBestalltNagot) {
+            // --- 2. FÖRBERED LOGGEN ---
+            txtLogg.setText(""); 
+            txtLogg.setText("BEKRÄFTELSE PÅ BESTÄLLNING\n");
             txtLogg.append("==========================\n");
-            txtLogg.append("Datum: " + nuvarandeDatum + "\n");
-            txtLogg.append("INFO: En textfil har skapats.\n");
             
-            sparaOrderTillFil(txtLogg.getText());
-            JOptionPane.showMessageDialog(this, "Beställning genomförd!");
-            uppdateraTabell();
-            laddaMaterialLista();
-        } else {
-            txtLogg.setText("INGET MATERIAL VALT.\nSkriv in ett antal i kolumnen 'Antal att beställa'.");
-        }
+            String nuvarandeDatum = java.time.LocalDateTime.now().format(java.time.format.DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm"));
+            boolean harBestalltNagot = false;
 
-    } catch (Exception e) {
-        JOptionPane.showMessageDialog(this, "Fel: " + e.getMessage());
-    }
+            // --- 3. GENOMFÖR BESTÄLLNINGAR (KUNDORDRAR) ---
+            for (int i = 0; i < materialModel.getRowCount(); i++) {
+                double antal = Double.parseDouble(materialModel.getValueAt(i, 4).toString());
+                
+                if (antal > 0) {
+                    String orderID = materialModel.getValueAt(i, 0).toString();
+                    String namn = materialModel.getValueAt(i, 1).toString();
+                    String matID = idb.fetchSingle("SELECT MaterialID FROM Material WHERE Namn = '" + namn + "'");
+                    
+                    // Markera materialet som beställt
+                    idb.update("UPDATE Material SET Bestallt = TRUE, BestallningsDatum = '" + nuvarandeDatum + "' WHERE MaterialID = " + matID);
+                    
+                    // Stäng hela ordern i databasen direkt (Så att den försvinner från tabellen!)
+                    idb.update("UPDATE Ordrar SET MaterialBestallt = TRUE WHERE OrderID = " + orderID);
+                    
+                    txtLogg.append("- " + namn + ": " + antal + " st (Order #" + orderID + ")\n");
+                    harBestalltNagot = true;
+                }
+            }
+
+            // --- 4. GENOMFÖR BESTÄLLNINGAR (LAGRET) ---
+            for (int i = 0; i < lagerModel.getRowCount(); i++) {
+                double antal = Double.parseDouble(lagerModel.getValueAt(i, 3).toString());
+                
+                if (antal > 0) {
+                    String matID = lagerModel.getValueAt(i, 0).toString();
+                    String namn = lagerModel.getValueAt(i, 1).toString();
+                    
+                    idb.update("UPDATE Material SET Bestallt = TRUE, BestallningsDatum = '" + nuvarandeDatum + "' WHERE MaterialID = " + matID);
+                    
+                    txtLogg.append("- " + namn + ": " + antal + " st (Lagerbeställning)\n");
+                    harBestalltNagot = true;
+                }
+            }
+
+            // --- 5. AVSLUT OCH UPPDATERA UI ---
+            if (harBestalltNagot) {
+                txtLogg.append("==========================\n");
+                txtLogg.append("Datum: " + nuvarandeDatum + "\n");
+                txtLogg.append("INFO: En textfil har skapats.\n");
+                
+                sparaOrderTillFil(txtLogg.getText());
+                JOptionPane.showMessageDialog(this, "Beställning genomförd!");
+                
+                uppdateraTabell();
+                laddaMaterialLista();
+            } else {
+                txtLogg.setText("INGET MATERIAL VALT.\nSkriv in ett antal i kolumnen 'Antal att beställa'.");
+            }
+
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, "Fel: " + e.getMessage());
+        }
     }
     private void sparaOrderTillFil(String innehall) {
     String filnamn = "Bestallning_" + java.time.LocalDate.now().toString() + ".txt";
