@@ -87,14 +87,6 @@
             <AuxValue name="JavaCodeGenerator_TypeParameters" type="java.lang.String" value="&lt;String&gt;"/>
           </AuxValues>
         </Component>
-        <Component class="javax.swing.JButton" name="btnVisaHistorik">
-          <Properties>
-            <Property name="text" type="java.lang.String" value="Visa historik"/>
-          </Properties>
-          <Events>
-            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnVisaHistorikActionPerformed"/>
-          </Events>
-        </Component>
         <Component class="javax.swing.JButton" name="btnTillbaka">
           <Properties>
             <Property name="text" type="java.lang.String" value="Tillbaka"/>

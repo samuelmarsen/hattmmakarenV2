@@ -31,12 +31,14 @@ public class OrderStatus extends javax.swing.JFrame {
 
     private void fyllRullListaMedKunder() {
         try {
-            ArrayList<String> namnLista = idb.fetchColumn("select namn from kunder");
-
-            if (namnLista != null) {
-                for (String namn : namnLista) {
-                    cmbVisaKunder.addItem(namn);
-                }
+            ArrayList<String> epostLista = idb.fetchColumn("SELECT Epost FROM Kunder");
+        cmbVisaKunder.removeAllItems();
+        cmbVisaKunder.addItem("Välj kund (Epost)");
+        
+        if (epostLista != null) {
+            for (String mail : epostLista) {
+                cmbVisaKunder.addItem(mail);
+            }
             }
         } catch (InfException e) {
             System.out.println("Error: " + e.getMessage());
@@ -56,7 +58,6 @@ public class OrderStatus extends javax.swing.JFrame {
         lblOrderStatusRubrik = new javax.swing.JLabel();
         jPanel1 = new javax.swing.JPanel();
         cmbVisaKunder = new javax.swing.JComboBox<>();
-        btnVisaStatus = new javax.swing.JButton();
         btnTillbaka = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
         txtVisaOrderStatus = new javax.swing.JTextArea();
@@ -72,11 +73,8 @@ public class OrderStatus extends javax.swing.JFrame {
 
         jPanel1.setLayout(new java.awt.GridLayout(0, 2, 15, 15));
 
+        cmbVisaKunder.addActionListener(this::cmbVisaKunderActionPerformed);
         jPanel1.add(cmbVisaKunder);
-
-        btnVisaStatus.setText("Visa status");
-        btnVisaStatus.addActionListener(this::btnVisaStatusActionPerformed);
-        jPanel1.add(btnVisaStatus);
 
         btnTillbaka.setText("Tillbaka");
         btnTillbaka.addActionListener(this::btnTillbakaActionPerformed);
@@ -114,57 +112,58 @@ public class OrderStatus extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void btnVisaStatusActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnVisaStatusActionPerformed
-        txtVisaOrderStatus.setText("");
+    private void btnTillbakaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnTillbakaActionPerformed
+        this.dispose();
+    }//GEN-LAST:event_btnTillbakaActionPerformed
 
-        String valtNamn = (String) cmbVisaKunder.getSelectedItem();
-        if (valtNamn == null || valtNamn.isEmpty()) {
+    private void cmbVisaKunderActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmbVisaKunderActionPerformed
+    txtVisaOrderStatus.setText(""); 
+
+        String valdEmail = (String) cmbVisaKunder.getSelectedItem();
+        
+        
+        if (valdEmail == null || valdEmail.isEmpty() || valdEmail.equals("Välj kund (Epost)")) {
             return;
         }
 
         try {
-            String fraga = "SELECT Ordrar.Status, Ordrar.ArSnabborder, Ordrar.OrderID "
-                    + "FROM Ordrar "
-                    + "JOIN Kunder ON Kunder.KundID = Ordrar.KundID "
-                    + "WHERE Kunder.Namn = '" + valtNamn + "'";
+            
+            String fraga = "SELECT Ordrar.OrderID, Ordrar.Status, Ordrar.ArSnabborder, Kunder.Namn "
+                         + "FROM Ordrar "
+                         + "JOIN Kunder ON Kunder.KundID = Ordrar.KundID "
+                         + "WHERE Kunder.Epost = '" + valdEmail + "' "
+                         + "ORDER BY Ordrar.OrderID DESC";
 
             ArrayList<HashMap<String, String>> rader = idb.fetchRows(fraga);
 
             if (rader != null && !rader.isEmpty()) {
-                txtVisaOrderStatus.append("Orderstatus för: " + valtNamn + "\n");
-                txtVisaOrderStatus.append("-------------------------------\n");
+                String kundNamn = rader.get(0).get("Namn");
+                StringBuilder sb = new StringBuilder();
+                sb.append("ORDERSTATUS FÖR: ").append(kundNamn.toUpperCase()).append("\n");
+                sb.append("Email: ").append(valdEmail).append("\n");
+                sb.append("==========================================\n\n");
 
                 for (HashMap<String, String> rad : rader) {
-                    String status = rad.get("Status");
-                    String arSnabborder = rad.get("ArSnabborder");
-                    String orderID = rad.get("OrderID");
-
-                    txtVisaOrderStatus.append("OrderID: " + orderID + "\n");
-                    txtVisaOrderStatus.append("Status: " + status + "\n");
-                    if ("1".equals(arSnabborder) || "true".equalsIgnoreCase(arSnabborder)) {
-                        txtVisaOrderStatus.append("Snabborder: Ja \n");
+                    sb.append("Ordernummer: #").append(rad.get("OrderID")).append("\n");
+                    sb.append("Status: ").append(rad.get("Status")).append("\n");
+                    
+                    String snabb = "Nej";
+                    if (rad.get("ArSnabborder").equals("1") || rad.get("ArSnabborder").equalsIgnoreCase("true")) {
+                        snabb = "Ja";
                     }
-                    else {
-                        txtVisaOrderStatus.append("Snabborder: Nej \n");
-                    }
-                    txtVisaOrderStatus.append("---------------\n");
+                    sb.append("Prioritet: ").append(snabb).append(" (Snabborder)\n");
+                    sb.append("------------------------------------------\n");
                 }
-
+                txtVisaOrderStatus.setText(sb.toString());
+                txtVisaOrderStatus.setCaretPosition(0); 
+            } else {
+                txtVisaOrderStatus.setText("Inga ordrar hittades för " + valdEmail);
             }
-            else {
-                txtVisaOrderStatus.setText("Kunden " + valtNamn + "har inga registrerade ordrar.");
-            }
-          
         } catch (InfException e) {
             System.out.println("Databasfel: " + e.getMessage());
-            javax.swing.JOptionPane.showMessageDialog(this, "Kunde inte hämta status.");
-        }
-        
-    }//GEN-LAST:event_btnVisaStatusActionPerformed
-
-    private void btnTillbakaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnTillbakaActionPerformed
-        this.dispose();
-    }//GEN-LAST:event_btnTillbakaActionPerformed
+            txtVisaOrderStatus.setText("Ett fel uppstod vid hämtning av status.");
+        }       // TODO add your handling code here:
+    }//GEN-LAST:event_cmbVisaKunderActionPerformed
 
     /**
      * @param args the command line arguments
@@ -193,7 +192,6 @@ public class OrderStatus extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnTillbaka;
-    private javax.swing.JButton btnVisaStatus;
     private javax.swing.JComboBox<String> cmbVisaKunder;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;

@@ -31,11 +31,13 @@ public class OrderHistorik extends javax.swing.JFrame {
 
     private void fyllRullListaMedKunder() {
         try {
-            ArrayList<String> namnLista = idb.fetchColumn("select namn from kunder");
+            ArrayList<String> epostLista = idb.fetchColumn("SELECT Epost FROM Kunder");
 
-            if (namnLista != null) {
-                for (String namn : namnLista) {
-                    cmbKunder.addItem(namn);
+            if (epostLista != null) {
+                cmbKunder.removeAllItems(); 
+                cmbKunder.addItem("Välj kund (Email)");
+            for (String mail : epostLista) {
+                cmbKunder.addItem(mail);
                 }
             }
         } catch (InfException e) {
@@ -58,7 +60,6 @@ public class OrderHistorik extends javax.swing.JFrame {
         txtHistorikText = new javax.swing.JTextArea();
         jPanel1 = new javax.swing.JPanel();
         cmbKunder = new javax.swing.JComboBox<>();
-        btnVisaHistorik = new javax.swing.JButton();
         btnTillbaka = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -100,10 +101,6 @@ public class OrderHistorik extends javax.swing.JFrame {
         cmbKunder.addActionListener(this::cmbKunderActionPerformed);
         jPanel1.add(cmbKunder);
 
-        btnVisaHistorik.setText("Visa historik");
-        btnVisaHistorik.addActionListener(this::btnVisaHistorikActionPerformed);
-        jPanel1.add(btnVisaHistorik);
-
         btnTillbaka.setText("Tillbaka");
         btnTillbaka.addActionListener(this::btnTillbakaActionPerformed);
         jPanel1.add(btnTillbaka);
@@ -120,80 +117,60 @@ public class OrderHistorik extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void cmbKunderActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmbKunderActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_cmbKunderActionPerformed
-
-    private void btnVisaHistorikActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnVisaHistorikActionPerformed
-                                                     
     txtHistorikText.setText("");
 
-    String valtNamn = (String) cmbKunder.getSelectedItem();
-    if (valtNamn == null || valtNamn.isEmpty()) {
-        return;
-    }
-    
-    try {
-        
-        String fraga = "SELECT Ordrar.OrderID, Ordrar.OrderDatum, Ordrar.TotalPrisInclMoms, "
-        + "Hattmodeller.ModellNamn, Orderrader.Anpassningstext, Hattmodeller.Farg " 
-        + "FROM Ordrar "
-        + "JOIN Kunder ON Kunder.KundID = Ordrar.KundID "
-        + "JOIN Orderrader ON Ordrar.OrderID = Orderrader.OrderID "
-        + "JOIN Hattmodeller ON Orderrader.ModellID = Hattmodeller.ModellID "
-        + "WHERE Kunder.Namn = '" + valtNamn + "' "
-        + "ORDER BY Ordrar.OrderDatum DESC";
+        String valdEmail = (String) cmbKunder.getSelectedItem();
 
-        ArrayList<HashMap<String, String>> rader = idb.fetchRows(fraga);
+        // Kontrollera att vi inte har valt rubriken
+        if (valdEmail == null || valdEmail.isEmpty() || valdEmail.equals("Välj kund (Email)")) {
+            return;
+        }
 
-        if (rader != null && !rader.isEmpty()) {
-            txtHistorikText.append("ORDERHISTORIK FÖR: " + valtNamn.toUpperCase() + "\n");
-            txtHistorikText.append("==========================================\n");
+        try {
+            // Här är den viktiga ändringen: Vi använder Epost överallt istället för Email
+            String fraga = "SELECT Ordrar.OrderID, Ordrar.OrderDatum, Ordrar.TotalPrisInclMoms, "
+                    + "Hattmodeller.ModellNamn, Orderrader.Anpassningstext, Hattmodeller.Farg, Kunder.Namn "
+                    + "FROM Ordrar "
+                    + "JOIN Kunder ON Kunder.KundID = Ordrar.KundID "
+                    + "JOIN Orderrader ON Ordrar.OrderID = Orderrader.OrderID "
+                    + "JOIN Hattmodeller ON Orderrader.ModellID = Hattmodeller.ModellID "
+                    + "WHERE Kunder.Epost = '" + valdEmail + "' " // Ändrat till Epost
+                    + "ORDER BY Ordrar.OrderDatum DESC";
 
-            String nuvarandeOrderId = "";
+            ArrayList<HashMap<String, String>> rader = idb.fetchRows(fraga);
 
-            for (HashMap<String, String> rad : rader) {
-                String orderId = rad.get("OrderID");
-                
-          
-                if (!orderId.equals(nuvarandeOrderId)) {
-                    if (!nuvarandeOrderId.equals("")) {
-                        txtHistorikText.append("------------------------------------------\n");
+            if (rader != null && !rader.isEmpty()) {
+                String kundNamn = rader.get(0).get("Namn");
+                txtHistorikText.append("ORDERHISTORIK FÖR: " + kundNamn.toUpperCase() + " (" + valdEmail + ")\n");
+                txtHistorikText.append("==========================================\n");
+
+                String nuvarandeOrderId = "";
+                for (HashMap<String, String> rad : rader) {
+                    String orderId = rad.get("OrderID");
+
+                    if (!orderId.equals(nuvarandeOrderId)) {
+                        if (!nuvarandeOrderId.equals("")) {
+                            txtHistorikText.append("------------------------------------------\n");
+                        }
+                        txtHistorikText.append("ORDER #" + orderId + " | Datum: " + rad.get("OrderDatum") + "\n");
+                        txtHistorikText.append("Totalpris: " + (rad.get("TotalPrisInclMoms") != null ? rad.get("TotalPrisInclMoms") : "0.00") + " kr inkl. moms\n");
+                        txtHistorikText.append("Artiklar:\n");
+                        nuvarandeOrderId = orderId;
                     }
-                    txtHistorikText.append("ORDER #" + orderId + " | Datum: " + rad.get("OrderDatum") + "\n");
-                    txtHistorikText.append("Totalpris: " + (rad.get("TotalPrisInclMoms") != null ? rad.get("TotalPrisInclMoms") : "0.00") + " kr inkl. moms\n");
-                    txtHistorikText.append("Artiklar:\n");
-                    nuvarandeOrderId = orderId;
+                    
+                    String modell = rad.get("ModellNamn");
+                    String farg = rad.get("Farg");
+                    txtHistorikText.append("  > " + modell + (farg != null ? " (Färg: " + farg + ")" : "") + "\n");
                 }
-
-            
-                String hattNamn = rad.get("ModellNamn");
-                String dekoration = rad.get("TextDekoration");
-                String farg = rad.get("Farg");
-
-                txtHistorikText.append("  > " + hattNamn);
-                
-         
-                if (farg != null && !farg.isEmpty()) {
-                    txtHistorikText.append(" (Färg: " + farg + ")");
-                }
-                if (dekoration != null && !dekoration.isEmpty() && !dekoration.equalsIgnoreCase("null")) {
-                    txtHistorikText.append("\n    Dekoration: " + dekoration);
-                }
-                txtHistorikText.append("\n");
+            } else {
+                txtHistorikText.setText("Kunden " + valdEmail + " har inga registrerade ordrar.");
             }
-            txtHistorikText.append("==========================================\n");
-            
-        } else {
-            txtHistorikText.setText("Kunden " + valtNamn + " har inga registrerade ordrar.");
-        } 
-    } catch(InfException e){
-        System.out.println("Databasfel: " + e.getMessage());
-        javax.swing.JOptionPane.showMessageDialog(this, "Kunde inte hämta historik.");
-    }
-
-        
-
-    }//GEN-LAST:event_btnVisaHistorikActionPerformed
+        } catch (InfException e) {
+            System.out.println("Databasfel: " + e.getMessage());
+            txtHistorikText.setText("Fel vid hämtning: " + e.getMessage());
+        }
+     // TODO add your handling code here:
+    }//GEN-LAST:event_cmbKunderActionPerformed
 
     private void btnTillbakaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnTillbakaActionPerformed
         this.dispose();
@@ -205,7 +182,6 @@ public class OrderHistorik extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnTillbaka;
-    private javax.swing.JButton btnVisaHistorik;
     private javax.swing.JComboBox<String> cmbKunder;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
